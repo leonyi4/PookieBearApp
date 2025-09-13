@@ -17,9 +17,26 @@
       "severity": "Moderate",
       "description": "Flash floods across Shan State disrupted communities and required urgent relief and recovery operations.",
       "active_reliefs": [2]
+    },
+    {
+      "id": 3,
+      "name": "Central Myanmar Earthquake",
+      "location": "Mandalay Region, Myanmar",
+      "date": "2024-01-20",
+      "severity": "High",
+      "description": "A powerful 6.5 magnitude earthquake struck near Mandalay, causing significant structural damage and trapping people under collapsed buildings.",
+      "active_reliefs": [3, 4]
+    },
+    {
+      "id": 4,
+      "name": "Kayin State Cyclone",
+      "location": "Kayin State, Myanmar",
+      "date": "2024-03-10",
+      "severity": "Moderate",
+      "description": "Tropical cyclone brought strong winds and heavy rainfall, leading to localized flooding and destruction of homes and crops.",
+      "active_reliefs": [5]
     }
   ],
-
   "relief_data": [
     {
       "id": 1,
@@ -86,15 +103,102 @@
           "medical_aid_provided": 300
         }
       ]
+    },
+    {
+      "id": 3,
+      "disaster_id": 3,
+      "name": "Earthquake Emergency Response",
+      "description": "Immediate aid for earthquake victims, focusing on search & rescue, medical care, and temporary housing.",
+      "org_id": 3,
+      "contributions": [
+        {
+          "cont_id": 1,
+          "name": "Search & Rescue",
+          "desc": "Deploying trained teams and equipment to locate and assist those trapped in rubble."
+        },
+        {
+          "cont_id": 2,
+          "name": "Temporary Housing",
+          "desc": "Setting up emergency shelters and providing basic living necessities."
+        }
+      ],
+      "goal": 250000,
+      "raised": 110000,
+      "budget_allocation": {
+        "Search_and_Rescue": 100000,
+        "Medical_Aid": 80000,
+        "Temporary_Housing": 70000
+      },
+      "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+    },
+    {
+      "id": 4,
+      "disaster_id": 3,
+      "name": "Rebuild Central Myanmar",
+      "description": "Long-term recovery and rebuilding efforts for communities affected by the Mandalay earthquake.",
+      "org_id": 1,
+      "contributions": [
+        {
+          "cont_id": 1,
+          "name": "Infrastructure Restoration",
+          "desc": "Repairing schools, roads, and community centers."
+        },
+        {
+          "cont_id": 2,
+          "name": "Livelihood Support",
+          "desc": "Providing grants and resources for families to restart their businesses."
+        }
+      ],
+      "goal": 500000,
+      "raised": 250000,
+      "budget_allocation": {
+        "Infrastructure_Restoration": 250000,
+        "Livelihood_Support": 150000,
+        "Psychosocial_Support": 100000
+      },
+      "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+    },
+    {
+      "id": 5,
+      "disaster_id": 4,
+      "name": "Cyclone Relief",
+      "description": "Emergency food and water distribution for communities affected by the Kayin State cyclone.",
+      "org_id": 4,
+      "contributions": [
+        {
+          "cont_id": 1,
+          "name": "Food & Water",
+          "desc": "Distributing emergency food packages and ensuring access to clean drinking water."
+        },
+        {
+          "cont_id": 2,
+          "name": "Hygiene Kits",
+          "desc": "Providing essential hygiene supplies to prevent the spread of waterborne diseases."
+        }
+      ],
+      "goal": 80000,
+      "raised": 60000,
+      "budget_allocation": {
+        "Food_and_Water": 40000,
+        "Hygiene_Kits": 25000,
+        "Shelter_Materials": 15000
+      },
+      "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
+      "impact": [
+        {
+          "people_served": 1500,
+          "families_reached": 300,
+          "medical_aid_provided": 0
+        }
+      ]
     }
   ],
-
   "orgs": [
     {
       "id": 1,
       "name": "Bright Horizons Foundation",
       "desc": "Non-profit dedicated to education, sustainable development, and access to essential resources for underserved communities.",
-      "reliefs": [2],
+      "reliefs": [2, 4],
       "ratings": {
         "ai_rating": 4.5,
         "public_rating": 4.6
@@ -102,8 +206,9 @@
       "achievements": {
         "audit": "pdf"
       },
-      "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
-      "ongoing": [2]
+      "logo": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
+      "ongoing": [2],
+      "tags": ["#Disaster Relief Aid", "#Community Development", "#Education Support"]
     },
     {
       "id": 2,
@@ -117,7 +222,7 @@
       "achievements": {
         "audit": "pdf"
       },
-      "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
+      "logo": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
       "impact": [
         {
           "year": 2022,
@@ -132,10 +237,42 @@
           "funds_raised": 300000
         }
       ],
-      "ongoing": [1]
+      "ongoing": [1],
+      "tags": ["#Following Christ", "#Community Support", "#Disaster Relief"]
+    },
+    {
+      "id": 3,
+      "name": "Hope Bridge Foundation",
+      "desc": "A global network of volunteers and professionals providing rapid humanitarian assistance in disaster zones.",
+      "reliefs": [3],
+      "ratings": {
+        "ai_rating": 4.8,
+        "public_rating": 4.7
+      },
+      "achievements": {
+        "audit": "pdf"
+      },
+      "logo": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
+      "ongoing": [3],
+      "tags": ["#Humanitarian Aid", "#Disaster Response", "#Volunteer Network"]
+    },
+    {
+      "id": 4,
+      "name": "Community First Collective",
+      "desc": "Grassroots organization focused on community-led disaster response and building resilience.",
+      "reliefs": [5],
+      "ratings": {
+        "ai_rating": 4.1,
+        "public_rating": 4.4
+      },
+      "achievements": {
+        "audit": "pdf"
+      },
+      "logo": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
+      "ongoing": [5],
+      "tags": ["#Community Resilience", "#Local Leadership", "#Disaster Preparedness"]
     }
   ],
-
   "fundraisers": [
     {
       "id": 1,
@@ -156,32 +293,80 @@
       "raised": 12000,
       "desc": "Raising funds to provide medical kits and mobile health services in Shan.",
       "sponsors": [3]
+    },
+    {
+      "id": 3,
+      "name": "Earthquake Search & Rescue Fund",
+      "creator": "Local Firefighters Union",
+      "relief_id": 3,
+      "goal": 50000,
+      "raised": 35000,
+      "desc": "Support our team with essential equipment for search and rescue operations after the earthquake.",
+      "sponsors": [4]
+    },
+    {
+      "id": 4,
+      "name": "Mandalay Rebuilding Drive",
+      "creator": "Mandalay City Council",
+      "relief_id": 4,
+      "goal": 100000,
+      "raised": 40000,
+      "desc": "Help rebuild our city's infrastructure and community centers damaged by the recent earthquake.",
+      "sponsors": [1, 5]
+    },
+    {
+      "id": 5,
+      "name": "Kayin State Cyclone Food Drive",
+      "creator": "Kayin Youth Association",
+      "relief_id": 5,
+      "goal": 25000,
+      "raised": 15000,
+      "desc": "Raising funds to provide emergency food supplies to families displaced by the cyclone.",
+      "sponsors": [6]
     }
   ],
-
   "sponsors": [
     {
       "id": 1,
       "name": "Global Aid Corp",
       "type": "Corporate",
       "contributions": ["Cash Donation", "Logistics Support"],
-      "logo": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+      "logo": "../src/assets/exotech_logo.png"
     },
     {
       "id": 2,
       "name": "Hope Bank",
       "type": "Corporate",
       "contributions": ["Matching Donations", "Volunteer Staff"],
-      "logo": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
-
+      "logo": "../src/assets/underwood_logo.png"
     },
     {
       "id": 3,
       "name": "Myanmar Youth Collective",
       "type": "Community Group",
       "contributions": ["Fundraising Events", "Awareness Campaigns"],
-      "logo": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
-
+      "logo": "../src/assets/methflix_logo.png"
+    },
+    {
+      "id": 4,
+      "name": "Tech for Good Initiative",
+      "type": "Corporate",
+      "contributions": ["Software Development", "Technical Support"],
+      "logo": "../src/assets/stolebucks_logo.png"
+    },
+    {
+      "id": 5,
+      "name": "Architects Without Borders",
+      "type": "Non-Profit",
+      "contributions": ["Pro-Bono Design Services", "Rebuilding Expertise"],
+      "logo": "../src/assets/solace_logo.png"
+    },
+    {
+      "id": 6,
+      "name": "Food Relief Now",
+      "type": "Non-Profit",
+      "contributions": ["Food Supplies", "Volunteers"],
+      "logo": "../src/assets/singles_logo.png"
     }
   ]
 }
