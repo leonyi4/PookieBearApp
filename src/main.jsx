@@ -37,8 +37,8 @@ const router = createBrowserRouter([
     { path: 'DisasterMap', element: <DisaterMap /> },
     { path: 'DisasterMap/:disasterId', element: <DisasterDetail /> },
 
-    { path: 'Donations', element: <Donations /> },
-    { path: 'Donations/:reliefId', element: <ReliefDetail />},
+    { path: 'donations', element: <Donations /> },
+    { path: 'donations/:reliefId', element: <ReliefDetail />},
 
     { path: '/StartFundRaiser', element: <StartFundRaiser /> },
     { path: '/FundraiserDashboard', element: <FundRaiserDashboard /> },

@@ -1,6 +1,8 @@
 import React from "react";
 import header_logo from "../assets/header_logo.png";
 import { NavLink } from "react-router-dom";
+import vertical_logo from "../assets/Vertical_logo.png";
+import Button from "./Button.jsx";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -10,19 +12,20 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky  bg-white border-b border-gray-200 shadow-sm">
+    <header className="sticky  bg-white border-accent shadow-sm">
       {/* Default Header */}
       {!isMenuOpen && (
-        <header className="sticky bg-white border-b border-gray-200 shadow-sm z-10">
+        <header className="sticky bg-white border-b border-accent shadow-sm z-10">
           <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6">
-            <img src={header_logo} alt="logo" width={150} />
-            <button
+            <NavLink to="/"> 
+              <img src={header_logo} alt="logo" width={150} /> 
+            </NavLink>
+            <Button
               type="button"
               onClick={setIsMenuOpen}
-              className="p-2 rounded-md text-white bg-blue-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Menu
-            </button>
+            </Button> 
           </nav>
         </header>
       )}
@@ -39,45 +42,56 @@ const Header = () => {
             ✕
           </button>
 
-          <nav className="space-y-6 text-center flex flex-col">
+          <nav className="space-y-6 text-center flex flex-col items-center">
+            <NavLink to="/" onClick={toggleMenu}>
+              <img src={vertical_logo} alt="logo" width={200} />
+            </NavLink>
             <NavLink
               to="/"
               onClick={toggleMenu}
-              className="text-2xl text-gray-800 hover:text-blue-600 font-medium"
+              className="text-2xl text-primary hover:text-accent font-medium"
             >
               Home
             </NavLink>
-            <hr className="border-gray-300 w-screen" />
+            <hr className="border-accent w-screen" />
             <NavLink
               to="/DisasterMap"
               onClick={toggleMenu}
-              className="text-2xl text-gray-800 hover:text-blue-600 font-medium"
+              className="text-2xl text-primary hover:text-accent font-medium"
             >
               Disaster Map
             </NavLink>
-            <hr className="border-gray-300 w-screen" />
+            <hr className="border-accent w-screen" />
             <NavLink
               to="/Donations"
               onClick={toggleMenu}
-              className="text-2xl text-gray-800 hover:text-blue-600 font-medium"
+              className="text-2xl text-primary hover:text-accent font-medium"
             >
               Donations
             </NavLink>
-            <hr className="border-gray-300 w-screen" />
+            <hr className="border-accent w-screen" />
             <NavLink
               to="/Organizations"
               onClick={toggleMenu}
-              className="text-2xl text-gray-800 hover:text-blue-600 font-medium"
+              className="text-2xl text-primary hover:text-accent font-medium"
             >
               Organizations
             </NavLink>
-            <hr className="border-gray-300 w-screen " />
+            <hr className="border-accent w-screen " />
             <NavLink
               to="/Sponsors"
               onClick={toggleMenu}
-              className="text-2xl text-gray-800 hover:text-blue-600 font-medium"
+              className="text-2xl text-primary hover:text-accent font-medium"
             >
               Sponsors
+            </NavLink>
+            <hr className="border-accent w-screen" />
+            <NavLink 
+            to="/StartFundRaiser"
+            onClick={toggleMenu}
+            className="text-2xl text-primary hover:text-accent font-medium"
+            >
+              Start Fundraiser
             </NavLink>
           </nav>
         </div>
