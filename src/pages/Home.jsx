@@ -60,7 +60,7 @@ export default function Home() {
                 className="h-10 w-10 rounded-full"
               />
               <div>
-                <p className="font-medium text-gray-800">{org.name}</p>
+                <Link to={`/organizations/${org.id}`} className="font-medium text-gray-800">{org.name}</Link>
                 <p className="text-xs text-gray-500">{org.tags[0]}</p>
               </div>
             </li>
@@ -79,14 +79,14 @@ export default function Home() {
           </Link>
         </div>
         <div className="flex overflow-x-auto overflow-y-hidden space-x-4">
-          {data.sponsors.map((org, index) => (
-            <div key={index} className="flex items-center gap-2">
+          {data.sponsors.map((sponsor, index) => (
+            <Link to={`/sponsors/${sponsor.id}`} key={index} className="flex items-center gap-2">
               <img
-                src={org.logo}
-                alt={org.name}
+                src={sponsor.logo}
+                alt={sponsor.name}
                 className="h-12 w-12 object-contain"
               />
-            </div>
+            </Link>
           ))}
         </div>
       </section>
