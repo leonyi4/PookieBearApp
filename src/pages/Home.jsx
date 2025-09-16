@@ -23,7 +23,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-      {/* Fundraising Section */}
+      {/* Fundraising Section
       <section>
         <h2 className="text-xl font-bold text-gray-900 mb-4 uppercase">
           Fundraising
@@ -38,7 +38,7 @@ export default function Home() {
             Start Your Own Fundraiser
           </button>
         </Link>
-      </section>
+      </section> */}
 
       {/* Organizations Section */}
       <section>

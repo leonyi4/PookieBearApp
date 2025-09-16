@@ -263,8 +263,8 @@
       "description": "Focused on disaster relief, healthcare, and education for vulnerable communities worldwide.",
       "reliefs": [1],
       "ratings": {
-        "ai_rating": 4.3,
-        "public_rating": 4.2
+        "ai_rating": 1,
+        "public_rating": 2
       },
       "achievements": [
         {
@@ -330,7 +330,7 @@
       "reliefs": [5],
       "ratings": {
         "ai_rating": 4.1,
-        "public_rating": 4.4
+        "public_rating": 3
       },
       "achievements": [
         {

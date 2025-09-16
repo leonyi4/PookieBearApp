@@ -43,7 +43,7 @@ const Header = () => {
             </NavLink>
             <NavLink
               to="/"
-              onClick={toggleMenu} 
+              onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Home
@@ -65,20 +65,14 @@ const Header = () => {
               Donations
             </NavLink>
             <hr className="border-accent w-screen" />
+            {/* Org and Sponsor*/}
+
             <NavLink
-              to="/Organizations"
+              to="/OrgsAndSponsors/organizations"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
-              Organizations
-            </NavLink>
-            <hr className="border-accent w-screen " />
-            <NavLink
-              to="/Sponsors"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Sponsors
+              Orgs & Sponsors
             </NavLink>
             <hr className="border-accent w-screen" />
             <NavLink
@@ -88,8 +82,8 @@ const Header = () => {
             >
               Start Fundraiser
             </NavLink>
+            <hr className="border-accent w-screen " />
           </nav>
-          <hr className="border-accent w-screen " />
         </div>
       )}
     </header>

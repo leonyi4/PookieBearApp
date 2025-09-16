@@ -1,15 +1,17 @@
 import { Link, Star } from "lucide-react";
-import data from "../../assets/test_data.json"
+import data from "../../assets/test_data.json";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function ReliefDetail() {
   // ⚡ Mock data — replace with real API later
 
-  const relief_id = useParams()
-  const navigate = useNavigate()
+  const relief_id = useParams();
+  const navigate = useNavigate();
 
   // Get Campaign Data
-  const campaign = data.relief_data.find((r) => r.id === parseInt(relief_id.reliefId))
+  const campaign = data.relief_data.find(
+    (r) => r.id === parseInt(relief_id.reliefId)
+  );
 
   // Calculate Campaign Goal Progress Percentage
   const progress = Math.min(
@@ -18,25 +20,31 @@ export default function ReliefDetail() {
   ).toFixed(0);
 
   // Get Organization Data
-  const org = campaign['org_id']
-  const orgData = data.orgs.find((o) => o.id === org)
+  const org = campaign["org_id"];
+  const orgData = data.orgs.find((o) => o.id === org);
 
   // Calculate Budget Allocation Percentages
-  const total_budget = Object.values(campaign.budget_allocation).reduce((a, b) => a + b, 0);
+  const total_budget = Object.values(campaign.budget_allocation).reduce(
+    (a, b) => a + b,
+    0
+  );
   // calculate the percentage for each allocation into a new object
   const budget_allocation_percentage = {};
 
   for (let key in campaign.budget_allocation) {
     var value = campaign.budget_allocation[key];
-    var percentage = Math.round(((value / total_budget) * 100),2)
+    var percentage = Math.round((value / total_budget) * 100, 2);
 
-    budget_allocation_percentage[key] = { percentage: percentage, value: value}
+    budget_allocation_percentage[key] = {
+      percentage: percentage,
+      value: value,
+    };
   }
 
   // for each entry in budget_allocation_percentage, log the key and value
   Object.entries(budget_allocation_percentage).map(([key, value]) => {
-    console.log(key, value.percentage, value.value)
-  })
+    console.log(key, value.percentage, value.value);
+  });
 
   return (
     <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -44,11 +52,14 @@ export default function ReliefDetail() {
         {/* Back Button and Relief Title*/}
 
         <div className="flex items-center space-x-4 p-6">
-          <button onClick={() => navigate(-1)} className="text-primary text-lg hover:text-accent">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-primary text-lg hover:text-accent"
+          >
             &larr;
           </button>
           <h2 className="text-lg font-semibold text-gray-900">
-            {campaign.name} 
+            {campaign.name}
           </h2>
         </div>
       </div>
@@ -61,9 +72,7 @@ export default function ReliefDetail() {
 
       <div className="p-6 space-y-6">
         {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-900">
-          {campaign.title}
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-900">{campaign.title}</h1>
 
         {/* Organization Info */}
         <div className="flex items-center space-x-3">
@@ -73,12 +82,8 @@ export default function ReliefDetail() {
             className="h-10 w-10 rounded-full"
           />
           <div>
-            <p className="font-medium text-gray-800">
-              {orgData.name}
-            </p>
-            <p className="text-xs text-gray-500">
-              {orgData.tags}
-            </p>
+            <p className="font-medium text-gray-800">{orgData.name}</p>
+            <p className="text-xs text-gray-500">{orgData.tags}</p>
           </div>
         </div>
 
@@ -87,28 +92,27 @@ export default function ReliefDetail() {
           <button className="flex flex-col space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
             <span className="text-sm font-medium">Public Rating</span>
             <div className="flex">
-              {[...Array(4)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="h-4 w-4 fill-primary text-primary"
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className={`h-4 w-4 ${
+                    i < orgData.ratings.public_rating
+                      ? "fill-primary text-primary"
+                      : "text-primary"
+                  }`}
                 />
               ))}
-              <Star className="h-4 w-4 text-primary" />
             </div>
           </button>
           <button className="flex  flex-col space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
             <span className="text-sm font-medium ">AI Rating</span>
             <div className="flex">
-              {[...Array(3)].map((_, i) => (
+              {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className="h-4 w-4 fill-primary text-primary"
-                />
-              ))}
-              {[...Array(2)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="h-4 w-4 text-primary"
+                  className={`h-4 w-4 ${
+                    i < orgData.ratings.public_rating
+                      ? "fill-primary text-primary"
+                      : "text-primary"
+                  }`}
                 />
               ))}
             </div>
@@ -174,22 +178,26 @@ export default function ReliefDetail() {
           <h2 className="text-lg font-semibold text-gray-900 mb-3">
             Budget Allocation
           </h2>
-          <p className="text-sm text-gray-500 mb-2">Total: {total_budget} Kyats</p>
+          <p className="text-sm text-gray-500 mb-2">
+            Total: {total_budget} Kyats
+          </p>
           <div className="space-y-2 text-black">
-            {Object.entries(budget_allocation_percentage).map(([key, value]) => (
-              <div key={key}>
-                <div className="flex justify-between text-sm mb-1">
-                  <span>{key}</span>
-                  <span>{value.percentage}%</span>
+            {Object.entries(budget_allocation_percentage).map(
+              ([key, value]) => (
+                <div key={key}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>{key}</span>
+                    <span>{value.percentage}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-3">
+                    <div
+                      className="bg-primary h-3 rounded-full"
+                      style={{ width: `${value.percentage}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div
-                    className="bg-primary h-3 rounded-full"
-                    style={{ width: `${value.percentage}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         </div>
       </div>
