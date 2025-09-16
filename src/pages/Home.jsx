@@ -23,22 +23,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-      {/* Fundraising Section
-      <section>
-        <h2 className="text-xl font-bold text-gray-900 mb-4 uppercase">
-          Fundraising
-        </h2>
-        <div className="rounded-xl overflow-hidden shadow bg-green-100 h-28 flex items-center justify-center">
-          <span className="text-green-700 font-semibold">
-            🌱 Empower Communities
-          </span>
-        </div>
-        <Link to="/StartFundraiser">
-          <button className="mt-4 w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700">
-            Start Your Own Fundraiser
-          </button>
-        </Link>
-      </section> */}
 
       {/* Organizations Section */}
       <section>
@@ -46,7 +30,7 @@ export default function Home() {
           <h2 className="text-xl font-bold text-gray-900 uppercase">
             Organizations
           </h2>
-          <Link to="/organizations" className="text-primary font-semibold">
+          <Link to="/OrgsAndSponsors/organizations" className="text-primary font-semibold">
             View All
           </Link>
         </div>
@@ -60,7 +44,7 @@ export default function Home() {
                 className="h-10 w-10 rounded-full"
               />
               <div>
-                <Link to={`/organizations/${org.id}`} className="font-medium text-gray-800">{org.name}</Link>
+                <Link to={`/OrgsAndSponsors/organizations/${org.id}`} className="font-medium text-gray-800">{org.name}</Link>
                 <p className="text-xs text-gray-500">{org.tags[0]}</p>
               </div>
             </li>
@@ -74,13 +58,13 @@ export default function Home() {
           <h2 className="text-xl font-bold text-gray-900 uppercase">
             Active Sponsors
           </h2>
-          <Link to="/sponsors" className="text-primary font-semibold">
+          <Link to="/OrgsAndSponsors/sponsors" className="text-primary font-semibold">
             View All
           </Link>
         </div>
         <div className="flex overflow-x-auto overflow-y-hidden space-x-4">
           {data.sponsors.map((sponsor, index) => (
-            <Link to={`/sponsors/${sponsor.id}`} key={index} className="flex items-center gap-2">
+            <Link to={`OrgsAndSponsors/sponsors/${sponsor.id}`} key={index} className="flex items-center gap-2">
               <img
                 src={sponsor.logo}
                 alt={sponsor.name}
@@ -117,3 +101,20 @@ export default function Home() {
     </div>
   );
 }
+
+      {/* Fundraising Section
+      <section>
+        <h2 className="text-xl font-bold text-gray-900 mb-4 uppercase">
+          Fundraising
+        </h2>
+        <div className="rounded-xl overflow-hidden shadow bg-green-100 h-28 flex items-center justify-center">
+          <span className="text-green-700 font-semibold">
+            🌱 Empower Communities
+          </span>
+        </div>
+        <Link to="/StartFundraiser">
+          <button className="mt-4 w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700">
+            Start Your Own Fundraiser
+          </button>
+        </Link>
+      </section> */}

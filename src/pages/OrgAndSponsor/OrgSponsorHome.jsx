@@ -15,7 +15,7 @@ export default function OrgSponsorsHome() {
   const organizations = data.orgs;
   const sponsors = data.sponsors;
 
-  console.log(organizations);
+  // console.log(organizations);
 
   // Sync URL param with state
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function OrgSponsorsHome() {
               className="text-black bg-secondary shadow rounded-lg p-2 flex flex-col
                justify-between items-center"
             >
-              <div className="flex items-center space-x-3 my-2 w-full">
+              <div className="flex items-center space-x-3 my-2 w-full ">
                 <img
                   src={org.image}
                   alt={org.name}
@@ -122,7 +122,7 @@ export default function OrgSponsorsHome() {
                 </button>
               </div>
               {/* View Details */}
-              <Link to={`/organizations/${org.id}`} className="w-full">
+              <Link to={`/OrgsAndSponsors/organizations/${org.id}`} className="w-full">
                 <button className="mt-4 w-full bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700">
                   View Details
                 </button>
@@ -136,17 +136,18 @@ export default function OrgSponsorsHome() {
       {activeTab === "sponsors" && (
         <div className="flex flex-wrap gap-4 justify-center">
           {sponsors.map((sponsor, idx) => (
-            <div
+            <Link
+                to={`/OrgsAndSponsors/sponsors/${sponsor.id}`}
               key={idx}
-              className="bg-white shadow rounded-lg p-4 flex flex-col items-center w-32"
+              className="bg-white text-black shadow  rounded-lg p-4 flex flex-col items-center w-32"
             >
               <img
                 src={sponsor.logo}
                 alt={sponsor.name}
                 className="h-16 w-16 object-contain mb-2"
               />
-              <p className="text-sm font-semibold">{sponsor.name}</p>
-            </div>
+              <p className="text-sm text-center font-semibold uppercase">{sponsor.name}</p>
+            </Link>
           ))}
         </div>
       )}

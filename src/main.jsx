@@ -58,11 +58,11 @@ const router = createBrowserRouter([
       },
       { path: "OrgsAndSponsors/:type", element: <OrgSponsorsHome /> },
 
-      { path: "Organizations", element: <Organizations /> },
-      { path: "Organizations/:orgId", element: <OrgDetail /> },
+      // { path: "Organizations", element: <Organizations /> },
+      { path: "OrgsAndSponsors/organizations/:orgId", element: <OrgDetail /> },
 
-      { path: "Sponsors", element: <Sponsors /> },
-      { path: "Sponsors/:sponsorId", element: <SponsorDetail /> },
+      // { path: "Sponsors", element: <Sponsors /> },
+      { path: "OrgsAndSponsors/sponsors/:sponsorId", element: <SponsorDetail /> },
     ],
   },
 

@@ -253,8 +253,26 @@
         }
       ],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
+      "impact": [
+        {
+          "year": 2022,
+          "people_served": 6000,
+          "projects_completed": 25,
+          "funds_raised": 390000
+        },
+        {
+          "year": 2023,
+          "people_served": 8000,
+          "projects_completed": 30,
+          "funds_raised": 450000
+        }
+      ],
       "ongoing": [2],
-      "tags": ["#Disaster Relief Aid", "#Community Development", "#Education Support"]
+      "tags": [
+        "#Disaster Relief Aid",
+        "#Community Development",
+        "#Education Support"
+      ]
     },
     {
       "id": 2,
@@ -318,6 +336,20 @@
           "details": "Recognized for developing a new system for aid distribution in hard-to-reach areas."
         }
       ],
+      "impact": [
+        {
+          "year": 2022,
+          "people_served": 5000,
+          "projects_completed": 15,
+          "funds_raised": 200000
+        },
+        {
+          "year": 2023,
+          "people_served": 7500,
+          "projects_completed": 20,
+          "funds_raised": 300000
+        }
+      ],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
       "ongoing": [3],
       "tags": ["#Humanitarian Aid", "#Disaster Response", "#Volunteer Network"]
@@ -344,9 +376,27 @@
           "details": "Named a leading new non-profit for our unique, community-centric model."
         }
       ],
+      "impact": [
+        {
+          "year": 2022,
+          "people_served": 5000,
+          "projects_completed": 15,
+          "funds_raised": 200000
+        },
+        {
+          "year": 2023,
+          "people_served": 7500,
+          "projects_completed": 20,
+          "funds_raised": 300000
+        }
+      ],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
       "ongoing": [5],
-      "tags": ["#Community Resilience", "#Local Leadership", "#Disaster Preparedness"]
+      "tags": [
+        "#Community Resilience",
+        "#Local Leadership",
+        "#Disaster Preparedness"
+      ]
     }
   ],
   "fundraisers": [
@@ -422,7 +472,10 @@
       "people_helped": 15000,
       "total_donations": 250000,
       "sponsored_reliefs": [1, 4],
-      "future_events": ["Annual Charity Gala", "Supply Chain Innovation Workshop"]
+      "future_events": [
+        "Annual Charity Gala",
+        "Supply Chain Innovation Workshop"
+      ]
     },
     {
       "id": 2,
@@ -434,7 +487,10 @@
       "people_helped": 8000,
       "total_donations": 180000,
       "sponsored_reliefs": [1, 6],
-      "future_events": ["Disaster Preparedness Seminar", "Volunteer Recruitment Drive"]
+      "future_events": [
+        "Disaster Preparedness Seminar",
+        "Volunteer Recruitment Drive"
+      ]
     },
     {
       "id": 3,
@@ -458,7 +514,10 @@
       "people_helped": 20000,
       "total_donations": 300000,
       "sponsored_reliefs": [3],
-      "future_events": ["Hackathon for Humanitarian Aid", "Tech for Good Conference"]
+      "future_events": [
+        "Hackathon for Humanitarian Aid",
+        "Tech for Good Conference"
+      ]
     },
     {
       "id": 5,
@@ -470,7 +529,10 @@
       "people_helped": 3000,
       "total_donations": 100000,
       "sponsored_reliefs": [4],
-      "future_events": ["Rebuilding Workshops", "Sustainable Housing Design Forum"]
+      "future_events": [
+        "Rebuilding Workshops",
+        "Sustainable Housing Design Forum"
+      ]
     },
     {
       "id": 6,
@@ -482,7 +544,10 @@
       "people_helped": 10000,
       "total_donations": 75000,
       "sponsored_reliefs": [5],
-      "future_events": ["Food Drive for Cyclone Season", "Volunteer Training Session"]
+      "future_events": [
+        "Food Drive for Cyclone Season",
+        "Volunteer Training Session"
+      ]
     }
   ],
   "fundraisers": [
@@ -644,7 +709,11 @@
     {
       "id": 2,
       "name": "Naw Htet Htet",
-      "skills": ["Community Outreach", "Translation (Burmese/English)", "Food Distribution"],
+      "skills": [
+        "Community Outreach",
+        "Translation (Burmese/English)",
+        "Food Distribution"
+      ],
       "availability": "part-time",
       "deployments": [2, 5],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
