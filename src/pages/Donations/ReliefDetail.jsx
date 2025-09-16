@@ -1,142 +1,198 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import data from "../../assets/test_data.json";
+import { Link, Star } from "lucide-react";
+import data from "../../assets/test_data.json"
+import { useParams, useNavigate } from "react-router-dom";
 
-const Relief = () => {
-  const { reliefId } = useParams();
+export default function ReliefDetail() {
+  // ⚡ Mock data — replace with real API later
 
-  // Find the relief by ID
-  const reliefEventData = data.relief_data.find(
-    (event) => event.id === parseInt(reliefId)
-  );
+  const relief_id = useParams()
+  const navigate = useNavigate()
 
-  // Find related org & disaster
-  const orgData = reliefEventData
-    ? data.orgs.find((org) => org.id === reliefEventData.org_id)
-    : null;
+  // Get Campaign Data
+  const campaign = data.relief_data.find((r) => r.id === parseInt(relief_id.reliefId))
 
-  const disasterData = reliefEventData
-    ? data.disasters.find((dis) => dis.id === reliefEventData.disaster_id)
-    : null;
+  // Calculate Campaign Goal Progress Percentage
+  const progress = Math.min(
+    (campaign.raised / campaign.goal) * 100,
+    100
+  ).toFixed(0);
 
-  // Find related fundraisers
-  const fundraisers = reliefEventData
-    ? data.fundraisers.filter((f) => f.relief_id === reliefEventData.id)
-    : [];
+  // Get Organization Data
+  const org = campaign['org_id']
+  const orgData = data.orgs.find((o) => o.id === org)
+
+  // Calculate Budget Allocation Percentages
+  const total_budget = Object.values(campaign.budget_allocation).reduce((a, b) => a + b, 0);
+  // calculate the percentage for each allocation into a new object
+  const budget_allocation_percentage = {};
+
+  for (let key in campaign.budget_allocation) {
+    var value = campaign.budget_allocation[key];
+    var percentage = Math.round(((value / total_budget) * 100),2)
+
+    budget_allocation_percentage[key] = { percentage: percentage, value: value}
+  }
+
+  // for each entry in budget_allocation_percentage, log the key and value
+  Object.entries(budget_allocation_percentage).map(([key, value]) => {
+    console.log(key, value.percentage, value.value)
+  })
 
   return (
-    <div className="text-gray-800 max-w-3xl mx-auto p-4">
-      {reliefEventData ? (
-        <>
-          {/* Title + Image */}
-          <h1 className="text-2xl font-bold mb-2">{reliefEventData.name}</h1>
+    <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+      <div>
+        {/* Back Button and Relief Title*/}
+
+        <div className="flex items-center space-x-4 p-6">
+          <button onClick={() => navigate(-1)} className="text-primary text-lg hover:text-accent">
+            &larr;
+          </button>
+          <h2 className="text-lg font-semibold text-gray-900">
+            {campaign.name} 
+          </h2>
+        </div>
+      </div>
+      {/* Hero Image */}
+      <img
+        src={campaign.image}
+        alt={campaign.title}
+        className="w-full h-56 object-cover"
+      />
+
+      <div className="p-6 space-y-6">
+        {/* Title */}
+        <h1 className="text-2xl font-bold text-gray-900">
+          {campaign.title}
+        </h1>
+
+        {/* Organization Info */}
+        <div className="flex items-center space-x-3">
           <img
-            src={reliefEventData.image}
-            alt={reliefEventData.name}
-            className="w-full max-w-md rounded-lg shadow-md mb-4"
+            src={orgData.logo}
+            alt={orgData.name}
+            className="h-10 w-10 rounded-full"
           />
-
-          {/* Description */}
-          <p className="mb-4">{reliefEventData.description}</p>
-
-          {/* Organizer */}
-          {orgData && (
-            <p className="mb-2">
-              <span className="font-semibold">Organized by:</span>{" "}
+          <div>
+            <p className="font-medium text-gray-800">
               {orgData.name}
             </p>
-          )}
-
-          {/* Disaster link */}
-          {disasterData && (
-            <p className="mb-4 text-sm text-gray-600">
-              <span className="font-semibold">Disaster:</span>{" "}
-              {disasterData.name} ({disasterData.location})
+            <p className="text-xs text-gray-500">
+              {orgData.tags}
             </p>
-          )}
-
-          {/* Fund progress */}
-          <div className="bg-gray-100 p-4 rounded-lg shadow-sm mb-6">
-            <h2 className="text-lg font-semibold mb-2">Funds Raised</h2>
-            <p className="mb-1">
-              <span className="font-semibold">Raised:</span> $
-              {reliefEventData.raised.toLocaleString()}
-            </p>
-            <p className="mb-1">
-              <span className="font-semibold">Goal:</span> $
-              {reliefEventData.goal.toLocaleString()}
-            </p>
-
-            {/* Progress bar */}
-            <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
-              <div
-                className="bg-blue-600 h-3 rounded-full"
-                style={{
-                  width: `${Math.min(
-                    (reliefEventData.raised / reliefEventData.goal) * 100,
-                    100
-                  )}%`,
-                }}
-              ></div>
-            </div>
           </div>
+        </div>
 
-          {/* Budget Allocation */}
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold mb-2">Budget Allocation</h2>
-            <ul className="space-y-1">
-              {Object.entries(reliefEventData.budget_allocation).map(
-                ([key, value]) => (
-                  <li key={key} className="flex justify-between">
-                    <span>{key.replace(/_/g, " ")}:</span>
-                    <span>${value.toLocaleString()}</span>
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-
-          {/* Contributions */}
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold mb-2">Contributions</h2>
-            <ul className="list-disc pl-5 space-y-1">
-              {reliefEventData.contributions.map((c) => (
-                <li key={c.cont_id}>
-                  <span className="font-semibold">{c.name}:</span> {c.desc}
-                </li>
+        {/* Ratings */}
+        <div className="grid grid-cols-2 gap-3 text-accent">
+          <button className="flex flex-col space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
+            <span className="text-sm font-medium">Public Rating</span>
+            <div className="flex">
+              {[...Array(4)].map((_, i) => (
+                <Star
+                  key={i}
+                  className="h-4 w-4 fill-primary text-primary"
+                />
               ))}
-            </ul>
-          </div>
-
-          {/* Related Fundraisers */}
-          {fundraisers.length > 0 && (
-            <div>
-              <h2 className="text-lg font-semibold mb-2">
-                Fundraisers Supporting This Relief
-              </h2>
-              <ul className="space-y-2">
-                {fundraisers.map((f) => (
-                  <li
-                    key={f.id}
-                    className="p-3 bg-white border rounded-lg shadow-sm"
-                  >
-                    <p className="font-semibold">{f.name}</p>
-                    <p className="text-sm text-gray-600">{f.desc}</p>
-                    <p className="text-sm mt-1">
-                      Raised ${f.raised.toLocaleString()} / $
-                      {f.goal.toLocaleString()}
-                    </p>
-                  </li>
-                ))}
-              </ul>
+              <Star className="h-4 w-4 text-primary" />
             </div>
-          )}
-        </>
-      ) : (
-        <p className="text-red-600">Relief event not found.</p>
-      )}
+          </button>
+          <button className="flex  flex-col space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
+            <span className="text-sm font-medium ">AI Rating</span>
+            <div className="flex">
+              {[...Array(3)].map((_, i) => (
+                <Star
+                  key={i}
+                  className="h-4 w-4 fill-primary text-primary"
+                />
+              ))}
+              {[...Array(2)].map((_, i) => (
+                <Star
+                  key={i}
+                  className="h-4 w-4 text-primary"
+                />
+              ))}
+            </div>
+          </button>
+        </div>
+
+        {/* Progress */}
+        <div>
+          <div className="flex justify-between text-sm mb-1 text-black">
+            <span>
+              Raised:{" "}
+              <span className="font-semibold text-gray-800">
+                {campaign.raised.toLocaleString()} Kyats
+              </span>
+            </span>
+            <span>{progress}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-3">
+            <div
+              className="bg-primary h-3 rounded-full"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p className="text-sm text-gray-500 mt-1">
+            Goal: {campaign.goal.toLocaleString()} Kyats
+          </p>
+        </div>
+
+        {/* Description */}
+        <p className="text-gray-700 text-sm leading-relaxed">
+          {campaign.description}
+        </p>
+
+        {/* CTA */}
+        <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-accent">
+          Donate Now
+        </button>
+
+        {/* How Your Donation Helps */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-3">
+            How Your Donation Helps
+          </h2>
+          <div className="space-y-3">
+            {campaign.contributions.map((item, idx) => (
+              <div key={idx} className="flex space-x-3">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="h-12 w-12 rounded-lg object-cover"
+                />
+                <div>
+                  <p className="font-medium text-gray-800">{item.name}</p>
+                  <p className="text-sm text-gray-600">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Budget Allocation */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-3">
+            Budget Allocation
+          </h2>
+          <p className="text-sm text-gray-500 mb-2">Total: {total_budget} Kyats</p>
+          <div className="space-y-2 text-black">
+            {Object.entries(budget_allocation_percentage).map(([key, value]) => (
+              <div key={key}>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>{key}</span>
+                  <span>{value.percentage}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div
+                    className="bg-primary h-3 rounded-full"
+                    style={{ width: `${value.percentage}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default Relief;
+}

@@ -48,12 +48,12 @@
         {
           "cont_id": 1,
           "name": "Emergency Shelter",
-          "desc": "Providing immediate shelter and essential supplies to displaced families."
+          "description": "Providing immediate shelter and essential supplies to displaced families."
         },
         {
           "cont_id": 2,
           "name": "Essential Supplies",
-          "desc": "Distributing clean water, food, and hygiene kits to prevent disease outbreaks."
+          "description": "Distributing clean water, food, and hygiene kits to prevent disease outbreaks."
         }
       ],
       "goal": 100000,
@@ -75,12 +75,12 @@
         {
           "cont_id": 1,
           "name": "Emergency Shelter",
-          "desc": "Temporary shelters for displaced families."
+          "description": "Temporary shelters for displaced families."
         },
         {
           "cont_id": 2,
           "name": "Medical Aid",
-          "desc": "Mobile clinics and emergency health kits."
+          "description": "Mobile clinics and emergency health kits."
         }
       ],
       "goal": 150000,
@@ -114,12 +114,12 @@
         {
           "cont_id": 1,
           "name": "Search & Rescue",
-          "desc": "Deploying trained teams and equipment to locate and assist those trapped in rubble."
+          "description": "Deploying trained teams and equipment to locate and assist those trapped in rubble."
         },
         {
           "cont_id": 2,
           "name": "Temporary Housing",
-          "desc": "Setting up emergency shelters and providing basic living necessities."
+          "description": "Setting up emergency shelters and providing basic living necessities."
         }
       ],
       "goal": 250000,
@@ -141,12 +141,12 @@
         {
           "cont_id": 1,
           "name": "Infrastructure Restoration",
-          "desc": "Repairing schools, roads, and community centers."
+          "description": "Repairing schools, roads, and community centers."
         },
         {
           "cont_id": 2,
           "name": "Livelihood Support",
-          "desc": "Providing grants and resources for families to restart their businesses."
+          "description": "Providing grants and resources for families to restart their businesses."
         }
       ],
       "goal": 500000,
@@ -168,12 +168,12 @@
         {
           "cont_id": 1,
           "name": "Food & Water",
-          "desc": "Distributing emergency food packages and ensuring access to clean drinking water."
+          "description": "Distributing emergency food packages and ensuring access to clean drinking water."
         },
         {
           "cont_id": 2,
           "name": "Hygiene Kits",
-          "desc": "Providing essential hygiene supplies to prevent the spread of waterborne diseases."
+          "description": "Providing essential hygiene supplies to prevent the spread of waterborne diseases."
         }
       ],
       "goal": 80000,
@@ -197,7 +197,7 @@
     {
       "id": 1,
       "name": "Bright Horizons Foundation",
-      "desc": "Non-profit dedicated to education, sustainable development, and access to essential resources for underserved communities.",
+      "description": "Non-profit dedicated to education, sustainable development, and access to essential resources for underserved communities.",
       "reliefs": [2, 4],
       "ratings": {
         "ai_rating": 4.5,
@@ -213,7 +213,7 @@
     {
       "id": 2,
       "name": "The Good Shepherd Mission",
-      "desc": "Focused on disaster relief, healthcare, and education for vulnerable communities worldwide.",
+      "description": "Focused on disaster relief, healthcare, and education for vulnerable communities worldwide.",
       "reliefs": [1],
       "ratings": {
         "ai_rating": 4.3,
@@ -243,7 +243,7 @@
     {
       "id": 3,
       "name": "Hope Bridge Foundation",
-      "desc": "A global network of volunteers and professionals providing rapid humanitarian assistance in disaster zones.",
+      "description": "A global network of volunteers and professionals providing rapid humanitarian assistance in disaster zones.",
       "reliefs": [3],
       "ratings": {
         "ai_rating": 4.8,
@@ -259,7 +259,7 @@
     {
       "id": 4,
       "name": "Community First Collective",
-      "desc": "Grassroots organization focused on community-led disaster response and building resilience.",
+      "description": "Grassroots organization focused on community-led disaster response and building resilience.",
       "reliefs": [5],
       "ratings": {
         "ai_rating": 4.1,
@@ -281,7 +281,7 @@
       "relief_id": 1,
       "goal": 20000,
       "raised": 8500,
-      "desc": "Community-driven fundraiser to rebuild damaged school classrooms in Meiktila.",
+      "description": "Community-driven fundraiser to rebuild damaged school classrooms in Meiktila.",
       "sponsors": [1, 2]
     },
     {
@@ -291,7 +291,7 @@
       "relief_id": 2,
       "goal": 30000,
       "raised": 12000,
-      "desc": "Raising funds to provide medical kits and mobile health services in Shan.",
+      "description": "Raising funds to provide medical kits and mobile health services in Shan.",
       "sponsors": [3]
     },
     {
@@ -301,7 +301,7 @@
       "relief_id": 3,
       "goal": 50000,
       "raised": 35000,
-      "desc": "Support our team with essential equipment for search and rescue operations after the earthquake.",
+      "description": "Support our team with essential equipment for search and rescue operations after the earthquake.",
       "sponsors": [4]
     },
     {
@@ -311,7 +311,7 @@
       "relief_id": 4,
       "goal": 100000,
       "raised": 40000,
-      "desc": "Help rebuild our city's infrastructure and community centers damaged by the recent earthquake.",
+      "description": "Help rebuild our city's infrastructure and community centers damaged by the recent earthquake.",
       "sponsors": [1, 5]
     },
     {
@@ -321,7 +321,7 @@
       "relief_id": 5,
       "goal": 25000,
       "raised": 15000,
-      "desc": "Raising funds to provide emergency food supplies to families displaced by the cyclone.",
+      "description": "Raising funds to provide emergency food supplies to families displaced by the cyclone.",
       "sponsors": [6]
     }
   ],

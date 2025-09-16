@@ -1,6 +1,6 @@
 import React from "react";
 import header_logo from "../assets/header_logo.png";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import vertical_logo from "../assets/Vertical_logo.png";
 import Button from "./Button.jsx";
 
@@ -17,9 +17,9 @@ const Header = () => {
       {!isMenuOpen && (
         <header className="sticky bg-white border-b border-accent shadow-sm z-10">
           <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6">
-            <Link to="/">
+            <NavLink to="/">
               <img src={header_logo} alt="logo" width={150} />
-            </Link>
+            </NavLink>
             <Button type="button" onClick={setIsMenuOpen}>
               Menu
             </Button>
@@ -38,56 +38,56 @@ const Header = () => {
           </button>
 
           <nav className="space-y-6 text-center flex flex-col items-center">
-            <Link to="/" onClick={toggleMenu}>
-              <img src={vertical_logo} alt="logo" width={200} />
-            </Link>
-            <Link
+            <NavLink to="/" onClick={toggleMenu}>
+              <img src={vertical_logo} alt="logo" width={150} />
+            </NavLink>
+            <NavLink
               to="/"
-              onClick={toggleMenu}
+              onClick={toggleMenu} 
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Home
-            </Link>
+            </NavLink>
             <hr className="border-accent w-screen" />
-            <Link
+            <NavLink
               to="/DisasterMap"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Disaster Map
-            </Link>
+            </NavLink>
             <hr className="border-accent w-screen" />
-            <Link
+            <NavLink
               to="/Donations"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Donations
-            </Link>
+            </NavLink>
             <hr className="border-accent w-screen" />
-            <Link
+            <NavLink
               to="/Organizations"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Organizations
-            </Link>
+            </NavLink>
             <hr className="border-accent w-screen " />
-            <Link
+            <NavLink
               to="/Sponsors"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Sponsors
-            </Link>
+            </NavLink>
             <hr className="border-accent w-screen" />
-            <Link
+            <NavLink
               to="/StartFundRaiser"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Start Fundraiser
-            </Link>
+            </NavLink>
           </nav>
           <hr className="border-accent w-screen " />
         </div>
