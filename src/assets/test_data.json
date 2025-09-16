@@ -243,36 +243,24 @@
       "achievements": [
         {
           "year": 2023,
-          "name": "Innovator in Community Resilience",
-          "details": "Recognized for our innovative approaches to local leadership and community-led projects."
+          "title": "Innovator in Community Resilience",
+          "description": "Recognized for our innovative approaches to local leadership and community-led projects."
         },
         {
           "year": 2022,
-          "name": "Excellence in Transparency",
-          "details": "Awarded for our commitment to financial transparency and public accountability."
+          "title": "Excellence in Transparency",
+          "description": "Awarded for our commitment to financial transparency and public accountability."
         }
       ],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
-      "impact": [
-        {
-          "year": 2022,
-          "people_served": 6000,
-          "projects_completed": 25,
-          "funds_raised": 390000
-        },
-        {
-          "year": 2023,
-          "people_served": 8000,
-          "projects_completed": 30,
-          "funds_raised": 450000
-        }
-      ],
       "ongoing": [2],
-      "tags": [
-        "#Disaster Relief Aid",
-        "#Community Development",
-        "#Education Support"
-      ]
+      "tags": ["#Disaster Relief Aid", "#Community Development", "#Education Support"],
+      "social_media": {
+        "facebook": "https://www.facebook.com/brighthorizonsfoundation",
+        "twitter": "https://www.twitter.com/bhfoundation",
+        "linkedin": "https://www.linkedin.com/company/bright-horizons-foundation"
+      },
+      "partnerships": ["Tech for Good Initiative", "Hope Bank"]
     },
     {
       "id": 2,
@@ -281,19 +269,19 @@
       "description": "Focused on disaster relief, healthcare, and education for vulnerable communities worldwide.",
       "reliefs": [1],
       "ratings": {
-        "ai_rating": 1,
-        "public_rating": 2
+        "ai_rating": 4.3,
+        "public_rating": 4.2
       },
       "achievements": [
         {
           "year": 2023,
-          "name": "Community Impact Award",
-          "details": "Honored for our impactful work in providing medical aid and clean water to underserved regions."
+          "title": "Community Impact Award",
+          "description": "Honored for our impactful work in providing medical aid and clean water to underserved regions."
         },
         {
           "year": 2022,
-          "name": "Partner of the Year",
-          "details": "Recognized by local governments for our effective and rapid disaster response."
+          "title": "Partner of the Year",
+          "description": "Recognized by local governments for our effective and rapid disaster response."
         }
       ],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
@@ -312,7 +300,13 @@
         }
       ],
       "ongoing": [1],
-      "tags": ["#Following Christ", "#Community Support", "#Disaster Relief"]
+      "tags": ["#Following Christ", "#Community Support", "#Disaster Relief"],
+      "social_media": {
+        "facebook": "https://www.facebook.com/thegoodshepherdmission",
+        "twitter": "https://www.twitter.com/gsm_relief",
+        "linkedin": "https://www.linkedin.com/company/the-good-shepherd-mission"
+      },
+      "partnerships": ["Global Aid Corp", "Food Relief Now"]
     },
     {
       "id": 3,
@@ -327,32 +321,24 @@
       "achievements": [
         {
           "year": 2024,
-          "name": "Humanitarian Excellence Award",
-          "details": "Awarded for our swift and effective response to the Central Myanmar Earthquake."
+          "title": "Humanitarian Excellence Award",
+          "description": "Awarded for our swift and effective response to the Central Myanmar Earthquake."
         },
         {
           "year": 2023,
-          "name": "Innovation in Logistics",
-          "details": "Recognized for developing a new system for aid distribution in hard-to-reach areas."
-        }
-      ],
-      "impact": [
-        {
-          "year": 2022,
-          "people_served": 5000,
-          "projects_completed": 15,
-          "funds_raised": 200000
-        },
-        {
-          "year": 2023,
-          "people_served": 7500,
-          "projects_completed": 20,
-          "funds_raised": 300000
+          "title": "Innovation in Logistics",
+          "description": "Recognized for developing a new system for aid distribution in hard-to-reach areas."
         }
       ],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
       "ongoing": [3],
-      "tags": ["#Humanitarian Aid", "#Disaster Response", "#Volunteer Network"]
+      "tags": ["#Humanitarian Aid", "#Disaster Response", "#Volunteer Network"],
+      "social_media": {
+        "facebook": "https://www.facebook.com/hopebridgefoundation",
+        "twitter": "https://www.twitter.com/hopebridge_fdn",
+        "linkedin": "https://www.linkedin.com/company/hope-bridge-foundation"
+      },
+      "partnerships": ["Tech for Good Initiative"]
     },
     {
       "id": 4,
@@ -362,41 +348,29 @@
       "reliefs": [5],
       "ratings": {
         "ai_rating": 4.1,
-        "public_rating": 3
+        "public_rating": 4.4
       },
       "achievements": [
         {
           "year": 2024,
-          "name": "Local Leadership in Action",
-          "details": "Celebrated for our work in empowering community leaders during the Kayin State cyclone."
+          "title": "Local Leadership in Action",
+          "description": "Celebrated for our work in empowering community leaders during the Kayin State cyclone."
         },
         {
           "year": 2023,
-          "name": "Best New Non-Profit",
-          "details": "Named a leading new non-profit for our unique, community-centric model."
-        }
-      ],
-      "impact": [
-        {
-          "year": 2022,
-          "people_served": 5000,
-          "projects_completed": 15,
-          "funds_raised": 200000
-        },
-        {
-          "year": 2023,
-          "people_served": 7500,
-          "projects_completed": 20,
-          "funds_raised": 300000
+          "title": "Best New Non-Profit",
+          "description": "Named a leading new non-profit for our unique, community-centric model."
         }
       ],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
       "ongoing": [5],
-      "tags": [
-        "#Community Resilience",
-        "#Local Leadership",
-        "#Disaster Preparedness"
-      ]
+      "tags": ["#Community Resilience", "#Local Leadership", "#Disaster Preparedness"],
+      "social_media": {
+        "facebook": "https://www.facebook.com/communityfirstcollective",
+        "twitter": "https://www.twitter.com/commfirst",
+        "linkedin": "https://www.linkedin.com/company/community-first-collective"
+      },
+      "partnerships": ["Myanmar Youth Collective"]
     }
   ],
   "fundraisers": [
@@ -465,217 +439,126 @@
     {
       "id": 1,
       "name": "Global Aid Corp",
-      "type": "Corporate",
-      "description": "A leading logistics company that leverages its global network to provide transportation and supply chain support for humanitarian efforts.",
-      "contributions": ["Cash Donation", "Logistics Support"],
       "logo": "../src/assets/exotech_logo.png",
-      "people_helped": 15000,
-      "total_donations": 250000,
-      "sponsored_reliefs": [1, 4],
-      "future_events": [
-        "Annual Charity Gala",
-        "Supply Chain Innovation Workshop"
-      ]
+      "memo": "Dear Global Aid Corp Team, thank you for your unwavering support for our disaster relief operations. Your sponsorship has played a critical role in enabling our rapid response and providing life-saving resources to communities in need.",
+      "stats": {
+        "peopleHelped": "12,500+",
+        "donations": "500,000 Kyats",
+        "events": "20+"
+      },
+      "events": [
+        {
+          "title": "Shan Flooding Rescue",
+          "description": "Global Aid Corp provided immediate assistance including shelter, food, and medical supplies for the Shan flood relief.",
+          "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+        },
+        {
+          "title": "Mandalay Rebuilding Efforts",
+          "description": "Provided logistics support and materials to help rebuild infrastructure in Mandalay after the earthquake.",
+          "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+        }
+      ],
+      "future": "We plan to host disaster preparedness training, first aid workshops, and community resilience programs in partnership with our corporate sponsors."
     },
     {
       "id": 2,
       "name": "Hope Bank",
-      "type": "Corporate",
-      "description": "A financial institution committed to corporate social responsibility, focusing on matching employee and public donations to amplify relief efforts.",
-      "contributions": ["Matching Donations", "Volunteer Staff"],
       "logo": "../src/assets/underwood_logo.png",
-      "people_helped": 8000,
-      "total_donations": 180000,
-      "sponsored_reliefs": [1, 6],
-      "future_events": [
-        "Disaster Preparedness Seminar",
-        "Volunteer Recruitment Drive"
-      ]
+      "memo": "Dear Hope Bank, your generous contributions and matching donation programs have greatly amplified our fundraising efforts. Your commitment to corporate social responsibility is a true inspiration.",
+      "stats": {
+        "peopleHelped": "8,000+",
+        "donations": "180,000 Kyats",
+        "events": "15+"
+      },
+      "events": [
+        {
+          "title": "Meiktila Flooding Emergency Fund",
+          "description": "Hope Bank initiated a successful matching donation campaign that helped us exceed our initial fundraising goal.",
+          "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+        },
+        {
+          "title": "Yangon Fire Emergency Fund",
+          "description": "Provided direct financial support and food vouchers to families displaced by the recent fire in Yangon.",
+          "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+        }
+      ],
+      "future": "We are currently organizing a large-scale volunteer recruitment drive and a seminar on financial resilience for disaster-affected communities."
     },
     {
       "id": 3,
       "name": "Myanmar Youth Collective",
-      "type": "Community Group",
-      "description": "A grassroots group of young activists dedicated to raising awareness and funds for local and regional disasters through community events and digital campaigns.",
-      "contributions": ["Fundraising Events", "Awareness Campaigns"],
       "logo": "../src/assets/methflix_logo.png",
-      "people_helped": 5000,
-      "total_donations": 50000,
-      "sponsored_reliefs": [2],
-      "future_events": ["Charity Run for Shan", "Digital Art Auction"]
+      "memo": "To the Myanmar Youth Collective, your dedication to raising awareness and mobilizing young people for our cause is incredible. Your energy and passion are a driving force behind our mission.",
+      "stats": {
+        "peopleHelped": "5,000+",
+        "donations": "50,000 Kyats",
+        "events": "10+"
+      },
+      "events": [
+        {
+          "title": "Shan Flood Relief Concert",
+          "description": "Organized a charity concert and social media campaign that significantly boosted donations for the Shan flood relief effort.",
+          "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+        }
+      ],
+      "future": "Our plans include a nationwide youth-led fundraising marathon and a series of workshops on local disaster response."
     },
     {
       "id": 4,
       "name": "Tech for Good Initiative",
-      "type": "Corporate",
-      "description": "A collective of technology companies providing pro-bono software development and technical support to enhance the efficiency of disaster response.",
-      "contributions": ["Software Development", "Technical Support"],
       "logo": "../src/assets/stolebucks_logo.png",
-      "people_helped": 20000,
-      "total_donations": 300000,
-      "sponsored_reliefs": [3],
-      "future_events": [
-        "Hackathon for Humanitarian Aid",
-        "Tech for Good Conference"
-      ]
+      "memo": "To the Tech for Good Initiative, your technical expertise and innovative solutions have revolutionized how we respond to crises. Thank you for your vital partnership.",
+      "stats": {
+        "peopleHelped": "20,000+",
+        "donations": "300,000 Kyats",
+        "events": "5+"
+      },
+      "events": [
+        {
+          "title": "Earthquake Response Technology",
+          "description": "Developed a real-time mapping application to help our teams locate and assist people trapped after the earthquake.",
+          "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+        }
+      ],
+      "future": "We are developing a new mobile application for volunteer coordination and an AI-powered system for predicting and preparing for future disasters."
     },
     {
       "id": 5,
       "name": "Architects Without Borders",
-      "type": "Non-Profit",
-      "description": "A non-profit organization of architects and engineers who provide pro-bono design services and rebuilding expertise to communities recovering from disasters.",
-      "contributions": ["Pro-Bono Design Services", "Rebuilding Expertise"],
       "logo": "../src/assets/solace_logo.png",
-      "people_helped": 3000,
-      "total_donations": 100000,
-      "sponsored_reliefs": [4],
-      "future_events": [
-        "Rebuilding Workshops",
-        "Sustainable Housing Design Forum"
-      ]
+      "memo": "To Architects Without Borders, your pro-bono design and rebuilding expertise have given hope to families who lost everything. Your work is fundamental to long-term recovery.",
+      "stats": {
+        "peopleHelped": "3,000+",
+        "donations": "100,000 Kyats",
+        "events": "3+"
+      },
+      "events": [
+        {
+          "title": "Mandalay Rebuilding Project",
+          "description": "Provided architectural plans and supervision for rebuilding key community centers and schools destroyed by the earthquake.",
+          "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
+        }
+      ],
+      "future": "We are planning a series of sustainable housing workshops for local builders to ensure new homes are resilient to future natural disasters."
     },
     {
       "id": 6,
       "name": "Food Relief Now",
-      "type": "Non-Profit",
-      "description": "A volunteer-driven non-profit specializing in the rapid distribution of food and water supplies in the immediate aftermath of a disaster.",
-      "contributions": ["Food Supplies", "Volunteers"],
       "logo": "../src/assets/singles_logo.png",
-      "people_helped": 10000,
-      "total_donations": 75000,
-      "sponsored_reliefs": [5],
-      "future_events": [
-        "Food Drive for Cyclone Season",
-        "Volunteer Training Session"
-      ]
-    }
-  ],
-  "fundraisers": [
-    {
-      "id": 1,
-      "name": "Rebuild Classrooms for Meiktila Children",
-      "creator": "Jane Doe",
-      "relief_id": 1,
-      "goal": 20000,
-      "raised": 8500,
-      "description": "Community-driven fundraiser to rebuild damaged school classrooms in Meiktila.",
-      "sponsors": [1, 2],
-      "donations": [
+      "memo": "To Food Relief Now, your timely provision of essential supplies has saved countless lives. Your volunteers and logistics team are true heroes on the ground.",
+      "stats": {
+        "peopleHelped": "10,000+",
+        "donations": "75,000 Kyats",
+        "events": "12+"
+      },
+      "events": [
         {
-          "donor_name": "Anonymous",
-          "amount": 50
-        },
-        {
-          "donor_name": "John Smith",
-          "amount": 100
-        },
-        {
-          "donor_name": "Hope Bank",
-          "amount": 2000,
-          "is_sponsor": true
+          "title": "Kayin State Cyclone Food Drive",
+          "description": "Rapidly deployed food and water aid packages to communities isolated by the cyclone, ensuring no one was left behind.",
+          "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif"
         }
-      ]
-    },
-    {
-      "id": 2,
-      "name": "Medical Kits for Shan Families",
-      "creator": "University Students Union",
-      "relief_id": 2,
-      "goal": 30000,
-      "raised": 12000,
-      "description": "Raising funds to provide medical kits and mobile health services in Shan.",
-      "sponsors": [3],
-      "donations": [
-        {
-          "donor_name": "Sarah Lee",
-          "amount": 25
-        },
-        {
-          "donor_name": "Myanmar Youth Collective",
-          "amount": 1000,
-          "is_sponsor": true
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Earthquake Search & Rescue Fund",
-      "creator": "Local Firefighters Union",
-      "relief_id": 3,
-      "goal": 50000,
-      "raised": 35000,
-      "description": "Support our team with essential equipment for search and rescue operations after the earthquake.",
-      "sponsors": [4],
-      "donations": [
-        {
-          "donor_name": "Anonymous",
-          "amount": 500
-        },
-        {
-          "donor_name": "Tech for Good Initiative",
-          "amount": 5000,
-          "is_sponsor": true
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "name": "Mandalay Rebuilding Drive",
-      "creator": "Mandalay City Council",
-      "relief_id": 4,
-      "goal": 100000,
-      "raised": 40000,
-      "description": "Help rebuild our city's infrastructure and community centers damaged by the recent earthquake.",
-      "sponsors": [1, 5],
-      "donations": [
-        {
-          "donor_name": "Global Aid Corp",
-          "amount": 10000,
-          "is_sponsor": true
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "name": "Kayin State Cyclone Food Drive",
-      "creator": "Kayin Youth Association",
-      "relief_id": 5,
-      "goal": 25000,
-      "raised": 15000,
-      "description": "Raising funds to provide emergency food supplies to families displaced by the cyclone.",
-      "sponsors": [6],
-      "donations": [
-        {
-          "donor_name": "Anonymous",
-          "amount": 100
-        },
-        {
-          "donor_name": "Food Relief Now",
-          "amount": 2500,
-          "is_sponsor": true
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "name": "Yangon Fire Victims Fund",
-      "creator": "Local Community Leaders",
-      "relief_id": 6,
-      "goal": 50000,
-      "raised": 10000,
-      "description": "A fund to provide direct financial assistance to families who lost their homes in the recent Yangon fire.",
-      "sponsors": [2],
-      "donations": [
-        {
-          "donor_name": "Hope Bank",
-          "amount": 3000,
-          "is_sponsor": true
-        },
-        {
-          "donor_name": "Lisa Chan",
-          "amount": 75
-        }
-      ]
+      ],
+      "future": "We are expanding our network of emergency food depots and conducting a major food drive in preparation for the upcoming monsoon season."
     }
   ],
   "stories": [
@@ -709,11 +592,7 @@
     {
       "id": 2,
       "name": "Naw Htet Htet",
-      "skills": [
-        "Community Outreach",
-        "Translation (Burmese/English)",
-        "Food Distribution"
-      ],
+      "skills": ["Community Outreach", "Translation (Burmese/English)", "Food Distribution"],
       "availability": "part-time",
       "deployments": [2, 5],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",

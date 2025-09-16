@@ -1,12 +1,13 @@
 // src/pages/Organizations/OrgDetail.jsx
 import React, { useMemo } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import data from "../../assets/test_data.json";
 import { Star } from "lucide-react";
 import DisasterCard from "../Disasters/DisasterCard";
 
 export default function OrgDetail() {
   const { orgId } = useParams();
+  const navigate = useNavigate();
 
   // get org data
   const org = data.orgs[orgId - 1] || null;
