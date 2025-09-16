@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import data from "../assets/test_data.json";
 import DisasterCard from "./Disasters/DisasterCard";
 
-console.log(data.relief_data);
+// console.log(data.relief_data);
 
 export default function Home() {
   return (
@@ -109,7 +109,7 @@ export default function Home() {
               View Now
             </button>
           </Link>
-          <button className="w-full bg-gray-800 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-900">
+          <button className="w-full mt-2 bg-gray-800 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-900">
             Learn More About Us
           </button>
         </div>
