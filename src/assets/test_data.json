@@ -665,12 +665,6 @@
       "email": "bob@example.com",
       "password": "b",
       "name": "Bob"
-    },
-    {
-      "id": 3,
-      "email": "admin@admin.com",
-      "password": "admin",
-      "name": "Admin"
     }
   ]
 }
