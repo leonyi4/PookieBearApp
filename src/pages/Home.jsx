@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import data from "../assets/test_data.json";
 import DisasterCard from "./Disasters/DisasterCard";
-
+import MiniMap from "./Disasters/MiniMap";
+import DisasterMap from "./Disasters/DisasterMap"; // adjust the path if necessary
 // console.log(data.relief_data);
 
 export default function Home() {
@@ -76,28 +77,25 @@ export default function Home() {
       </section>
 
       {/* Real Time Updates Section */}
-      <section>
-        <h2 className="text-xl font-bold text-gray-900 mb-4">
-          Real Time Updates
-        </h2>
-        <div className="rounded-xl overflow-hidden shadow">
-          <img
-            src="https://via.placeholder.com/600x250"
-            alt="Disaster Map"
-            className="w-full h-56 object-cover"
-          />
-        </div>
-        <div className="mt-4 space-y-2">
-          <Link to="/DisasterMap">
-            <button className="w-full bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700">
-              View Now
-            </button>
-          </Link>
-          <button className="w-full mt-2 bg-gray-800 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-900">
-            Learn More About Us
-          </button>
-        </div>
-      </section>
+<section>
+  <h2 className="text-xl font-bold text-gray-900 mb-4">
+    Real Time Updates
+  </h2>
+  <div className="rounded-xl overflow-hidden shadow">
+    <MiniMap /> {/* use preview map instead of full DisasterMap */}
+  </div>
+  <div className="mt-4 space-y-2">
+    <Link to="/DisasterMap">
+      <button className="w-full bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700">
+        View Now
+      </button>
+    </Link>
+    <button className="w-full mt-2 bg-gray-800 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-900">
+      Learn More About Us
+    </button>
+  </div>
+</section>
+
     </div>
   );
 }
