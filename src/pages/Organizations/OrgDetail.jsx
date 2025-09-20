@@ -2,8 +2,10 @@
 import React, { useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import data from "../../assets/test_data.json";
-import { Star } from "lucide-react";
+import { Star, StarHalf } from "lucide-react";
 import DisasterCard from "../Disasters/DisasterCard";
+import RatingStars from "../../components/RatingStars";
+
 
 export default function OrgDetail() {
   const { orgId } = useParams();
@@ -28,7 +30,8 @@ export default function OrgDetail() {
           (reliefId) => data.relief_data.find((r) => r.id === reliefId) || null
         )
     : [];
-  console.log(pastReliefData);
+
+  console.log(org.ratings);
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 text-black">
@@ -43,7 +46,9 @@ export default function OrgDetail() {
           >
             &larr;
           </button>
-          <h1 className="text-xl uppercase font-bold text-accent">{org.name}</h1>
+          <h1 className="text-xl uppercase font-bold text-accent">
+            {org.name}
+          </h1>
         </div>
         <img
           src={org.image}
@@ -68,36 +73,14 @@ export default function OrgDetail() {
           items-start justify-center space-x-1 border rounded-lg py-2"
           >
             <span className="text-sm font-medium ">AI Credibility Rating</span>
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`h-4 w-4 ${
-                    i < org.ratings.ai_rating
-                      ? "fill-primary text-primary"
-                      : "text-primary"
-                  }`}
-                />
-              ))}
-            </div>
+            <RatingStars rating={org.ratings.ai_rating} maxStars={5} className="" />
           </div>
           <div
             className="my-2 w-full flex flex-col p-2 bg-background space-y-2 items-start 
           justify-center space-x-1 border rounded-lg py-2"
           >
             <span className="text-sm font-medium">Public Rating</span>
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`h-4 w-4 ${
-                    i < org.ratings.public_rating
-                      ? "fill-primary text-primary"
-                      : "text-primary"
-                  }`}
-                />
-              ))}
-            </div>
+            <RatingStars rating={org.ratings.public_rating} maxStars={5} className="" />
           </div>
         </div>
       </section>
@@ -120,31 +103,12 @@ export default function OrgDetail() {
       {/* Impact */}
       <section>
         <h2 className="font-semibold mb-2">Our Impact</h2>
-        <div className="space-y-3">
-          {org.impact.map((item, idx) => (
-            <div key={idx}>
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full rounded-lg mb-1"
-              />
-              {/* <p className="font-medium text-center">{item.year}</p> */}
-              <div className="flex justify-between space-x-2 text-sm my-2 text-center text-white">
-                <p className="font-medium text-accent flex justify-center items-center">
-                  {item.year}:
-                </p>
-                <div className="flex flex-col justify-between border shadow p-1 bg-primary border-accent rounded-md">
-                  <p className="text-md font-bold">{item.people_served}</p>
-                  <p>People Served </p>
-                </div>
-                <div className="flex flex-col justify-between border p-1 shadow bg-primary border-accent rounded-md">
-                  <p className="text-md font-bold">{item.projects_completed}</p>
-                  <p>Projects Completed </p>
-                </div>
-                <div className="flex flex-col justify-between border p-1 shadow bg-primary border-accent rounded-md">
-                  <p className="text-md font-bold">{item.funds_raised}</p>
-                  <p>Funds Raised </p>
-                </div>
+        <div className="flex space-y-3 space-x-3 w-fit flex-wrap">
+          {Object.entries(org.impact).map(([key, item], idx) => (
+            <div key={idx} className=" my-2 text-center text-white">
+              <div className="border text-xs shadow p-1 bg-primary border-accent rounded-md">
+                <p className="text-sm font-bold">{item}</p>
+                <p>{key} </p>
               </div>
             </div>
           ))}

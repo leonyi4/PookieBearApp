@@ -86,14 +86,14 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
             >
               Orgs & Sponsors
             </NavLink>
-            <hr className="border-accent w-screen" />
+            {/* <hr className="border-accent w-screen" />
             <NavLink
               to="/StartFundRaiser"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Start Fundraiser
-            </NavLink>
+            </NavLink> */}
             <hr className="border-accent w-screen " />
             <button
               onClick={handleLogout}

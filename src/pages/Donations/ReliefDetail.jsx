@@ -1,6 +1,6 @@
-import { Link, Star } from "lucide-react";
 import data from "../../assets/test_data.json";
 import { useParams, useNavigate } from "react-router-dom";
+import RatingStars from "../../components/RatingStars";
 
 export default function ReliefDetail() {
   // ⚡ Mock data — replace with real API later
@@ -42,9 +42,9 @@ export default function ReliefDetail() {
   }
 
   // for each entry in budget_allocation_percentage, log the key and value
-  Object.entries(budget_allocation_percentage).map(([key, value]) => {
-    console.log(key, value.percentage, value.value);
-  });
+  // Object.entries(budget_allocation_percentage).map(([key, value]) => {
+  //   console.log(key, value.percentage, value.value);
+  // });
 
   return (
     <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -91,31 +91,19 @@ export default function ReliefDetail() {
         <div className="grid grid-cols-2 gap-3 text-accent">
           <button className="flex flex-col space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
             <span className="text-sm font-medium">Public Rating</span>
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className={`h-4 w-4 ${
-                    i < orgData.ratings.public_rating
-                      ? "fill-primary text-primary"
-                      : "text-primary"
-                  }`}
-                />
-              ))}
-            </div>
+            <RatingStars
+              rating={orgData.ratings.ai_rating}
+              maxStars={5}
+              className=""
+            />
           </button>
           <button className="flex  flex-col space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
             <span className="text-sm font-medium ">AI Rating</span>
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`h-4 w-4 ${
-                    i < orgData.ratings.public_rating
-                      ? "fill-primary text-primary"
-                      : "text-primary"
-                  }`}
-                />
-              ))}
-            </div>
+            <RatingStars
+              rating={orgData.ratings.public_rating}
+              maxStars={5}
+              className=""
+            />
           </button>
         </div>
 

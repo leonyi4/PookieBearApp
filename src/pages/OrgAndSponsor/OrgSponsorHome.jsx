@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Star } from "lucide-react";
 import data from "../../assets/test_data.json";
+import RatingStars from "../../components/RatingStars";
 
 
 // const type = params.get('type') || 'organizations';
@@ -92,33 +92,11 @@ export default function OrgSponsorsHome() {
               <div className="flex justify-around w-full text-accent ">
                 <button className="flex flex-col p-2 bg-background space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
                   <span className="text-sm font-medium">Public Rating</span>
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-4 w-4 ${
-                          i < org.ratings.public_rating
-                            ? "fill-primary text-primary"
-                            : "text-primary"
-                        }`}
-                      />
-                    ))}
-                  </div>
+                  <RatingStars rating={org.ratings.public_rating} maxStars={5} className="" />
                 </button>
                 <button className="flex p-2 bg-background flex-col space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
                   <span className="text-sm font-medium ">AI Rating</span>
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-4 w-4 ${
-                          i < org.ratings.ai_rating
-                            ? "fill-primary text-primary"
-                            : "text-primary"
-                        }`}
-                      />
-                    ))}
-                  </div>
+                  <RatingStars rating={org.ratings.ai_rating} maxStars={5} className="" />
                 </button>
               </div>
               {/* View Details */}
