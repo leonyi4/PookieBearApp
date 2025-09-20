@@ -3,11 +3,13 @@ import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./DisasterMap.css";
+import data from "../../assets/test_data.json";
 
 // Fix Leaflet marker icons
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { Link } from "react-router-dom";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -31,33 +33,14 @@ const FitMyanmarBounds = ({ bounds }) => {
 const DisasterMap = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
 
-  const markers = [
-    {
-      id: 1,
-      position: [16.8409, 96.1735],
-      title: "Yangon Fire",
-      description: "A large fire outbreak reported in downtown Yangon.",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/6/6b/Fire_example.jpg",
-    },
-    {
-      id: 2,
-      position: [16.7833, 94.8],
-      title: "Ayeyarwady Flood",
-      description:
-        "Heavy flooding affecting several villages in the Ayeyarwady delta.",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/6/65/Flood_example.jpg",
-    },
-    {
-      id: 3,
-      position: [21.9162, 95.956],
-      title: "Mandalay Incident",
-      description: "Reported building collapse in Mandalay city.",
-      image:
-        "https://upload.wikimedia.org/wikipedia/commons/d/d1/Building_collapse_example.jpg",
-    },
-  ];
+  // Sample disaster markers data
+  // In real app, fetch this data from an API
+  const markers = data.disasters;
+  console.log(markers);
+
+  markers.map((marker) => {
+    console.log(marker);
+  });
 
   const myanmarBounds = [
     [9.5, 92.0], // SW
@@ -88,7 +71,10 @@ const DisasterMap = () => {
         {markers.map((marker) => (
           <Marker
             key={marker.id}
-            position={marker.position}
+            position={[
+              marker.location_data.latitude,
+              marker.location_data.longitude,
+            ]}
             eventHandlers={{
               click: () => handleMarkerClick(marker),
             }}
@@ -117,7 +103,7 @@ const DisasterMap = () => {
         >
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-bold text-blue-800">
-              {selectedMarker.title}
+              {selectedMarker.name}
             </h2>
             <button
               onClick={() => setSelectedMarker(null)}
@@ -129,13 +115,23 @@ const DisasterMap = () => {
           <p className="text-gray-700 mb-2">{selectedMarker.description}</p>
           <img
             src={selectedMarker.image}
-            alt={selectedMarker.title}
+            alt={selectedMarker.titnamele}
             style={{
               width: "100%",
               borderRadius: "10px",
               boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}
           />
+          <div className="flex">
+            <Link to={`/DisasterMap/${selectedMarker.id}`}>
+              <button className="bg-primary text-white py-2 px-4 rounded">
+                View Details
+              </button>
+            </Link>
+            <button className="ml-4 bg-accent text-white py-2 px-4 rounded">
+              Donate Now
+            </button>
+          </div>
         </div>
       )}
     </div>
