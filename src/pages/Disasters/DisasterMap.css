@@ -1,0 +1,39 @@
+/* DisasterMap.css */
+
+/* Map container styling */
+.disaster-map-container {
+  height: 500px;          /* same as inline style, can adjust */
+  width: 100%;
+  border-radius: 12px;    /* rounded corners */
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* subtle shadow */
+  border: 2px solid #e2e8f0; /* light gray border */
+  transition: transform 0.3s ease;
+}
+
+/* Add a hover effect to slightly lift the map */
+.disaster-map-container:hover {
+  transform: scale(1.02);
+}
+
+/* Popup styling */
+.leaflet-popup-content-wrapper {
+  background: #1e40af; /* nice blue background */
+  color: #fff;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.leaflet-popup-tip {
+  background: #1e40af;
+}
+
+/* Optional: improve marker hover effect */
+.leaflet-marker-icon {
+  transition: transform 0.2s ease;
+}
+
+.leaflet-marker-icon:hover {
+  transform: scale(1.2);
+}
