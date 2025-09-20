@@ -652,13 +652,13 @@
     {
       "id": 1,
       "email": "alice@example.com",
-      "password": "password123",
+      "password": "a",
       "name": "Alice"
     },
     {
       "id": 2,
       "email": "bob@example.com",
-      "password": "password456",
+      "password": "b",
       "name": "Bob"
     }
   ]

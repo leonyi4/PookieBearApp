@@ -47,7 +47,7 @@ const MiniMap = () => {
       </MapContainer>
 
       {/* Overlay Label */}
-      <div className="absolute bottom-3 right-3 bg-primary text-white px-3 py-1 rounded-lg text-sm shadow-md">
+      <div className=" bottom-3 right-3 bg-primary text-white px-3 py-1 rounded-lg text-sm shadow-md">
         View Full Map
       </div>
     </div>

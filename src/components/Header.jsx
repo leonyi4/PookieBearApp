@@ -4,10 +4,13 @@ import { NavLink } from "react-router-dom";
 import vertical_logo from "../assets/Vertical_logo.png";
 import Button from "./Button.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import  {useLockBodyScroll}  from "../hooks/useLockBodyScroll.jsx"
+
 
 //
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+const Header = ({ isMenuOpen, setIsMenuOpen }) => {
+  // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  useLockBodyScroll(isMenuOpen); // Lock scroll when menu is open
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -21,10 +24,10 @@ const Header = () => {
   }
 
   return (
-    <header className="sticky  bg-white border-accent shadow-sm">
+    <header className="sticky  bg-white border-accent shadow-sm" >
       {/* Default Header */}
       {!isMenuOpen && (
-        <header className="sticky bg-white border-b border-accent shadow-sm z-10">
+        <header className="sticky bg-white border-b border-accent shadow-sm z-100000">
           <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6">
             <NavLink to="/">
               <img src={header_logo} alt="logo" width={150} />
@@ -38,7 +41,7 @@ const Header = () => {
 
       {/* Drop Down Menu */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center px-6 py-8">
+        <header className="fixed inset-0 z-1000 bg-white  flex flex-col items-center justify-center px-6 py-8 menu-overlay">
           <button
             onClick={toggleMenu}
             className="absolute top-6 right-6 text-gray-600 hover:text-red-500 text-xl font-bold"
@@ -99,7 +102,7 @@ const Header = () => {
               Sign Out
             </button>
           </nav>
-        </div>
+        </header>
       )}
     </header>
   );
