@@ -254,7 +254,11 @@
       ],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
       "ongoing": [2],
-      "tags": ["#Disaster Relief Aid", "#Community Development", "#Education Support"],
+      "tags": [
+        "#Disaster Relief Aid",
+        "#Community Development",
+        "#Education Support"
+      ],
       "social_media": {
         "facebook": "https://www.facebook.com/brighthorizonsfoundation",
         "twitter": "https://www.twitter.com/bhfoundation",
@@ -364,7 +368,11 @@
       ],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
       "ongoing": [5],
-      "tags": ["#Community Resilience", "#Local Leadership", "#Disaster Preparedness"],
+      "tags": [
+        "#Community Resilience",
+        "#Local Leadership",
+        "#Disaster Preparedness"
+      ],
       "social_media": {
         "facebook": "https://www.facebook.com/communityfirstcollective",
         "twitter": "https://www.twitter.com/commfirst",
@@ -592,7 +600,11 @@
     {
       "id": 2,
       "name": "Naw Htet Htet",
-      "skills": ["Community Outreach", "Translation (Burmese/English)", "Food Distribution"],
+      "skills": [
+        "Community Outreach",
+        "Translation (Burmese/English)",
+        "Food Distribution"
+      ],
       "availability": "part-time",
       "deployments": [2, 5],
       "image": "https://media.tenor.com/-ufrqpl5cp0AAAAM/test.gif",
@@ -634,6 +646,20 @@
       "amount": 75,
       "fundraiser_id": 6,
       "timestamp": "2024-06-04T12:10:00Z"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email": "alice@example.com",
+      "password": "password123",
+      "name": "Alice"
+    },
+    {
+      "id": 2,
+      "email": "bob@example.com",
+      "password": "password456",
+      "name": "Bob"
     }
   ]
 }

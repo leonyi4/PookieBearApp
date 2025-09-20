@@ -1,10 +1,11 @@
 // src/pages/Sponsors/SponsorDetail.jsx
 import React, { useMemo } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate} from "react-router-dom";
 import data from "../../assets/test_data.json";
 
 export default function SponsorDetail() {
   const { sponsorId } = useParams();
+  const navigate = useNavigate();
   const sponsor = (data.sponsors || []).find(
     (s) => s.id === parseInt(sponsorId)
   );

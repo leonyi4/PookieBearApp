@@ -3,13 +3,22 @@ import header_logo from "../assets/header_logo.png";
 import { NavLink } from "react-router-dom";
 import vertical_logo from "../assets/Vertical_logo.png";
 import Button from "./Button.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
+//
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    setIsMenuOpen(false);
+  }
 
   return (
     <header className="sticky  bg-white border-accent shadow-sm">
@@ -83,6 +92,12 @@ const Header = () => {
               Start Fundraiser
             </NavLink>
             <hr className="border-accent w-screen " />
+            <button
+              onClick={handleLogout}
+              className="text-2xl text-red-500 hover:text-red-700 font-medium"
+            >
+              Sign Out
+            </button>
           </nav>
         </div>
       )}
