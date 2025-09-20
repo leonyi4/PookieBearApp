@@ -38,7 +38,9 @@ const DisasterMap = () => {
   const markers = data.disasters;
   console.log(markers);
 
-
+  markers.map((marker) => {
+    console.log(marker);
+  });
 
   const myanmarBounds = [
     [9.5, 92.0], // SW
@@ -55,7 +57,6 @@ const DisasterMap = () => {
 
   return (
     <div style={{ position: "relative" }}>
-      <h1 className=' text-primary text-xl uppercase my-2 font-bold text-center'>Disaster Map of Myanmar</h1>
       {/* Map Section */}
       <MapContainer
         className="disaster-map-container"
@@ -101,7 +102,7 @@ const DisasterMap = () => {
           }}
         >
           <div className="flex justify-between items-center mb-2">
-            <h2 className="text-lg font-bold text-primary">
+            <h2 className="text-lg font-bold text-blue-800">
               {selectedMarker.name}
             </h2>
             <button
@@ -123,11 +124,11 @@ const DisasterMap = () => {
           />
           <div className="flex">
             <Link to={`/DisasterMap/${selectedMarker.id}`}>
-              <button className="bg-accent text-background py-2 px-4 rounded">
+              <button className="bg-primary text-white py-2 px-4 rounded">
                 View Details
               </button>
             </Link>
-            <button className="ml-4 bg-secondary text-accent py-2 px-4 rounded">
+            <button className="ml-4 bg-accent text-white py-2 px-4 rounded">
               Donate Now
             </button>
           </div>
