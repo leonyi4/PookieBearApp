@@ -73,6 +73,10 @@
       "name": "Meiktila Monsoon Flooding Relief",
       "description": "Emergency aid and long-term recovery support for communities affected by the Meiktila monsoon floods.",
       "org_id": 2,
+      "location_data": {
+        "latitude": 20.8752,
+        "longitude": 95.8643
+      },
       "contributions": [
         {
           "cont_id": 1,
@@ -107,6 +111,10 @@
       "name": "Shan Flood Relief",
       "description": "Providing immediate relief and long-term recovery for communities affected by floods in Shan.",
       "org_id": 1,
+      "location_data": {
+        "latitude": 20.5750,
+        "longitude": 97.4320
+      },
       "contributions": [
         {
           "cont_id": 1,
@@ -141,6 +149,10 @@
       "name": "Earthquake Emergency Response",
       "description": "Immediate aid for earthquake victims, focusing on search & rescue, medical care, and temporary housing.",
       "org_id": 3,
+      "location_data": {
+        "latitude": 21.8901,
+        "longitude": 96.0950
+      },
       "contributions": [
         {
           "cont_id": 1,
@@ -175,6 +187,10 @@
       "name": "Rebuild Central Myanmar",
       "description": "Long-term recovery and rebuilding efforts for communities affected by the Mandalay earthquake.",
       "org_id": 1,
+      "location_data": {
+        "latitude": 21.8995,
+        "longitude": 96.0820
+      },
       "contributions": [
         {
           "cont_id": 1,
@@ -209,6 +225,10 @@
       "name": "Cyclone Relief",
       "description": "Emergency food and water distribution for communities affected by the Kayin State cyclone.",
       "org_id": 4,
+      "location_data": {
+        "latitude": 16.8900,
+        "longitude": 97.6350
+      },
       "contributions": [
         {
           "cont_id": 1,
@@ -243,6 +263,10 @@
       "name": "Yangon Fire Emergency Fund",
       "description": "Immediate support for families who lost their homes in the urban fire, providing temporary shelter and food.",
       "org_id": 3,
+      "location_data": {
+        "latitude": 16.7850,
+        "longitude": 96.1630
+      },
       "contributions": [
         {
           "cont_id": 1,
