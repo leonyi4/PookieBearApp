@@ -2,13 +2,7 @@ import React from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
-
-// Marker positions (same as your DisasterMap)
-const markers = [
-  { id: 1, position: [16.8409, 96.1735], title: "Yangon Fire" },
-  { id: 2, position: [16.7833, 94.8], title: "Ayeyarwady Flood" },
-  { id: 3, position: [21.9162, 95.956], title: "Mandalay Incident" },
-];
+import data from "../../assets/test_data.json";
 
 const MiniMap = () => {
   const navigate = useNavigate();
@@ -17,12 +11,16 @@ const MiniMap = () => {
     navigate("/DisasterMap"); // Navigate to full map page
   };
 
+  // load data
+  const markers = data.disasters;
+  const central_myanmar = [21.9162, 95.956]
+
   return (
     <div
       className="relative w-full h-64 rounded-xl shadow-md overflow-hidden cursor-pointer border border-primary"
     >
       <MapContainer
-        center={[21.9162, 95.956]} // Center Myanmar
+        center={central_myanmar}
         zoom={5}
         scrollWheelZoom={false}
         dragging={false}
@@ -33,12 +31,11 @@ const MiniMap = () => {
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution=""
         />
         {markers.map((marker) => (
           <Marker
             key={marker.id}
-            position={marker.position}
+            position={[marker.location_data.latitude, marker.location_data.longitude]}
             eventHandlers={{
               click: handleMarkerClick,
             }}

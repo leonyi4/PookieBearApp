@@ -1,3 +1,4 @@
+@import "tailwindcss";
 /* Map container styling */
 .disaster-map-container {
   height: 600px;          /* a bit taller for clarity */
