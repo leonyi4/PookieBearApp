@@ -39,7 +39,7 @@ export default function SponsorDetail() {
       {/* Memo */}
       <section>
         <h2 className="font-semibold mb-2">Memorandum of Appreciation</h2>
-        <p className="text-gray-600 text-sm">{sponsor.description}</p>
+        <p className="text-gray-600 text-sm">{sponsor.memo}</p>
       </section>
 
       {/* Stats */}

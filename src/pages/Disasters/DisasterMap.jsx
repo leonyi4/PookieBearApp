@@ -54,11 +54,12 @@ const DisasterMap = () => {
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className='relative h-full p-4 bg-background'>
       <h1 className=' text-primary text-xl uppercase my-2 font-bold text-center'>Disaster Map of Myanmar</h1>
       {/* Map Section */}
       <MapContainer
-        className="disaster-map-container"
+        className="h-[600px] w-full rounded-xl overflow-hidden shadow-md border-2 border-slate-300 
+        transition-transform duration-300 ease-in z-0 hover:scale-[1.04] hover:shadow-lg" 
         center={[20.0, 96.0]}
         zoom={6}
         maxBoundsViscosity={1.0}
@@ -85,20 +86,9 @@ const DisasterMap = () => {
       {/* Bottom Chat-Box Style Info Panel */}
       {selectedMarker && (
         <div
-          style={{
-            position: "absolute",
-            bottom: "0",
-            left: "0",
-            right: "0",
-            background: "#fff",
-            borderTopLeftRadius: "16px",
-            borderTopRightRadius: "16px",
-            padding: "16px",
-            boxShadow: "0 -4px 12px rgba(0,0,0,0.2)",
-            maxHeight: "40%",
-            overflowY: "auto",
-            transition: "transform 0.3s ease",
-          }}
+
+          className="absolute bottom-0 left-0 right-0 bg-background p-4 
+          shadow-sm max-h-[40%] overflow-y-auto transition-transform duration-300 ease-in-out rounded-t-xl z-10"
         >
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-bold text-primary">
@@ -114,12 +104,8 @@ const DisasterMap = () => {
           <p className="text-gray-700 mb-2">{selectedMarker.description}</p>
           <img
             src={selectedMarker.image}
-            alt={selectedMarker.titnamele}
-            style={{
-              width: "100%",
-              borderRadius: "10px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-            }}
+            alt={selectedMarker.title}
+            className="w-full h-40 shadow-sm rounded-lg"
           />
           <div className="flex">
             <Link to={`/DisasterMap/${selectedMarker.id}`}>
