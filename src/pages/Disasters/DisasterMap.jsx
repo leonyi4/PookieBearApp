@@ -36,7 +36,7 @@ const DisasterMap = () => {
   // Sample disaster markers data
   // In real app, fetch this data from an API
   const markers = data.disasters;
-  console.log(markers);
+  // console.log(markers);
 
 
 

@@ -76,7 +76,7 @@ export default function OrgSponsorsHome() {
             >
               <div className="flex items-center space-x-3 my-2 w-full ">
                 <img
-                  src={org.image}
+                  src={org.logo}
                   alt={org.name}
                   className="max-h-25 max-w-50 rounded-full"
                 />

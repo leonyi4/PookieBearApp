@@ -6,8 +6,7 @@ const DisasterCard = (props) => {
     // console.log(props.data)
 
     const progress = props.data.raised / props.data.goal * 100;
-    
-    console.log(props.data.image)
+
     
   return (
     <Link to={`/donations/${props.data.id}`} className='min-w-[200px] max-w-[200px] min-h-[250px] max-h-[250px] bg-secondary shadow-md'>

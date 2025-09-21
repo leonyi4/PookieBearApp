@@ -1,5 +1,5 @@
 import data from "../../assets/test_data.json";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import RatingStars from "../../components/RatingStars";
 
 export default function ReliefDetail() {
@@ -82,7 +82,9 @@ export default function ReliefDetail() {
             className="h-10 w-10 rounded-full"
           />
           <div>
-            <p className="font-medium text-gray-800">{orgData.name}</p>
+            <Link to={`/OrgsAndSponsors/organizations/${orgData.id}`}>
+              <p className="font-medium text-gray-800">{orgData.name}</p>
+            </Link>
             <p className="text-xs text-gray-500">{orgData.tags}</p>
           </div>
         </div>
