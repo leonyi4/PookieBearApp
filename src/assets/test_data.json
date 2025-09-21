@@ -12,7 +12,7 @@
       "severity": "High",
       "description": "Heavy monsoon rains caused widespread flooding in Meiktila, displacing thousands of families and damaging infrastructure.",
       "active_reliefs": [1],
-      "image": "https://example.com/images/disaster_meiktila_flooding.jpg"
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster1.png?raw=true"
     },
     {
       "id": 2,
@@ -26,7 +26,7 @@
       "severity": "Moderate",
       "description": "Flash floods across Shan State disrupted communities and required urgent relief and recovery operations.",
       "active_reliefs": [2],
-      "image": "https://example.com/images/disaster_shan_flooding.jpg"
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster2.png?raw=true"
     },
     {
       "id": 3,
@@ -40,7 +40,7 @@
       "severity": "High",
       "description": "A powerful 6.5 magnitude earthquake struck near Mandalay, causing significant structural damage and trapping people under collapsed buildings.",
       "active_reliefs": [3, 4],
-      "image": "https://example.com/images/disaster_myanmar_earthquake.jpg"
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster3.png?raw=true"
     },
     {
       "id": 4,
@@ -54,7 +54,7 @@
       "severity": "Moderate",
       "description": "Tropical cyclone brought strong winds and heavy rainfall, leading to localized flooding and destruction of homes and crops.",
       "active_reliefs": [5],
-      "image": "https://example.com/images/disaster_kayin_cyclone.jpg"
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster4.png?raw=true"
     },
     {
       "id": 5,
@@ -101,7 +101,7 @@
         "Essential_Supplies": 30000,
         "Medical_Aid": 20000
       },
-      "image": "https://example.com/images/relief_meiktila_shelter.jpg",
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster1.png?raw=true",
       "impact": [
         {
           "people_served": 500,
@@ -139,7 +139,7 @@
         "Essential_Supplies": 50000,
         "Medical_Aid": 30000
       },
-      "image": "https://example.com/images/relief_shan_medical.jpg",
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster2.png?raw=true",
       "impact": [
         {
           "people_served": 2000,
@@ -177,7 +177,7 @@
         "Medical_Aid": 80000,
         "Temporary_Housing": 70000
       },
-      "image": "https://example.com/images/relief_earthquake_rescue.jpg",
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster3.png?raw=true",
       "impact": [
         {
           "people_served": 1500,
@@ -215,7 +215,7 @@
         "Livelihood_Support": 150000,
         "Psychosocial_Support": 100000
       },
-      "image": "https://example.com/images/relief_myanmar_rebuild.jpg",
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster4.png?raw=true",
       "impact": [
         {
           "people_served": 3000,
@@ -253,7 +253,7 @@
         "Hygiene_Kits": 25000,
         "Shelter_Materials": 15000
       },
-      "image": "https://example.com/images/relief_cyclone_food.jpg",
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster5.png?raw=true",
       "impact": [
         {
           "people_served": 1500,
@@ -291,7 +291,7 @@
         "Food_Vouchers": 10000,
         "Medical_Aid": 10000
       },
-      "image": "https://example.com/images/relief_yangon_fire.jpg",
+      "image": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/disasters/disaster6.png?raw=true",
       "impact": [
         {
           "people_served": 800,
@@ -329,8 +329,7 @@
         "total_funds_raised": "1.2M Kyats",
         "projects_completed": 45
       },
-      "image": "https://example.com/images/org_bright_horizons_banner.jpg",
-      "logo": "https://example.com/images/org_bright_horizons_logo.png",
+      "logo": "https://github.com/leonyi4/PookieBearApp/blob/f120c5623679fbe4dd36613bd760b233b731ea76/src/assets/orgs/org1.png?raw=trueg",
       "ongoing": [2, 4],
       "tags": [
         "#Disaster Relief Aid",
@@ -371,8 +370,7 @@
         "total_funds_raised": "850,000 Kyats",
         "projects_completed": 30
       },
-      "image": "https://example.com/images/org_good_shepherd_banner.jpg",
-      "logo": "https://example.com/images/org_good_shepherd_logo.png",
+      "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/orgs/org2.png?raw=true",
       "ongoing": [1],
       "tags": [
         "#Following Christ",
@@ -413,8 +411,7 @@
         "total_funds_raised": "2.1M Kyats",
         "projects_completed": 50
       },
-      "image": "https://example.com/images/org_hope_bridge_banner.jpg",
-      "logo": "https://example.com/images/org_hope_bridge_logo.png",
+      "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/orgs/org3.png?raw=true",
       "ongoing": [3, 6],
       "tags": [
         "#Humanitarian Aid",
@@ -475,7 +472,7 @@
     {
       "id": 1,
       "name": "Global Aid Corp",
-      "logo": "https://example.com/images/sponsor_global_aid_logo.png",
+      "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/sponsors/sponsor1.png?raw=true",
       "memo": "Dear Global Aid Corp Team, thank you for your unwavering support for our disaster relief operations. Your sponsorship has played a critical role in enabling our rapid response and providing life-saving resources to communities in need.",
       "stats": {
         "peopleHelped": "12,500+",
@@ -500,7 +497,7 @@
     {
       "id": 2,
       "name": "Hope Bank",
-      "logo": "https://example.com/images/sponsor_hope_bank_logo.png",
+      "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/sponsors/sponsor2.png?raw=true",
       "memo": "Dear Hope Bank, your generous contributions and matching donation programs have greatly amplified our fundraising efforts. Your commitment to corporate social responsibility is a true inspiration.",
       "stats": {
         "peopleHelped": "8,000+",
@@ -525,7 +522,7 @@
     {
       "id": 3,
       "name": "Myanmar Youth Collective",
-      "logo": "https://example.com/images/sponsor_myanmar_youth_logo.png",
+      "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/sponsors/sponsor3.png?raw=true",
       "memo": "To the Myanmar Youth Collective, your dedication to raising awareness and mobilizing young people for our cause is incredible. Your energy and passion are a driving force behind our mission.",
       "stats": {
         "peopleHelped": "5,000+",
@@ -545,7 +542,7 @@
     {
       "id": 4,
       "name": "Tech for Good Initiative",
-      "logo": "https://example.com/images/sponsor_tech_for_good_logo.png",
+      "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/sponsors/sponsor4.png?raw=true",
       "memo": "To the Tech for Good Initiative, your technical expertise and innovative solutions have revolutionized how we respond to crises. Thank you for your vital partnership.",
       "stats": {
         "peopleHelped": "20,000+",
@@ -565,7 +562,7 @@
     {
       "id": 5,
       "name": "Architects Without Borders",
-      "logo": "https://example.com/images/sponsor_architects_logo.png",
+      "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/sponsors/sponsor5.png?raw=true",
       "memo": "To Architects Without Borders, your pro-bono design and rebuilding expertise have given hope to families who lost everything. Your work is fundamental to long-term recovery.",
       "stats": {
         "peopleHelped": "3,000+",
@@ -585,7 +582,7 @@
     {
       "id": 6,
       "name": "Food Relief Now",
-      "logo": "https://example.com/images/sponsor_food_relief_logo.png",
+      "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/sponsors/sponsor6.png?raw=true",
       "memo": "To Food Relief Now, your timely provision of essential supplies has saved countless lives. Your volunteers and logistics team are true heroes on the ground.",
       "stats": {
         "peopleHelped": "10,000+",

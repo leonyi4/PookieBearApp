@@ -3,6 +3,7 @@ import data from "../assets/test_data.json";
 import DisasterCard from "./Disasters/DisasterCard";
 import MiniMap from "./Disasters/MiniMap";
 import DisasterMap from "./Disasters/DisasterMap"; // adjust the path if necessary
+
 // console.log(data.relief_data);
 
 export default function Home() {
@@ -60,7 +61,6 @@ export default function Home() {
           ))}
         </ul>
       </section>
-
       {/* Sponsors Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
@@ -92,7 +92,7 @@ export default function Home() {
       </section>
 
       {/* Real Time Updates Section */}
-      <section >
+      <section>
         <h2 className="text-xl font-bold text-gray-900 mb-4">
           Real Time Updates
         </h2>
