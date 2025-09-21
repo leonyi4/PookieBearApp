@@ -34,7 +34,7 @@ export default function Landing() {
   return (
     <div className="flex h-screen w-full items-center justify-center bg-cover bg-center"
          style={{ backgroundImage: "url('/map-background.png')" }}>
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-[90%] max-w-md">
+      <div className="bg-background p-8 rounded-2xl shadow-lg w-[90%] max-w-md">
         {/* Logo */}
         <div className="flex flex-col items-center mb-6">
           <img src={logo} alt="Pookie Bear Logo" className="h-60" />
