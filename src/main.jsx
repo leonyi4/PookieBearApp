@@ -12,6 +12,8 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import Landing from "./pages/Auth/Landing.jsx";
 import SignUp from "./pages/Auth/SignUp.jsx";
+import Profile from "./profile/Profile.jsx";
+
 import Home from "./pages/Home.jsx";
 import DisaterMap from "./pages/Disasters/DisasterMap.jsx";
 import DisasterDetail from "./pages/Disasters/DisasterDetail.jsx";
@@ -45,12 +47,13 @@ const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Home /> },
+      { path: "profile", element: <Profile /> },
 
       { path: "DisasterMap", element: <DisaterMap /> },
       { path: "DisasterMap/:disasterId", element: <DisasterDetail /> },
 
       {
-        path: "DonationsAndVolunteers/",
+        path: "DonationsAndVolunteers",
         element: <Navigate to="/DonationsAndVolunteers/donations" replace />,
       },
       {
@@ -74,7 +77,7 @@ const router = createBrowserRouter([
       { path: "FundraiserDashboard", element: <FundRaiserDashboard /> },
 
       {
-        path: "OrgsAndSponsors/",
+        path: "OrgsAndSponsors",
         element: <Navigate to="/OrgsAndSponsors/organizations" replace />,
       },
       { path: "OrgsAndSponsors/:type", element: <OrgSponsorsHome /> },

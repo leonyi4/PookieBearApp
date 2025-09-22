@@ -12,10 +12,11 @@ export default function OrgSponsorsHome() {
 
   const [activeTab, setActiveTab] = useState("organizations");
 
+  console.log(data)
+
   const organizations = data.orgs;
   const sponsors = data.sponsors;
 
-  // console.log(organizations);
 
   // Sync URL param with state
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function OrgSponsorsHome() {
   // Update URL when tab is clicked
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    console.log('tab: ', tab)
     navigate(`/OrgsAndSponsors/${tab}`);
   };
 
@@ -65,8 +67,9 @@ export default function OrgSponsorsHome() {
         placeholder="Search"
         className="w-full p-2 border text-black border-secondary rounded-lg mb-4 bg-white"
       ></input>
+
       {/* Organizations List */}
-      {activeTab === "organization s" && (
+      {activeTab === "organizations" && (
         <div className="space-y-4">
           {organizations.map((org, idx) => (
             <div

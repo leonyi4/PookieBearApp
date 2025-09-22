@@ -4,17 +4,16 @@ import data from "../../../assets/test_data.json";
 
 const VolunteerCard = (props) => {
 
- 
 
   const progress =
     (props.data.impact.volunteers_signed_up /
       props.data.impact.volunteers_needed) *
     100;
 
-  console.log(data);
+  // console.log(data);
   const org_id = props.data.org_id;
   const org_data = data.orgs.find((o) => o.id === org_id);
-  console.log(org_data);
+  // console.log(org_data);
 
   return (
     <div
@@ -70,7 +69,7 @@ const VolunteerCard = (props) => {
         {!props.home && (
         <div className="mt-2 flex space-x-2 justify-between text-center">
           <Link
-            to={`DonationsAndVolunteers/volunteers/${props.data.id}`}
+            to={`/DonationsAndVolunteers/volunteers/${props.data.id}`}
             className="w-full bg-primary  text-white font-medium py-1 px-1 rounded-md hover:bg-accent"
           >
             <button className="">

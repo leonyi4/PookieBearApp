@@ -70,7 +70,7 @@ const DonationCard = ({ data: donation, home: isHome, className = "" }) => {
         {!isHome && (
           <div className="mt-2 flex space-x-2 justify-between text-center">
             <Link
-              to={`DonationsAndVolunteers/donations/${donation.id}`}
+              to={`/DonationsAndVolunteers/donations/${donation.id}`}
               className="w-full bg-primary  text-white font-medium py-1 px-1 rounded-md hover:bg-accentS"
             >
               <button className="">View Details</button>

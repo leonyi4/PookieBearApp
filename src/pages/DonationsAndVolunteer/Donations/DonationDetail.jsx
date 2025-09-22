@@ -9,6 +9,8 @@ export default function DonationDetail() {
   const relief_id = useParams();
   const navigate = useNavigate();
 
+  console.log('hahahaahahah')
+
   // Get Campaign Data
   const campaign = data.donations.find(
     (r) => r.id === parseInt(relief_id.donationId)

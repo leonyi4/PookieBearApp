@@ -4,8 +4,7 @@ import { NavLink } from "react-router-dom";
 import vertical_logo from "../assets/Vertical_logo.png";
 import Button from "./Button.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import  {useLockBodyScroll}  from "../hooks/useLockBodyScroll.jsx"
-
+import { useLockBodyScroll } from "../hooks/useLockBodyScroll.jsx";
 
 //
 const Header = ({ isMenuOpen, setIsMenuOpen }) => {
@@ -21,10 +20,10 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
   const handleLogout = () => {
     logout();
     setIsMenuOpen(false);
-  }
+  };
 
   return (
-    <header className="sticky  bg-white border-accent shadow-sm" >
+    <header className="sticky  bg-white border-accent shadow-sm">
       {/* Default Header */}
       {!isMenuOpen && (
         <header className="sticky bg-white border-b border-accent shadow-sm z-100000">
@@ -53,6 +52,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
             <NavLink to="/" onClick={toggleMenu}>
               <img src={vertical_logo} alt="logo" width={150} />
             </NavLink>
+
             <NavLink
               to="/"
               onClick={toggleMenu}
@@ -61,6 +61,16 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               Home
             </NavLink>
             <hr className="border-accent w-screen" />
+
+            <NavLink
+            to="/profile"
+              onClick={toggleMenu}
+              className="text-2xl text-primary hover:text-accent font-medium"
+            >
+              Profile
+            </NavLink>
+            <hr className="border-accent w-screen" />
+
             <NavLink
               to="/DisasterMap"
               onClick={toggleMenu}
@@ -69,16 +79,17 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               Disaster Map
             </NavLink>
             <hr className="border-accent w-screen" />
+
             <NavLink
-              to="/Donations"
+              to="/DonationsAndVolunteers/donations"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
-              Donations
+              Donations & Volunteers
             </NavLink>
             <hr className="border-accent w-screen" />
-            {/* Org and Sponsor*/}
 
+            {/* Org and Sponsor*/}
             <NavLink
               to="/OrgsAndSponsors/organizations"
               onClick={toggleMenu}
@@ -87,23 +98,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               Orgs & Sponsors
             </NavLink>
             <hr className="border-accent w-screen" />
-            <NavLink
-              to="/volunteers"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Volunteers
-            </NavLink>
-            <hr className="border-accent w-screen" />
-            {/* <hr className="border-accent w-screen" />
-            <NavLink
-              to="/StartFundRaiser"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Start Fundraiser
-            </NavLink> */}
-            <hr className="border-accent w-screen " />
+
             <button
               onClick={handleLogout}
               className="text-2xl text-red-500 hover:text-red-700 font-medium"
