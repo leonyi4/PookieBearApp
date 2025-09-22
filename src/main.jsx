@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Landing from "./pages/Auth/Landing.jsx";
 import SignUp from "./pages/Auth/SignUp.jsx";
 import Profile from "./profile/Profile.jsx";
+import ProfileCompletion from "./pages/Auth/ProfileCompletion.jsx";
 
 import Home from "./pages/Home.jsx";
 import DisaterMap from "./pages/Disasters/DisasterMap.jsx";
@@ -36,6 +37,7 @@ import OrgSponsorsHome from "./pages/OrgAndSponsor/OrgSponsorHome.jsx";
 const router = createBrowserRouter([
   { path: "/Landing", element: <Landing /> },
   { path: "/SignUp", element: <SignUp /> },
+  { path: "ProfileCompletion", element: <ProfileCompletion /> },
 
   // Main App (Protected)
   {

@@ -1,0 +1,5 @@
+id,email,password,name,identification,birthdate,country,city,location,profile_picture
+1,alice@example.com,a,Alice,MM1234567,1995-04-12,Myanmar,Yangon,"[16.8409, 96.1735]",https://randomuser.me/api/portraits/women/68.jpg
+2,bob@example.com,b,Bob,MM7654321,1990-09-22,Myanmar,Mandalay,"[21.9588, 96.0891]",https://randomuser.me/api/portraits/men/75.jpg
+3,funAdmin@example.com,funAdmin,Fun Admin,MM2468101,1985-01-05,Myanmar,Naypyidaw,"[19.7633, 96.0785]",https://randomuser.me/api/portraits/men/12.jpg
+4,susan@example.com,susan123,Susan,MM1357911,1998-07-30,Myanmar,Shan State,"[20.5739, 97.43]",https://randomuser.me/api/portraits/women/44.jpg

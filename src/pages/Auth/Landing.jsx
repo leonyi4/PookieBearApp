@@ -1,67 +1,114 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import data from "../../assets/test_data.json";
+import { supabase } from "../../lib/supabase-client";
 import logo from "../../assets/Vertical_logo.png";
 
-const users = data.users; // mock users from test_data.json
-
-
 export default function Landing() {
-  const { login } = useAuth();
   const navigate = useNavigate();
-
+  const { user, login, loading } = useAuth(); // from AuthContext
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+  // If already logged in, route away from Landing immediately
+  useEffect(() => {
+    const routeIfLoggedIn = async () => {
+      if (!user) return;
+      // fetch profile_complete; if no row, treat as incomplete
+      const { data: profile, error: profileErr } = await supabase
+        .from("users")
+        .select("profile_complete")
+        .eq("id", user.id)
+        .single();
+
+      console.log(profile)
+      if (profileErr || !profile || profile.profile_complete === false) {
+        navigate("/ProfileCompletion", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+    };
+    if (!loading) routeIfLoggedIn();
+  }, [user, loading, navigate]);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
 
-    // Check against mock users
-    const foundUser = users.find(
-      (u) => u.email === email && u.password === password
-    );
+    try {
+      const authedUser = await login(email, password); // AuthContext → supabase.auth.signInWithPassword
+      if (!authedUser) return;
 
-    if (foundUser) {
-      login(foundUser); // Save to context + localStorage
-      navigate("/"); // Redirect to home page
-    } else {
-      setError("Invalid email or password.");
+      // Make sure a minimal users row exists (if signup minimal insert ever failed)
+      const { data: profile, error: fetchErr } = await supabase
+        .from("users")
+        .select("profile_complete")
+        .eq("id", authedUser.id)
+        .single();
+
+      if (fetchErr || !profile) {
+        // Try to create minimal row (id+email); ignore unique conflicts
+        await supabase.from("users").insert({
+          id: authedUser.id,
+          email,
+          profile_complete: false,
+        });
+        return navigate("/ProfileCompletion");
+      }
+
+      // Route by completion
+      if (!profile.profile_complete) {
+        navigate("/ProfileCompletion");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      setError(err.message || "Login failed");
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center text-accent">
+        Loading…
+      </div>
+    );
+  }
+
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-cover bg-center"
-         style={{ backgroundImage: "url('/map-background.png')" }}>
+    <div
+      className="flex h-screen w-full items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('/map-background.png')" }}
+    >
       <div className="bg-background p-8 rounded-2xl shadow-lg w-[90%] max-w-md">
-        {/* Logo */}
         <div className="flex flex-col items-center mb-6">
           <img src={logo} alt="Pookie Bear Logo" className="h-60" />
         </div>
 
-        {/* Auth Form */}
         <form onSubmit={handleLogin} className="space-y-4 text-accent">
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+            className="w-full p-3 border rounded-lg text-accent"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
           />
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+            className="w-full p-3 border rounded-lg text-accent"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
           />
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"
-            className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-sky-700 transition"
+            className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-80"
           >
             Log In
           </button>
