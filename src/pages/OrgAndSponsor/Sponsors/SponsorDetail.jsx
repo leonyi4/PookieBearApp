@@ -1,7 +1,7 @@
 // src/pages/Sponsors/SponsorDetail.jsx
 import React, { useMemo } from "react";
 import { useParams, Link, useNavigate} from "react-router-dom";
-import data from "../../assets/test_data.json";
+import data from "../../../assets/test_data.json";
 
 export default function SponsorDetail() {
   const { sponsorId } = useParams();

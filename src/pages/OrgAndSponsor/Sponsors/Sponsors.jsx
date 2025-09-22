@@ -1,7 +1,7 @@
 // src/pages/Sponsors/SponsorsList.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import data from "../../assets/test_data.json";
+import data from "../../../assets/test_data.json";
 
 export default function Sponsors() {
   const sponsors = data.sponsors || [];

@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import data from "../assets/test_data.json";
-import DonationCard from "./Donations/DonationCard";
+import DonationCard from "./DonationsAndVolunteer/Donations/DonationCard";
 import MiniMap from "./Disasters/MiniMap";
-import DisasterMap from "./Disasters/DisasterMap"; // adjust the path if necessary
-import VolunteerCard from "./Volunteer/VolunteerCard";
+import VolunteerCard from "./DonationsAndVolunteer/Volunteer/VolunteerCard";
 
 
 export default function Home() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import data from "../../assets/test_data.json";
+import data from "../../../assets/test_data.json";
 
 const Donations = () => {
   const donations = data.donations;

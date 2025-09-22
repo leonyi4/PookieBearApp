@@ -1,10 +1,10 @@
 // src/pages/Organizations/OrgDetail.jsx
 import React, { useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import data from "../../assets/test_data.json";
-import { Star, StarHalf } from "lucide-react";
-import DisasterCard from "../Donations/DonationCard";
-import RatingStars from "../../components/RatingStars";
+import data from "../../../assets/test_data.json";
+import DisasterCard from "../../DonationsAndVolunteer/Donations/DonationCard";
+import RatingStars from "../../../components/RatingStars";
+import VolunteerCard from "../../DonationsAndVolunteer/Volunteer/VolunteerCard";
 
 export default function OrgDetail() {
   const { orgId } = useParams();
@@ -16,7 +16,7 @@ export default function OrgDetail() {
   // get relief data
   const ongoingReliefData = org.ongoing
     ? org.ongoing.map(
-        (reliefId) => data.relief_data.find((r) => r.id === reliefId) || null
+        (reliefId) => data.donations.find((r) => r.id === reliefId) || null
       )
     : [];
 
@@ -25,7 +25,7 @@ export default function OrgDetail() {
     ? org.reliefs
         .filter((reliefId) => !org.ongoing.includes(reliefId))
         .map(
-          (reliefId) => data.relief_data.find((r) => r.id === reliefId) || null
+          (reliefId) => data.donations.find((r) => r.id === reliefId) || null
         )
     : [];
 
@@ -92,10 +92,10 @@ export default function OrgDetail() {
         </div>
       </section>
 
-      {/* Ongoing Reliefs */}
+      {/* Ongoing Donations */}
 
       <section>
-        <h2 className="font-semibold mb-2">Ongoing Campaigns</h2>
+        <h2 className="font-semibold mb-2">Ongoing Donations</h2>
         {ongoingReliefData.length > 0 ? (
           <div className="flex overflow-x-auto w-full overflow-y-hidden space-x-4 pb-2">
             {ongoingReliefData.map((disaster, index) => (
@@ -103,9 +103,28 @@ export default function OrgDetail() {
             ))}
           </div>
         ) : (
-          <p className="text-gray-600 text-sm">No ongoing campaigns.</p>
+          <p className="text-gray-600 text-sm">No ongoing donation campaigns.</p>
         )}
       </section>
+
+      {/* ongoing volunteer campaigns */}
+      {/* <section>
+        <h2 className="font-semibold mb-2">Ongoing Volunteer Campaigns</h2>
+        {org.ongoing_volunteer.length > 0 ? (
+          <div className="flex overflow-x-auto w-full overflow-y-hidden space-x-4 pb-2">
+            {org.ongoing_volunteer.map((volunteerId, index) => {
+              const volunteer = data.volunteers.find(
+                (v) => v.id === volunteerId
+              );
+              return volunteer ? (
+                <VolunteerCard key={index} data={volunteer} />
+              ) : null;
+            })}
+          </div>
+        ) : (
+          <p className="text-gray-600 text-sm">No ongoing volunteer campaigns.</p>
+        )}
+      </section> */}
 
       {/* Impact */}
       <section>
