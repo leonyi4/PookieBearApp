@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import data from "../../assets/test_data.json";
 import { Star, StarHalf } from "lucide-react";
-import DisasterCard from "../Disasters/DisasterCard";
+import DisasterCard from "../Donations/DonationCard";
 import RatingStars from "../../components/RatingStars";
 
 export default function OrgDetail() {

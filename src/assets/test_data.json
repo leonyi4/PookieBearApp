@@ -20,7 +20,7 @@
       "location": "Shan State, Myanmar",
       "location_data": {
         "latitude": 20.5739,
-        "longitude": 97.4300
+        "longitude": 97.43
       },
       "date": "2023-08-05",
       "severity": "Moderate",
@@ -71,7 +71,7 @@
       "image": "https://example.com/images/disaster_yangon_fire.jpg"
     }
   ],
-  "relief_data": [
+  "donations": [
     {
       "id": 1,
       "disaster_id": 1,
@@ -117,8 +117,8 @@
       "description": "Providing immediate relief and long-term recovery for communities affected by floods in Shan.",
       "org_id": 1,
       "location_data": {
-        "latitude": 20.5750,
-        "longitude": 97.4320
+        "latitude": 20.575,
+        "longitude": 97.432
       },
       "contributions": [
         {
@@ -156,7 +156,7 @@
       "org_id": 3,
       "location_data": {
         "latitude": 21.8901,
-        "longitude": 96.0950
+        "longitude": 96.095
       },
       "contributions": [
         {
@@ -194,7 +194,7 @@
       "org_id": 1,
       "location_data": {
         "latitude": 21.8995,
-        "longitude": 96.0820
+        "longitude": 96.082
       },
       "contributions": [
         {
@@ -231,8 +231,8 @@
       "description": "Emergency food and water distribution for communities affected by the Kayin State cyclone.",
       "org_id": 4,
       "location_data": {
-        "latitude": 16.8900,
-        "longitude": 97.6350
+        "latitude": 16.89,
+        "longitude": 97.635
       },
       "contributions": [
         {
@@ -269,8 +269,8 @@
       "description": "Immediate support for families who lost their homes in the urban fire, providing temporary shelter and food.",
       "org_id": 3,
       "location_data": {
-        "latitude": 16.7850,
-        "longitude": 96.1630
+        "latitude": 16.785,
+        "longitude": 96.163
       },
       "contributions": [
         {
@@ -299,6 +299,98 @@
           "medical_aid_provided": 50
         }
       ]
+    }
+  ],
+  "volunteers": [
+    {
+      "id": 1,
+      "disaster_id": 3,
+      "name": "Earthquake Response Volunteers",
+      "description": "Recruiting volunteers to assist with medical aid, logistics, and food distribution in Mandalay Region.",
+      "org_id": 3,
+      "location_data": {
+        "latitude": 21.8958,
+        "longitude": 96.0891
+      },
+      "roles": [
+        {
+          "role_id": 1,
+          "title": "Medical Volunteer",
+          "skills_required": ["First Aid", "Basic Nursing"],
+          "commitment": "5 days minimum"
+        },
+        {
+          "role_id": 2,
+          "title": "Logistics Volunteer",
+          "skills_required": ["Driving", "Heavy Lifting"],
+          "commitment": "Flexible"
+        }
+      ],
+      "impact": {
+        "volunteers_needed": 200,
+        "volunteers_signed_up": 85
+      },
+      "image": "https://example.com/images/volunteer_earthquake.png"
+    },
+    {
+      "id": 2,
+      "disaster_id": 4,
+      "name": "Cyclone Relief Volunteers",
+      "description": "Helping distribute food and hygiene kits to affected families in Kayin State.",
+      "org_id": 4,
+      "location_data": {
+        "latitude": 16.89,
+        "longitude": 97.635
+      },
+      "roles": [
+        {
+          "role_id": 1,
+          "title": "Food Distribution Volunteer",
+          "skills_required": ["Organization", "Teamwork"],
+          "commitment": "3 days"
+        },
+        {
+          "role_id": 2,
+          "title": "Community Outreach Volunteer",
+          "skills_required": ["Communication", "Local Language"],
+          "commitment": "Flexible"
+        }
+      ],
+      "impact": {
+        "volunteers_needed": 100,
+        "volunteers_signed_up": 45
+      },
+      "image": "https://example.com/images/volunteer_cyclone.png"
+    },
+    {
+      "id": 3,
+      "disaster_id": 5,
+      "name": "Yangon Fire Support Volunteers",
+      "description": "Assisting displaced families with temporary shelter setup and food distribution.",
+      "org_id": 3,
+      "location_data": {
+        "latitude": 16.785,
+        "longitude": 96.163
+      },
+      "roles": [
+        {
+          "role_id": 1,
+          "title": "Shelter Setup Volunteer",
+          "skills_required": ["Basic Carpentry", "Heavy Lifting"],
+          "commitment": "Weekend shifts"
+        },
+        {
+          "role_id": 2,
+          "title": "Food Distribution Volunteer",
+          "skills_required": ["Organization", "Cooking"],
+          "commitment": "4 hours/day"
+        }
+      ],
+      "impact": {
+        "volunteers_needed": 80,
+        "volunteers_signed_up": 32
+      },
+      "image": "https://example.com/images/volunteer_yangon_fire.png"
     }
   ],
   "orgs": [
@@ -372,11 +464,7 @@
       },
       "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/orgs/org2.png?raw=true",
       "ongoing": [1],
-      "tags": [
-        "#Following Christ",
-        "#Community Support",
-        "#Disaster Relief"
-      ],
+      "tags": ["#Following Christ", "#Community Support", "#Disaster Relief"],
       "social_media": {
         "facebook": "https://www.facebook.com/thegoodshepherdmission",
         "twitter": "https://www.twitter.com/gsm_relief",
@@ -413,11 +501,7 @@
       },
       "logo": "https://github.com/leonyi4/PookieBearApp/blob/main/src/assets/orgs/org3.png?raw=true",
       "ongoing": [3, 6],
-      "tags": [
-        "#Humanitarian Aid",
-        "#Disaster Response",
-        "#Volunteer Network"
-      ],
+      "tags": ["#Humanitarian Aid", "#Disaster Response", "#Volunteer Network"],
       "social_media": {
         "facebook": "https://www.facebook.com/hopebridgefoundation",
         "twitter": "https://www.twitter.com/hopebridge_fdn",
@@ -600,107 +684,54 @@
       "sponsored_reliefs": [5]
     }
   ],
-  "stories": [
-    {
-      "id": 1,
-      "title": "A New Beginning in Meiktila",
-      "relief_id": 1,
-      "author": "Maung Aye",
-      "narrative": "After the floods took everything, my family and I were hopeless. The emergency shelter provided by The Good Shepherd Mission gave us not just a roof, but a community. We received blankets, food, and the kindness of volunteers. It was a lifeline that helped us believe in a new beginning.",
-      "image": "https://example.com/images/story_meiktila_family.jpg"
-    },
-    {
-      "id": 2,
-      "title": "Hope after the Shake",
-      "relief_id": 3,
-      "author": "Daw Hla",
-      "narrative": "The earthquake destroyed our home in minutes. But within hours, Hope Bridge Foundation volunteers arrived with medical aid and helped my injured husband. They worked tirelessly to clear rubble and set up a safe place for us to stay. Their dedication showed us that we are not alone in this.",
-      "image": "https://example.com/images/story_earthquake_rescue.jpg"
-    }
-  ],
-  "volunteers": [
-    {
-      "id": 1,
-      "name": "Aung Win",
-      "skills": [
-        "First Aid",
-        "Logistics",
-        "Shelter Management"
-      ],
-      "availability": "full-time",
-      "deployments": [1, 3],
-      "image": "https://example.com/images/volunteer_aung_win.jpg",
-      "bio": "Aung is a retired paramedic with over 20 years of experience. He is dedicated to using his medical knowledge to help in disaster zones."
-    },
-    {
-      "id": 2,
-      "name": "Naw Htet Htet",
-      "skills": [
-        "Community Outreach",
-        "Translation (Burmese/English)",
-        "Food Distribution"
-      ],
-      "availability": "part-time",
-      "deployments": [2, 5],
-      "image": "https://example.com/images/volunteer_naw_htet_htet.jpg",
-      "bio": "Naw Htet is a university student passionate about community service. Her local knowledge and language skills are invaluable for relief efforts."
-    }
-  ],
-  "donations": [
-    {
-      "id": 1,
-      "donor_name": "Anonymous",
-      "amount": 50,
-      "relief_id": 1,
-      "timestamp": "2024-06-01T10:30:00Z"
-    },
-    {
-      "id": 2,
-      "donor_name": "John Smith",
-      "amount": 100,
-      "relief_id": 1,
-      "timestamp": "2024-06-01T11:45:00Z"
-    },
-    {
-      "id": 3,
-      "donor_name": "Sarah Lee",
-      "amount": 25,
-      "relief_id": 2,
-      "timestamp": "2024-06-02T09:00:00Z"
-    },
-    {
-      "id": 4,
-      "donor_name": "Anonymous",
-      "amount": 500,
-      "relief_id": 3,
-      "timestamp": "2024-06-03T15:20:00Z"
-    },
-    {
-      "id": 5,
-      "donor_name": "Lisa Chan",
-      "amount": 75,
-      "relief_id": 6,
-      "timestamp": "2024-06-04T12:10:00Z"
-    }
-  ],
   "users": [
     {
       "id": 1,
       "email": "alice@example.com",
       "password": "a",
-      "name": "Alice"
+      "name": "Alice",
+      "identification": "MM1234567",
+      "birthdate": "1995-04-12",
+      "country": "Myanmar",
+      "city": "Yangon",
+      "location": [16.8409, 96.1735],
+      "profile_picture": "https://randomuser.me/api/portraits/women/68.jpg"
     },
     {
       "id": 2,
       "email": "bob@example.com",
       "password": "b",
-      "name": "Bob"
+      "name": "Bob",
+      "identification": "MM7654321",
+      "birthdate": "1990-09-22",
+      "country": "Myanmar",
+      "city": "Mandalay",
+      "location": [21.9588, 96.0891],
+      "profile_picture": "https://randomuser.me/api/portraits/men/75.jpg"
     },
     {
       "id": 3,
       "email": "funAdmin@example.com",
       "password": "funAdmin",
-      "name": "Fun Admin"
+      "name": "Fun Admin",
+      "identification": "MM2468101",
+      "birthdate": "1985-01-05",
+      "country": "Myanmar",
+      "city": "Naypyidaw",
+      "location": [19.7633, 96.0785],
+      "profile_picture": "https://randomuser.me/api/portraits/men/12.jpg"
+    },
+    {
+      "id": 4,
+      "email": "susan@example.com",
+      "password": "susan123",
+      "name": "Susan",
+      "identification": "MM1357911",
+      "birthdate": "1998-07-30",
+      "country": "Myanmar",
+      "city": "Shan State",
+      "location": [20.5739, 97.43],
+      "profile_picture": "https://randomuser.me/api/portraits/women/44.jpg"
     }
   ]
 }

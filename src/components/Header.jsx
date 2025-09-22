@@ -86,6 +86,15 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
             >
               Orgs & Sponsors
             </NavLink>
+            <hr className="border-accent w-screen" />
+            <NavLink
+              to="/volunteers"
+              onClick={toggleMenu}
+              className="text-2xl text-primary hover:text-accent font-medium"
+            >
+              Volunteers
+            </NavLink>
+            <hr className="border-accent w-screen" />
             {/* <hr className="border-accent w-screen" />
             <NavLink
               to="/StartFundRaiser"

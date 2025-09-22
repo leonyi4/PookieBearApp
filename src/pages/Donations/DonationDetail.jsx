@@ -2,14 +2,14 @@ import data from "../../assets/test_data.json";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import RatingStars from "../../components/RatingStars";
 
-export default function ReliefDetail() {
+export default function DonationDetail() {
   // ⚡ Mock data — replace with real API later
 
   const relief_id = useParams();
   const navigate = useNavigate();
 
   // Get Campaign Data
-  const campaign = data.relief_data.find(
+  const campaign = data.donations.find(
     (r) => r.id === parseInt(relief_id.reliefId)
   );
 

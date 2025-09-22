@@ -15,8 +15,12 @@ import SignUp from "./pages/Auth/SignUp.jsx";
 import Home from "./pages/Home.jsx";
 import DisaterMap from "./pages/Disasters/DisasterMap.jsx";
 import DisasterDetail from "./pages/Disasters/DisasterDetail.jsx";
+
 import Donations from "./pages/Donations/Donations.jsx";
-import ReliefDetail from "./pages/Donations/ReliefDetail.jsx";
+import DonationDetail from "./pages/Donations/DonationDetail.jsx";
+import Volunteers from "./pages/Volunteer/Volunteers.jsx";
+import VolunteerDetail from "./pages/Volunteer/VolunteerDetail.jsx";
+
 import StartFundRaiser from "./pages/Fundraisers/StartFundRaiser.jsx";
 import FundRaiserDashboard from "./pages/Fundraisers/FundRaiserDashboard.jsx";
 import OrgDetail from "./pages/Organizations/OrgDetail.jsx";
@@ -43,7 +47,10 @@ const router = createBrowserRouter([
       { path: "DisasterMap/:disasterId", element: <DisasterDetail /> },
 
       { path: "donations", element: <Donations /> },
-      { path: "donations/:reliefId", element: <ReliefDetail /> },
+      { path: "donations/:reliefId", element: <DonationDetail /> },
+
+      { path: "volunteers", element: <Volunteers /> },
+      { path: "volunteers/:volunteerId", element: <VolunteerDetail /> },
 
       { path: "StartFundRaiser", element: <StartFundRaiser /> },
       { path: "FundraiserDashboard", element: <FundRaiserDashboard /> },

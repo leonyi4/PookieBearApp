@@ -14,6 +14,7 @@ const SignUp = () => {
     country: "",
     city: "",
     location: null,
+    profilePicture: null,
   });
 
   const [tempLocation, setTempLocation] = useState(null);
@@ -36,13 +37,16 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex h-screen w-full items-start justify-center bg-cover bg-center">
-      <div className="bg-background rounded-2xl shadow-lg w-[90%] max-w-full space-y-4">
+    <div className="flex h-screen w-full items-start justify-center p-4 m-4  bg-cover bg-center">
+      <div className="bg-background rounded-2xl shadow-lg w-[80%] max-w-full space-y-4 items center">
         <div className="flex flex-col items-center mb-6">
           <img src={vert_logo} alt="Logo" className="h-60" />
           <h1 className="my-2 text-primary font-bold text-2xl">Sign Up</h1>
         </div>
-        <form className="space-y-0" onSubmit={handleSubmit}>
+        <form
+          className="space-y-0 w-[90%] max-w-lg  mx-auto"
+          onSubmit={handleSubmit}
+        >
           {[
             "email",
             "password",
@@ -94,6 +98,24 @@ const SignUp = () => {
                 Confirm Location
               </button>
             )}
+          </div>
+
+          {/* optional profile picture */}
+          <div className="text-accent p-4">
+            <label className="text-sm font-medium mb-2 block">
+              Upload Profile Picture (optional):
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              className="mt-1 block w-full text-accent border border-accent bg-primary rounded-md px-2"
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  profilePicture: e.target.files[0],
+                }))
+              }
+            />
           </div>
 
           {/* Submit Button and Back to Sign in Button */}

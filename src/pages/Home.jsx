@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import data from "../assets/test_data.json";
-import DisasterCard from "./Disasters/DisasterCard";
+import DonationCard from "./Donations/DonationCard";
 import MiniMap from "./Disasters/MiniMap";
 import DisasterMap from "./Disasters/DisasterMap"; // adjust the path if necessary
+import VolunteerCard from "./Volunteer/VolunteerCard";
 
-// console.log(data.relief_data);
 
 export default function Home() {
   return (
@@ -20,8 +20,24 @@ export default function Home() {
           </Link>
         </div>
         <div className="flex overflow-x-auto overflow-y-hidden space-x-4 pb-2">
-          {data.relief_data.map((disaster, index) => (
-            <DisasterCard key={index} data={disaster} />
+          {data.donations.map((disaster, index) => (
+            <DonationCard key={index} data={disaster} />
+          ))}
+        </div>
+      </section>
+      {/* Donation Section */}
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-gray-900 uppercase">
+            Donation
+          </h2>
+          <Link to="/donations" className="text-primary font-semibold">
+            View All
+          </Link>
+        </div>
+        <div className="flex overflow-x-auto overflow-y-hidden space-x-4 pb-2">
+          {data.volunteers.map((disaster, index) => (
+            <VolunteerCard key={index} data={disaster} />
           ))}
         </div>
       </section>

@@ -2,30 +2,29 @@ import React from "react";
 import { Link } from "react-router-dom";
 import data from "../../assets/test_data.json";
 
-const Donations = () => {
-  const donations = data.donations;
+const Volunteers = () => {
+  const volunteers = data.volunteers;
+
+  console.log(volunteers);
+  console.log(volunteers.map((v) => v.impact.volunteers_needed));
 
   const org_data = {};
-  for (let relief of donations) {
+  for (let relief of volunteers) {
     const org = relief["org_id"];
     if (!org_data[org]) {
       org_data[org] = data.orgs.find((o) => o.id === org);
     }
   }
 
-  donations.map((r) => {
-    var current_org = org_data[r.org_id];
-  });
-
   return (
     <div className="max-w-6xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
-        Ongoing Relief Campaigns
+        Ongoing Volunteer Campaigns
       </h1>
 
-      {donations.length > 0 ? (
+      {volunteers.length > 0 ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {donations.map((relief) => (
+          {volunteers.map((relief) => (
             <div
               key={relief.id}
               className="bg-secondary border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col"
@@ -48,13 +47,10 @@ const Donations = () => {
                 {/* Progress bar */}
                 <div className="mt-auto ">
                   <div className="flex justify-between items-center">
-                    <p className="text-sm text-black">Raised</p>
+                    <p className="text-sm text-black">Volunteers</p>
                     <p className="text-sm text-gray-700">
-                      {" "}
-                      {Math.round(
-                        (relief.raised / relief.goal) * 100
-                      ).toLocaleString()}{" "}
-                      %
+                      {relief.impact.volunteers_signed_up.toLocaleString()}/
+                      {relief.impact.volunteers_needed.toLocaleString()}{" "}
                     </p>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
@@ -62,14 +58,17 @@ const Donations = () => {
                       className="bg-primary h-2 rounded-full"
                       style={{
                         width: `${Math.min(
-                          (relief.raised / relief.goal) * 100,
+                          (relief.impact.volunteers_signed_up /
+                            relief.impact.volunteers_needed) *
+                            100,
                           100
                         )}%`,
                       }}
                     ></div>
                   </div>
                   <p className="text-sm text-gray-700">
-                    Goal: ${relief.goal.toLocaleString()}
+                    Goal: {relief.impact.volunteers_needed.toLocaleString()}{" "}
+                    People
                   </p>
                 </div>
 
@@ -87,7 +86,7 @@ const Donations = () => {
 
                 {/* View Details and Share buttons */}
                 <div className="mt-2">
-                  <Link to={`/donations/${relief.id}`}>
+                  <Link to={`/volunteers/${relief.id}`}>
                     <button className="w-full bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-accent">
                       View Details
                     </button>
@@ -107,4 +106,4 @@ const Donations = () => {
   );
 };
 
-export default Donations;
+export default Volunteers;
