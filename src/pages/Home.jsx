@@ -29,9 +29,9 @@ export default function Home() {
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-900 uppercase">
-            Donation
+            Volunteer
           </h2>
-          <Link to="/donations" className="text-primary font-semibold">
+          <Link to="/volunteers" className="text-primary font-semibold">
             View All
           </Link>
         </div>

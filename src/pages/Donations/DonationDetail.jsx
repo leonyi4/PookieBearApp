@@ -1,6 +1,7 @@
 import data from "../../assets/test_data.json";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import RatingStars from "../../components/RatingStars";
+import LocationMap from "../../components/LocationMap";
 
 export default function DonationDetail() {
   // ⚡ Mock data — replace with real API later
@@ -135,6 +136,20 @@ export default function DonationDetail() {
         <p className="text-gray-700 text-sm leading-relaxed">
           {campaign.description}
         </p>
+
+        {/* Location Map */}
+        <div className="">
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">
+            Disaster Location
+          </h2>
+          <LocationMap
+            position={[
+              campaign.location_data.latitude,
+              campaign.location_data.longitude,
+            ]} // e.g., [16.8409, 96.1735]
+            label={campaign.name}
+          />
+        </div>
 
         {/* CTA */}
         <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-accent">
