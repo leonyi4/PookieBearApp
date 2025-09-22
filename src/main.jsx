@@ -16,6 +16,7 @@ import Home from "./pages/Home.jsx";
 import DisaterMap from "./pages/Disasters/DisasterMap.jsx";
 import DisasterDetail from "./pages/Disasters/DisasterDetail.jsx";
 
+import DonationVolunteerHome from "./pages/DonationsAndVolunteer/DonationVolunteerHome.jsx";
 import Donations from "./pages/DonationsAndVolunteer/Donations/Donations.jsx";
 import DonationDetail from "./pages/DonationsAndVolunteer/Donations/DonationDetail.jsx";
 import Volunteers from "./pages/DonationsAndVolunteer/Volunteer/Volunteers.jsx";
@@ -48,11 +49,26 @@ const router = createBrowserRouter([
       { path: "DisasterMap", element: <DisaterMap /> },
       { path: "DisasterMap/:disasterId", element: <DisasterDetail /> },
 
-      { path: "donations", element: <Donations /> },
-      { path: "donations/:reliefId", element: <DonationDetail /> },
+      {
+        path: "DonationsAndVolunteers/",
+        element: <Navigate to="/DonationsAndVolunteers/donations" replace />,
+      },
+      {
+        path: "DonationsAndVolunteers/:type",
+        element: <DonationVolunteerHome />,
+      },
+      {
+        path: "DonationsAndVolunteers/donations/:donationId",
+        element: <DonationDetail />,
+      },
 
+      {
+        path: "DonationsAndVolunteers/volunteers/:volunteerId",
+        element: <VolunteerDetail />,
+      },
+
+      { path: "donations", element: <Donations /> },
       { path: "volunteers", element: <Volunteers /> },
-      { path: "volunteers/:volunteerId", element: <VolunteerDetail /> },
 
       { path: "StartFundRaiser", element: <StartFundRaiser /> },
       { path: "FundraiserDashboard", element: <FundRaiserDashboard /> },
@@ -63,7 +79,10 @@ const router = createBrowserRouter([
       },
       { path: "OrgsAndSponsors/:type", element: <OrgSponsorsHome /> },
       { path: "OrgsAndSponsors/organizations/:orgId", element: <OrgDetail /> },
-      { path: "OrgsAndSponsors/sponsors/:sponsorId", element: <SponsorDetail /> },
+      {
+        path: "OrgsAndSponsors/sponsors/:sponsorId",
+        element: <SponsorDetail />,
+      },
     ],
   },
 ]);

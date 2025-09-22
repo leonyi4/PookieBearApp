@@ -11,7 +11,7 @@ export default function DonationDetail() {
 
   // Get Campaign Data
   const campaign = data.donations.find(
-    (r) => r.id === parseInt(relief_id.reliefId)
+    (r) => r.id === parseInt(relief_id.donationId)
   );
 
   // Calculate Campaign Goal Progress Percentage

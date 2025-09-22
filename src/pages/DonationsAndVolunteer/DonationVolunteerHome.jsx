@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import data from "../../assets/test_data.json";
 import RatingStars from "../../components/RatingStars";
+import DonationCard from "./Donations/DonationCard";
+import VolunteerCard from "./Volunteer/VolunteerCard";
 
 export default function DonationsVolunteersHome() {
   const { type } = useParams(); // 'donations' or 'volunteers'
@@ -62,52 +64,9 @@ export default function DonationsVolunteersHome() {
 
       {/* Donations List */}
       {activeTab === "donations" && (
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           {donations.map((campaign) => (
-            <div
-              key={campaign.id}
-              className="bg-secondary text-black shadow rounded-lg p-4"
-            >
-              {/* Title & Image */}
-              <div className="flex items-center space-x-3 mb-3">
-                <img
-                  src={campaign.image}
-                  alt={campaign.name}
-                  className="h-16 w-16 object-cover rounded-lg"
-                />
-                <div className="flex flex-col">
-                  <p className="font-semibold">{campaign.name}</p>
-                  <p className="text-xs text-gray-600 truncate max-w-xs">
-                    {campaign.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Ratings */}
-              <div className="flex justify-around w-full text-accent mb-3">
-                <div className="flex flex-col items-center">
-                  <span className="text-xs">Public Rating</span>
-                  <RatingStars
-                    rating={campaign.ratings?.public_rating || 4}
-                    maxStars={5}
-                  />
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="text-xs">AI Rating</span>
-                  <RatingStars
-                    rating={campaign.ratings?.ai_rating || 4}
-                    maxStars={5}
-                  />
-                </div>
-              </div>
-
-              {/* View Details */}
-              <Link to={`/donations/${campaign.id}`} className="w-full">
-                <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-accent">
-                  View Donation
-                </button>
-              </Link>
-            </div>
+            <DonationCard key={campaign.id} data={campaign} home={false} />
           ))}
         </div>
       )}
@@ -116,38 +75,7 @@ export default function DonationsVolunteersHome() {
       {activeTab === "volunteers" && (
         <div className="space-y-4">
           {volunteers.map((campaign) => (
-            <div
-              key={campaign.id}
-              className="bg-secondary text-black shadow rounded-lg p-4"
-            >
-              {/* Title & Image */}
-              <div className="flex items-center space-x-3 mb-3">
-                <img
-                  src={campaign.image}
-                  alt={campaign.name}
-                  className="h-16 w-16 object-cover rounded-lg"
-                />
-                <div className="flex flex-col">
-                  <p className="font-semibold">{campaign.name}</p>
-                  <p className="text-xs text-gray-600 truncate max-w-xs">
-                    {campaign.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Needed vs Signed Up */}
-              <div className="text-sm text-black mb-3">
-                {campaign.impact.volunteers_signed_up} of{" "}
-                {campaign.impact.volunteers_needed} signed up
-              </div>
-
-              {/* View Details */}
-              <Link to={`/volunteers/${campaign.id}`} className="w-full">
-                <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-accent">
-                  View Volunteer
-                </button>
-              </Link>
-            </div>
+            <VolunteerCard key={campaign.id} data={campaign} home={false} />
           ))}
         </div>
       )}

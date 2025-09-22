@@ -66,7 +66,7 @@ export default function OrgSponsorsHome() {
         className="w-full p-2 border text-black border-secondary rounded-lg mb-4 bg-white"
       ></input>
       {/* Organizations List */}
-      {activeTab === "organizations" && (
+      {activeTab === "organization s" && (
         <div className="space-y-4">
           {organizations.map((org, idx) => (
             <div

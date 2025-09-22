@@ -4,7 +4,6 @@ import DonationCard from "./DonationsAndVolunteer/Donations/DonationCard";
 import MiniMap from "./Disasters/MiniMap";
 import VolunteerCard from "./DonationsAndVolunteer/Volunteer/VolunteerCard";
 
-
 export default function Home() {
   return (
     <div className="space-y-4">
@@ -14,29 +13,36 @@ export default function Home() {
           <h2 className="text-xl font-bold text-gray-900 uppercase">
             Donation
           </h2>
-          <Link to="/donations" className="text-primary font-semibold">
+          <Link
+            to="DonationsAndVolunteers/donations"
+            className="text-primary font-semibold"
+          >
             View All
           </Link>
         </div>
-        <div className="flex overflow-x-auto overflow-y-hidden space-x-4 pb-2">
+        <div className="flex overflow-x-scroll overflow-y-hidden space-x-4 pb-2">
           {data.donations.map((disaster, index) => (
-            <DonationCard key={index} data={disaster} />
+            <DonationCard key={index} className="w-60" home={true} data={disaster} />
           ))}
         </div>
       </section>
-      {/* Donation Section */}
+
+      {/* Volunteer Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-900 uppercase">
             Volunteer
           </h2>
-          <Link to="/volunteers" className="text-primary font-semibold">
+          <Link
+            to="DonationsAndVolunteers/volunteers"
+            className="text-primary font-semibold"
+          >
             View All
           </Link>
         </div>
         <div className="flex overflow-x-auto overflow-y-hidden space-x-4 pb-2">
-          {data.volunteers.map((disaster, index) => (
-            <VolunteerCard key={index} data={disaster} />
+          {data.volunteers.map((vol, index) => (
+            <VolunteerCard key={index} data={vol} home={true} className="w-60 sm:w-72" />
           ))}
         </div>
       </section>
