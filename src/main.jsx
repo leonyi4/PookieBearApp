@@ -16,17 +16,15 @@ import Home from "./pages/Home.jsx";
 import DisaterMap from "./pages/Disasters/DisasterMap.jsx";
 import DisasterDetail from "./pages/Disasters/DisasterDetail.jsx";
 
-import Donations from "./pages/DonationsAndVolunteer/Donations/Donations.jsx";
-import DonationDetail from "./pages/DonationsAndVolunteer/Donations/DonationDetail.jsx";
-import Volunteers from "./pages/DonationsAndVolunteer/Volunteer/Volunteers.jsx";
-import VolunteerDetail from "./pages/DonationsAndVolunteer/Volunteer/VolunteerDetail.jsx";
+import Donations from "./pages/Donations/Donations.jsx";
+import DonationDetail from "./pages/Donations/DonationDetail.jsx";
+import Volunteers from "./pages/Volunteer/Volunteers.jsx";
+import VolunteerDetail from "./pages/Volunteer/VolunteerDetail.jsx";
 
 import StartFundRaiser from "./pages/Fundraisers/StartFundRaiser.jsx";
 import FundRaiserDashboard from "./pages/Fundraisers/FundRaiserDashboard.jsx";
-
-import OrgDetail from "./pages/OrgAndSponsor/Organizations/OrgDetail.jsx";
-import SponsorDetail from "./pages/OrgAndSponsor/Sponsors/SponsorDetail.jsx";
-
+import OrgDetail from "./pages/Organizations/OrgDetail.jsx";
+import SponsorDetail from "./pages/Sponsors/SponsorDetail.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import OrgSponsorsHome from "./pages/OrgAndSponsor/OrgSponsorHome.jsx";
 

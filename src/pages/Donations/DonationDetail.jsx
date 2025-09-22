@@ -1,7 +1,7 @@
-import data from "../../../assets/test_data.json";
+import data from "../../assets/test_data.json";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import RatingStars from "../../../components/RatingStars";
-import LocationMap from "../../../components/LocationMap";
+import RatingStars from "../../components/RatingStars";
+import LocationMap from "../../components/LocationMap";
 
 export default function DonationDetail() {
   // ⚡ Mock data — replace with real API later
