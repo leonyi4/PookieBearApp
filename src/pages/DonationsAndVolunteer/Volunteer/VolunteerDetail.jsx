@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { supabase } from "../../../lib/supabase-client";
 import RatingStars from "../../../components/RatingStars";
 import LocationMap from "../../../components/LocationMap";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function VolunteerDetail() {
   const { volunteerId } = useParams();
@@ -81,11 +82,7 @@ export default function VolunteerDetail() {
   }, [volunteerId]);
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center text-accent">
-        Loading…
-      </div>
-    );
+    return <LoadingSpinner message="Fetching Volunteer Details..." />;
   }
 
   if (!campaign) {

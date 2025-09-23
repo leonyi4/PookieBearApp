@@ -25,6 +25,9 @@ import DonationDetail from "./pages/DonationsAndVolunteer/Donations/DonationDeta
 import Volunteers from "./pages/DonationsAndVolunteer/Volunteer/Volunteers.jsx";
 import VolunteerDetail from "./pages/DonationsAndVolunteer/Volunteer/VolunteerDetail.jsx";
 
+import Sponsors from "./pages/OrgAndSponsor/Sponsors/Sponsors.jsx";
+
+
 import StartFundRaiser from "./pages/Fundraisers/StartFundRaiser.jsx";
 import FundRaiserDashboard from "./pages/Fundraisers/FundRaiserDashboard.jsx";
 
@@ -33,6 +36,7 @@ import SponsorDetail from "./pages/OrgAndSponsor/Sponsors/SponsorDetail.jsx";
 
 import MainLayout from "./layouts/MainLayout.jsx";
 import OrgSponsorsHome from "./pages/OrgAndSponsor/OrgSponsorHome.jsx";
+import Organizations from "./pages/OrgAndSponsor/Organizations/Organizations.jsx";
 
 const router = createBrowserRouter([
   { path: "/Landing", element: <Landing /> },
@@ -88,6 +92,9 @@ const router = createBrowserRouter([
         path: "OrgsAndSponsors/sponsors/:sponsorId",
         element: <SponsorDetail />,
       },
+
+      { path: "Organizations", element: <Organizations/>},
+      { path: "Sponsors", element: <Sponsors />},
     ],
   },
 ]);

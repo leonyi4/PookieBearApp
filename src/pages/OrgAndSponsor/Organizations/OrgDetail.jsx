@@ -1,43 +1,77 @@
 // src/pages/Organizations/OrgDetail.jsx
-import React, { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import data from "../../../assets/test_data.json";
-import DisasterCard from "../../DonationsAndVolunteer/Donations/DonationCard";
-import RatingStars from "../../../components/RatingStars";
+import { supabase } from "../../../lib/supabase-client";
+import DonationCard from "../../DonationsAndVolunteer/Donations/DonationCard";
 import VolunteerCard from "../../DonationsAndVolunteer/Volunteer/VolunteerCard";
+import RatingStars from "../../../components/RatingStars";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function OrgDetail() {
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  // get org data
-  const org = data.orgs[orgId - 1] || null;
+  const [org, setOrg] = useState(null);
+  const [donations, setDonations] = useState([]);
+  const [volunteers, setVolunteers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // get relief data
-  const ongoingReliefData = org.ongoing
-    ? org.ongoing.map(
-        (reliefId) => data.donations.find((r) => r.id === reliefId) || null
-      )
-    : [];
+  // Fetch org + related data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
 
-  // get past relief campaigns from org.reliefs by filtering out ongoing ones
-  const pastReliefData = org.reliefs
-    ? org.reliefs
-        .filter((reliefId) => !org.ongoing.includes(reliefId))
-        .map(
-          (reliefId) => data.donations.find((r) => r.id === reliefId) || null
-        )
-    : [];
+        // 1. Organization
+        const { data: orgData, error: orgError } = await supabase
+          .from("organizations")
+          .select("*")
+          .eq("id", orgId)
+          .single();
+        if (orgError) throw orgError;
+        setOrg(orgData);
 
-  // console.log(org.achievements)
-  org.achievements.map((item) => console.log(item));
+        // 2. Donations linked to org
+        const { data: donationData, error: donationError } = await supabase
+          .from("donations")
+          .select("*")
+          .eq("org_id", orgId);
+        if (donationError) throw donationError;
+        setDonations(donationData || []);
+
+        // 3. Volunteers linked to org
+        const { data: volunteerData, error: volunteerError } = await supabase
+          .from("volunteers")
+          .select("*")
+          .eq("org_id", orgId);
+        if (volunteerError) throw volunteerError;
+        setVolunteers(volunteerData || []);
+      } catch (err) {
+        console.error("Error fetching org details:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [orgId]);
+
+  if (loading) {
+    return <LoadingSpinner message="Fetching organization details..." />;
+  }
+
+  if (!org) {
+    return (
+      <div className="flex h-screen items-center justify-center text-red-500">
+        Organization not found
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 text-black">
       {/* Header */}
       <div>
-        {/* Back Button and Relief Title*/}
-
         <div className="flex items-center space-x-4 p-4">
           <button
             onClick={() => navigate(-1)}
@@ -52,7 +86,7 @@ export default function OrgDetail() {
         <img
           src={org.logo}
           alt={org.name}
-          className="h-25 w-25 flex items-center mx-auto justify-center rounded-md"
+          className="h-25 w-25 mx-auto rounded-md object-contain"
         />
       </div>
 
@@ -63,117 +97,87 @@ export default function OrgDetail() {
       </section>
 
       {/* Ratings */}
-      <section>
-        <h2 className="font-semibold mb-2">Ratings</h2>
-
-        <div className="flex flex-col items-start w-full text-accent ">
-          <div
-            className="my-2 w-full flex p-2 bg-background flex-col space-y-2 
-          items-start justify-center space-x-1 border rounded-lg py-2"
-          >
-            <span className="text-sm font-medium ">AI Credibility Rating</span>
-            <RatingStars
-              rating={org.ratings.ai_rating}
-              maxStars={5}
-              className=""
-            />
+      {org.ratings && (
+        <section>
+          <h2 className="font-semibold mb-2">Ratings</h2>
+          <div className="flex flex-col items-start w-full text-accent">
+            <div className="my-2 w-full flex flex-col p-2 bg-background border rounded-lg">
+              <span className="text-sm font-medium">AI Credibility Rating</span>
+              <RatingStars rating={org.ratings.ai_rating} maxStars={5} />
+            </div>
+            <div className="my-2 w-full flex flex-col p-2 bg-background border rounded-lg">
+              <span className="text-sm font-medium">Public Rating</span>
+              <RatingStars rating={org.ratings.public_rating} maxStars={5} />
+            </div>
           </div>
-          <div
-            className="my-2 w-full flex flex-col p-2 bg-background space-y-2 items-start 
-          justify-center space-x-1 border rounded-lg py-2"
-          >
-            <span className="text-sm font-medium">Public Rating</span>
-            <RatingStars
-              rating={org.ratings.public_rating}
-              maxStars={5}
-              className=""
-            />
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Ongoing Donations */}
-
       <section>
-        <h2 className="font-semibold mb-2">Ongoing Donations</h2>
-        {ongoingReliefData.length > 0 ? (
-          <div className="flex overflow-x-auto w-full overflow-y-hidden space-x-4 pb-2">
-            {ongoingReliefData.map((disaster, index) => (
-              <DisasterCard key={index} data={disaster} />
+        <h2 className="font-semibold mb-2">Donations</h2>
+        {donations.length > 0 ? (
+          <div className="flex overflow-x-auto space-x-4 pb-2">
+            {donations.map((donation) => (
+              <DonationCard key={donation.id} data={donation} />
             ))}
           </div>
         ) : (
-          <p className="text-gray-600 text-sm">No ongoing donation campaigns.</p>
+          <p className="text-gray-600 text-sm">No donation campaigns found.</p>
         )}
       </section>
 
-      {/* ongoing volunteer campaigns */}
-      {/* <section>
-        <h2 className="font-semibold mb-2">Ongoing Volunteer Campaigns</h2>
-        {org.ongoing_volunteer.length > 0 ? (
-          <div className="flex overflow-x-auto w-full overflow-y-hidden space-x-4 pb-2">
-            {org.ongoing_volunteer.map((volunteerId, index) => {
-              const volunteer = data.volunteers.find(
-                (v) => v.id === volunteerId
-              );
-              return volunteer ? (
-                <VolunteerCard key={index} data={volunteer} />
-              ) : null;
-            })}
+      {/* Volunteer Campaigns */}
+      <section>
+        <h2 className="font-semibold mb-2">Volunteer Campaigns</h2>
+        {volunteers.length > 0 ? (
+          <div className="flex overflow-x-auto space-x-4 pb-2">
+            {volunteers.map((vol) => (
+              <VolunteerCard key={vol.id} data={vol} />
+            ))}
           </div>
         ) : (
-          <p className="text-gray-600 text-sm">No ongoing volunteer campaigns.</p>
+          <p className="text-gray-600 text-sm">No volunteer campaigns found.</p>
         )}
-      </section> */}
+      </section>
 
       {/* Impact */}
-      <section>
-        <h2 className="font-semibold mb-2">Our Impact</h2>
-        <div className="flex space-y-3 space-x-3 w-fit flex-wrap">
-          {Object.entries(org.impact).map(([key, item], idx) => (
-            <div key={idx} className=" my-2 text-center text-white">
-              <div className="border text-xs shadow p-1 bg-primary border-accent rounded-md">
-                <p className="text-sm font-bold">{item}</p>
-                <p>{key} </p>
+      {org.impact && (
+        <section>
+          <h2 className="font-semibold mb-2">Our Impact</h2>
+          <div className="flex flex-wrap gap-3">
+            {Object.entries(org.impact).map(([key, val], idx) => (
+              <div
+                key={idx}
+                className="border text-xs shadow p-2 bg-primary text-white rounded-md"
+              >
+                <p className="text-sm font-bold">{val}</p>
+                <p>{key}</p>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Tracker */}
-      <section>
-        <h2 className="font-semibold mb-2">Achievements</h2>
-        {/* display every achievements */}
-
-        {org.achievements.map((item, idx) => (
-          <div
-            key={idx}
-            className="flex flex-col my-2 items-start justify-center px-2 py-1 border rounded-lg bg-secondary"
-          >
-            <div className="flex w-full justify-between">
-              <p className="font-medium text-md text-white">{item.title}</p>
-              <p className="text-accent text-sm font-sm">{item.year}</p>
-            </div>
-            <hr className="border-accent w-full" />
-            <p className="text-accent text-sm">{item.description}</p>
-          </div>
-        ))}
-      </section>
-
-      {/* Past relief campaigns */}
-      <section>
-        <h2 className="font-semibold mb-2">Past Relief Campaigns</h2>
-        {pastReliefData.length > 0 ? (
-          <div className="flex overflow-x-auto overflow-y-hidden space-x-4 pb-2">
-            {pastReliefData.map((disaster, index) => (
-              <DisasterCard key={index} data={disaster} />
             ))}
           </div>
-        ) : (
-          <p className="text-gray-600 text-sm">No past relief campaigns.</p>
-        )}
-      </section>
+        </section>
+      )}
+
+      {/* Achievements */}
+      {org.achievements && org.achievements.length > 0 && (
+        <section>
+          <h2 className="font-semibold mb-2">Achievements</h2>
+          {org.achievements.map((item, idx) => (
+            <div
+              key={idx}
+              className="flex flex-col my-2 px-2 py-1 border rounded-lg bg-secondary"
+            >
+              <div className="flex justify-between">
+                <p className="font-medium text-md text-white">{item.title}</p>
+                <p className="text-accent text-sm">{item.year}</p>
+              </div>
+              <hr className="border-accent w-full" />
+              <p className="text-accent text-sm">{item.description}</p>
+            </div>
+          ))}
+        </section>
+      )}
     </div>
   );
 }

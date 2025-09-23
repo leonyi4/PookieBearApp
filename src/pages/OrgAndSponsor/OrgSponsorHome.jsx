@@ -1,22 +1,47 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import data from "../../assets/test_data.json";
+import { supabase } from "../../lib/supabase-client";
 import RatingStars from "../../components/RatingStars";
-
-
-// const type = params.get('type') || 'organizations';
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function OrgSponsorsHome() {
   const { type } = useParams(); // 'organizations' or 'sponsors'
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState("organizations");
+  const [organizations, setOrganizations] = useState([]);
+  const [sponsors, setSponsors] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  console.log(data)
+  // Fetch orgs + sponsors
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
 
-  const organizations = data.orgs;
-  const sponsors = data.sponsors;
+        const { data: orgs, error: orgError } = await supabase
+          .from("organizations")
+          .select("id, name, description, logo, tags, ratings");
 
+        if (orgError) throw orgError;
+        setOrganizations(orgs || []);
+
+        const { data: sponsorData, error: sponsorError } = await supabase
+          .from("sponsors")
+          .select("id, name, logo");
+
+        if (sponsorError) throw sponsorError;
+        setSponsors(sponsorData || []);
+      } catch (err) {
+        console.error("Error fetching orgs/sponsors:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Sync URL param with state
   useEffect(() => {
@@ -31,9 +56,13 @@ export default function OrgSponsorsHome() {
   // Update URL when tab is clicked
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-    console.log('tab: ', tab)
+    // console.log("tab: ", tab);
     navigate(`/OrgsAndSponsors/${tab}`);
   };
+
+  if (loading) {
+    return <LoadingSpinner message="Fetching Organizations and Sponsors..." />;
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -95,15 +124,26 @@ export default function OrgSponsorsHome() {
               <div className="flex justify-around w-full text-accent ">
                 <button className="flex flex-col p-2 bg-background space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
                   <span className="text-sm font-medium">Public Rating</span>
-                  <RatingStars rating={org.ratings.public_rating} maxStars={5} className="" />
+                  <RatingStars
+                    rating={org.ratings.public_rating}
+                    maxStars={5}
+                    className=""
+                  />
                 </button>
                 <button className="flex p-2 bg-background flex-col space-y-2 items-center justify-center space-x-1 border rounded-lg py-2">
                   <span className="text-sm font-medium ">AI Rating</span>
-                  <RatingStars rating={org.ratings.ai_rating} maxStars={5} className="" />
+                  <RatingStars
+                    rating={org.ratings.ai_rating}
+                    maxStars={5}
+                    className=""
+                  />
                 </button>
               </div>
               {/* View Details */}
-              <Link to={`/OrgsAndSponsors/organizations/${org.id}`} className="w-full">
+              <Link
+                to={`/OrgsAndSponsors/organizations/${org.id}`}
+                className="w-full"
+              >
                 <button className="mt-4 w-full bg-primary text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700">
                   View Details
                 </button>
@@ -118,7 +158,7 @@ export default function OrgSponsorsHome() {
         <div className="flex flex-wrap gap-4 justify-center">
           {sponsors.map((sponsor, idx) => (
             <Link
-                to={`/OrgsAndSponsors/sponsors/${sponsor.id}`}
+              to={`/OrgsAndSponsors/sponsors/${sponsor.id}`}
               key={idx}
               className="bg-white text-black shadow  rounded-lg p-4 flex flex-col items-center w-32"
             >
@@ -127,7 +167,9 @@ export default function OrgSponsorsHome() {
                 alt={sponsor.name}
                 className="h-16 w-16 object-contain mb-2"
               />
-              <p className="text-sm text-center font-semibold uppercase">{sponsor.name}</p>
+              <p className="text-sm text-center font-semibold uppercase">
+                {sponsor.name}
+              </p>
             </Link>
           ))}
         </div>
