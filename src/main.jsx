@@ -75,8 +75,8 @@ const router = createBrowserRouter([
       { path: "donations", element: <Donations /> },
       { path: "volunteers", element: <Volunteers /> },
 
-      { path: "StartFundRaiser", element: <StartFundRaiser /> },
-      { path: "FundraiserDashboard", element: <FundRaiserDashboard /> },
+      // { path: "StartFundRaiser", element: <StartFundRaiser /> },
+      // { path: "FundraiserDashboard", element: <FundRaiserDashboard /> },
 
       {
         path: "OrgsAndSponsors",

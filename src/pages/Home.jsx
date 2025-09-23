@@ -12,8 +12,6 @@ export default function Home() {
   const [sponsors, setSponsors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,18 +23,26 @@ export default function Home() {
           );
 
         if (donationsError) throw donationsError;
-        setDonations(donationsData || []);
+        const sortedDonations = (donationsData || []).sort(
+          (a, b) => a.id - b.id
+        );
+        setDonations(sortedDonations);
 
-        console.log(donationsData)
+        // console.log(donationsData)
         // Fetch volunteers
         const { data: volunteersData, error: volunteersError } = await supabase
           .from("volunteers")
-          .select("id, name, description, latitude, longitude, disaster_id, impact, image");
+          .select(
+            "id, name, description, latitude, longitude, disaster_id, impact, image"
+          );
 
         if (volunteersError) throw volunteersError;
-        setVolunteers(volunteersData || []);
+        const sortedVolunteers = (volunteersData || []).sort(
+          (a, b) => a.id - b.id
+        );
+        setVolunteers(sortedVolunteers);
 
-        console.log(volunteersData);
+        // console.log(volunteersData);
 
         // Fetch organizations
         const { data: orgsData, error: orgsError } = await supabase
@@ -44,7 +50,8 @@ export default function Home() {
           .select("id, name, logo, tags");
 
         if (orgsError) throw orgsError;
-        setOrgs(orgsData || []);
+        const sortedOrgs = (orgsData || []).sort((a, b) => a.id - b.id);
+        setOrgs(sortedOrgs);
 
         // Fetch sponsors
         const { data: sponsorsData, error: sponsorsError } = await supabase
@@ -52,7 +59,8 @@ export default function Home() {
           .select("id, name, logo");
 
         if (sponsorsError) throw sponsorsError;
-        setSponsors(sponsorsData || []);
+        const sortedSponsors = (sponsorsData || []).sort((a, b) => a.id - b.id);
+        setSponsors(sortedSponsors);
       } catch (err) {
         console.error("Error fetching home data:", err.message);
       } finally {
@@ -88,12 +96,12 @@ export default function Home() {
         </div>
         <div className="flex overflow-x-scroll overflow-y-hidden space-x-4 pb-2">
           {donations.map((disaster, index) => (
-            <DonationCard
+            <Link
               key={index}
-              className="w-60"
-              home={true}
-              data={disaster}
-            />
+              to={`/DonationsAndVolunteers/donations/${disaster.id}`}
+            >
+              <DonationCard className="w-60" home={true} data={disaster} />
+            </Link>
           ))}
         </div>
       </section>
@@ -113,12 +121,12 @@ export default function Home() {
         </div>
         <div className="flex overflow-x-auto overflow-y-hidden space-x-4 pb-2">
           {volunteers.map((vol, index) => (
-            <VolunteerCard
+            <Link
               key={index}
-              data={vol}
-              home={true}
-              className="w-60 sm:w-72"
-            />
+              to={`/DonationsAndVolunteers/volunteers/${vol.id}`}
+            >
+              <VolunteerCard data={vol} home={true} className="w-60 sm:w-72" />
+            </Link>
           ))}
         </div>
       </section>
@@ -209,23 +217,4 @@ export default function Home() {
       </section>
     </div>
   );
-}
-
-{
-  /* Fundraising Section
-      <section>
-        <h2 className="text-xl font-bold text-gray-900 mb-4 uppercase">
-          Fundraising
-        </h2>
-        <div className="rounded-xl overflow-hidden shadow bg-green-100 h-28 flex items-center justify-center">
-          <span className="text-green-700 font-semibold">
-            🌱 Empower Communities
-          </span>
-        </div>
-        <Link to="/StartFundraiser">
-          <button className="mt-4 w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700">
-            Start Your Own Fundraiser
-          </button>
-        </Link>
-      </section> */
 }
