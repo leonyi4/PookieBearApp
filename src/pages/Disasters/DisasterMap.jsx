@@ -3,13 +3,13 @@ import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./DisasterMap.css";
-import data from "../../assets/test_data.json";
+import { supabase } from "../../lib/supabase-client";
+import { Link } from "react-router-dom";
 
 // Fix Leaflet marker icons
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import { Link } from "react-router-dom";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -23,7 +23,7 @@ const FitMyanmarBounds = ({ bounds }) => {
   const map = useMap();
   useEffect(() => {
     if (bounds) {
-      map.fitBounds(bounds, { padding: [30, 30] });
+      map.fitBounds(bounds, { padding: [25, 25] });
       map.setMaxBounds(bounds);
     }
   }, [map, bounds]);
@@ -32,18 +32,34 @@ const FitMyanmarBounds = ({ bounds }) => {
 
 const DisasterMap = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
-
-  // Sample disaster markers data
-  // In real app, fetch this data from an API
-  const markers = data.disasters;
-  // console.log(markers);
-
-
+  const [disasters, setDisasters] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const myanmarBounds = [
     [9.5, 92.0], // SW
     [28.5, 101.0], // NE
   ];
+
+  useEffect(() => {
+    const fetchDisasters = async () => {
+      const { data, error } = await supabase
+        .from("disasters")
+        .select(
+          "id, name, location, latitude, longitude, date, severity, description, image"
+        );
+
+      if (error) {
+        console.error("Error fetching disasters:", error.message);
+        setError(error.message);
+      } else {
+        setDisasters(data);
+      }
+      setLoading(false);
+    };
+
+    fetchDisasters();
+  }, []);
 
   const handleMarkerClick = (marker) => {
     if (selectedMarker && selectedMarker.id === marker.id) {
@@ -53,13 +69,24 @@ const DisasterMap = () => {
     }
   };
 
+  if (loading) {
+    return <div className="p-4 text-accent">Loading disasters…</div>;
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">Error: {error}</div>;
+  }
+
   return (
-    <div className='relative h-full p-4 bg-background'>
-      <h1 className=' text-primary text-xl uppercase my-2 font-bold text-center'>Disaster Map of Myanmar</h1>
+    <div className="relative h-full p-4 bg-background">
+      <h1 className="text-primary text-xl uppercase my-2 font-bold text-center">
+        Disaster Map of Myanmar
+      </h1>
+
       {/* Map Section */}
       <MapContainer
         className="h-[600px] w-full rounded-xl overflow-hidden shadow-md border-2 border-slate-300 
-        transition-transform duration-300 ease-in z-0 hover:scale-[1.04] hover:shadow-lg" 
+        transition-transform duration-300 ease-in z-0 hover:scale-[1.04] hover:shadow-lg"
         center={[20.0, 96.0]}
         zoom={6}
         maxBoundsViscosity={1.0}
@@ -68,13 +95,10 @@ const DisasterMap = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"
         />
-        {markers.map((marker) => (
+        {disasters.map((marker) => (
           <Marker
             key={marker.id}
-            position={[
-              marker.location_data.latitude,
-              marker.location_data.longitude,
-            ]}
+            position={[marker.latitude, marker.longitude]}
             eventHandlers={{
               click: () => handleMarkerClick(marker),
             }}
@@ -83,10 +107,9 @@ const DisasterMap = () => {
         <FitMyanmarBounds bounds={myanmarBounds} />
       </MapContainer>
 
-      {/* Bottom Chat-Box Style Info Panel */}
+      {/* Bottom Info Panel */}
       {selectedMarker && (
         <div
-
           className="absolute bottom-0 left-0 right-0 bg-background p-4 
           shadow-sm max-h-[40%] overflow-y-auto transition-transform duration-300 ease-in-out rounded-t-xl z-10"
         >
@@ -104,7 +127,7 @@ const DisasterMap = () => {
           <p className="text-gray-700 mb-2">{selectedMarker.description}</p>
           <img
             src={selectedMarker.image}
-            alt={selectedMarker.title}
+            alt={selectedMarker.name}
             className="w-full h-40 shadow-sm rounded-lg"
           />
           <div className="flex">

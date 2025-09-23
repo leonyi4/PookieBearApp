@@ -21,8 +21,9 @@ export default function Landing() {
         .select("profile_complete")
         .eq("id", user.id)
         .single();
+      
 
-      console.log(profile)
+      // console.log(profile)
       if (profileErr || !profile || profile.profile_complete === false) {
         navigate("/ProfileCompletion", { replace: true });
       } else {

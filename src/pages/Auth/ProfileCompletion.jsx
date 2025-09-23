@@ -16,6 +16,7 @@ export default function ProfileCompletion() {
     city: "",
     latitude: "",
     longitude: "",
+    phone: "",
   });
 
   const [profilePictureFile, setProfilePictureFile] = useState(null);
@@ -35,7 +36,7 @@ export default function ProfileCompletion() {
       const { data, error } = await supabase
         .from("users")
         .select(
-          "name, identification, birthdate, country, city, latitude, longitude, profile_complete"
+          "name, identification, birthdate, country, city, latitude, longitude, profile_complete", "phone"
         )
         .eq("id", user.id)
         .single();
@@ -67,6 +68,7 @@ export default function ProfileCompletion() {
           city: data.city || "",
           latitude: data.latitude ?? "",
           longitude: data.longitude ?? "",
+          phone: data.phone || "",
         }));
 
         // If they somehow already completed, send them home
@@ -94,23 +96,23 @@ export default function ProfileCompletion() {
     }
   };
 
-  const uploadImage = async (file) => {
-    const fileName = `${user.id}-${Date.now()}-${file.name}`;
-    const { error: uploadError } = await supabase.storage
-      .from("profile_pictures")
-      .upload(fileName, file);
+  // const uploadImage = async (file) => {
+  //   const fileName = `${user.id}-${Date.now()}-${file.name}`;
+  //   const { error: uploadError } = await supabase.storage
+  //     .from("profile_pictures")
+  //     .upload(fileName, file);
 
-    if (uploadError) {
-      console.error("Error uploading image:", uploadError);
-      return null;
-    }
+  //   if (uploadError) {
+  //     console.error("Error uploading image:", uploadError);
+  //     return null;
+  //   }
 
-    const { data } = supabase.storage
-      .from("profile_pictures")
-      .getPublicUrl(fileName);
+  //   const { data } = supabase.storage
+  //     .from("profile_pictures")
+  //     .getPublicUrl(fileName);
 
-    return data.publicUrl;
-  };
+  //   return data.publicUrl;
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,6 +141,7 @@ export default function ProfileCompletion() {
       longitude: formData.longitude !== "" ? Number(formData.longitude) : null,
       profile_picture: profile_picture_url,
       profile_complete: true,
+      phone: formData.phone,
     };
 
     const { error } = await supabase
@@ -182,7 +185,7 @@ export default function ProfileCompletion() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-3 text-accent">
-          {["name", "identification", "birthdate", "country", "city"].map(
+          {["name", "identification", "birthdate", "country", "city", "phone"].map(
             (field) => (
               <input
                 key={field}
@@ -206,7 +209,7 @@ export default function ProfileCompletion() {
               Confirm Location
             </button>
           )}
-
+{/* 
           <div className="text-accent p-2">
             <label className="text-sm font-medium mb-2 block">
               Upload Profile Picture (optional):
@@ -217,7 +220,7 @@ export default function ProfileCompletion() {
               className="mt-1 block w-full text-accent border border-accent bg-primary rounded-md px-2"
               onChange={(e) => setProfilePictureFile(e.target.files[0])}
             />
-          </div>
+          </div> */}
 
           <button
             type="submit"

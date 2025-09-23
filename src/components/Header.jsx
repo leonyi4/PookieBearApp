@@ -53,17 +53,17 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               <img src={vertical_logo} alt="logo" width={150} />
             </NavLink>
 
-            <NavLink
+            {/* <NavLink
               to="/"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Home
             </NavLink>
-            <hr className="border-accent w-screen" />
+            <hr className="border-accent w-screen" /> */}
 
             <NavLink
-            to="/profile"
+              to="/profile"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
@@ -72,20 +72,11 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
             <hr className="border-accent w-screen" />
 
             <NavLink
-              to="/DisasterMap"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Disaster Map
-            </NavLink>
-            <hr className="border-accent w-screen" />
-
-            <NavLink
               to="/DonationsAndVolunteers/donations"
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
-              Donations & Volunteers
+              Reliefs
             </NavLink>
             <hr className="border-accent w-screen" />
 
@@ -95,7 +86,15 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               onClick={toggleMenu}
               className="text-2xl text-primary hover:text-accent font-medium"
             >
-              Orgs & Sponsors
+              Organizations
+            </NavLink>
+            <hr className="border-accent w-screen" />
+            <NavLink
+              to="/DisasterMap"
+              onClick={toggleMenu}
+              className="text-2xl text-primary hover:text-accent font-medium"
+            >
+              Disaster Map
             </NavLink>
             <hr className="border-accent w-screen" />
 

@@ -305,7 +305,7 @@
     {
       "id": 1,
       "disaster_id": 3,
-      "name": "Earthquake Response Volunteers",
+      "name": "Mandalay Earthquake Response Volunteers",
       "description": "Recruiting volunteers to assist with medical aid, logistics, and food distribution in Mandalay Region.",
       "org_id": 3,
       "location_data": {
@@ -335,7 +335,7 @@
     {
       "id": 2,
       "disaster_id": 4,
-      "name": "Cyclone Relief Volunteers",
+      "name": "Kayin Cyclone Relief Volunteers",
       "description": "Helping distribute food and hygiene kits to affected families in Kayin State.",
       "org_id": 4,
       "location_data": {
@@ -576,7 +576,7 @@
         }
       ],
       "future": "We plan to host disaster preparedness training, first aid workshops, and community resilience programs in partnership with our corporate sponsors.",
-      "sponsored_reliefs": [2, 4]
+      "sponsored_donations": [2, 4]
     },
     {
       "id": 2,
@@ -601,7 +601,7 @@
         }
       ],
       "future": "We are currently organizing a large-scale volunteer recruitment drive and a seminar on financial resilience for disaster-affected communities.",
-      "sponsored_reliefs": [1, 6]
+      "sponsored_donations": [1, 6]
     },
     {
       "id": 3,
@@ -621,7 +621,7 @@
         }
       ],
       "future": "Our plans include a nationwide youth-led fundraising marathon and a series of workshops on local disaster response.",
-      "sponsored_reliefs": [2]
+      "sponsored_donations": [2]
     },
     {
       "id": 4,
@@ -641,7 +641,7 @@
         }
       ],
       "future": "We are developing a new mobile application for volunteer coordination and an AI-powered system for predicting and preparing for future disasters.",
-      "sponsored_reliefs": [3]
+      "sponsored_donations": [3]
     },
     {
       "id": 5,
@@ -661,7 +661,7 @@
         }
       ],
       "future": "We are planning a series of sustainable housing workshops for local builders to ensure new homes are resilient to future natural disasters.",
-      "sponsored_reliefs": [4]
+      "sponsored_donations": [4]
     },
     {
       "id": 6,
@@ -681,7 +681,7 @@
         }
       ],
       "future": "We are expanding our network of emergency food depots and conducting a major food drive in preparation for the upcoming monsoon season.",
-      "sponsored_reliefs": [5]
+      "sponsored_donations": [5]
     }
   ],
   "users": [
