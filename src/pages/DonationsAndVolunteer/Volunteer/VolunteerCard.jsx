@@ -31,9 +31,9 @@ const VolunteerCard = (props) => {
 
       {/* Content */}
       <div className="p-2 flex flex-col flex-1">
-        <h3 className="text-base font-semibold text-gray-900 mb-1 line-clamp-2">
+        <h2 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">
           {props.data.name}
-        </h3>
+        </h2>
 
         {/* Progress bar */}
         <div className="mt-auto">

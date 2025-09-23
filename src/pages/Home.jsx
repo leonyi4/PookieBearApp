@@ -4,6 +4,7 @@ import MiniMap from "./Disasters/MiniMap";
 import VolunteerCard from "./DonationsAndVolunteer/Volunteer/VolunteerCard";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase-client";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Home() {
   const [donations, setDonations] = useState([]);
@@ -71,13 +72,10 @@ export default function Home() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center text-accent">
-        Loading Home…
-      </div>
-    );
-  }
+    if (loading) {
+      return <LoadingSpinner message="Fetching Home..." />;
+    }
+  
 
   return (
     <div className="space-y-4">

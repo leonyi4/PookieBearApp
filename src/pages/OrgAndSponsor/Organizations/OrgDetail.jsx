@@ -119,7 +119,7 @@ export default function OrgDetail() {
         {donations.length > 0 ? (
           <div className="flex overflow-x-auto space-x-4 pb-2">
             {donations.map((donation) => (
-              <DonationCard key={donation.id} data={donation} />
+              <DonationCard key={donation.id} data={donation} className='w-60' />
             ))}
           </div>
         ) : (

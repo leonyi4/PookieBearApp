@@ -24,7 +24,7 @@ const DonationCard = ({ data: donation, home: isHome, className = "" }) => {
         />
 
         {/* Title + Description */}
-        <h2 className="text-lg font-semibold text-gray-900 mb-1 mt-2">
+        <h2 className="text-lg font-semibold line-clamp-2 min-h-[60px] text-gray-900 mb-1 mt-2">
           {donation.name}
         </h2>
         {!isHome && (

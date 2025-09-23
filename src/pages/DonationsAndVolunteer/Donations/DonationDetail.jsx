@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { supabase } from "../../../lib/supabase-client";
 import RatingStars from "../../../components/RatingStars";
 import LocationMap from "../../../components/LocationMap";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function DonationDetail() {
   const { donationId } = useParams();
@@ -83,13 +84,10 @@ export default function DonationDetail() {
     fetchDonation();
   }, [donationId]);
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center text-accent">
-        Loading…
-      </div>
-    );
-  }
+    if (loading) {
+      return <LoadingSpinner message="Fetching Donations..." />;
+    }
+    
 
   if (!campaign) {
     return (

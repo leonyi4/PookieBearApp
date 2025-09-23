@@ -5,6 +5,7 @@ import "leaflet/dist/leaflet.css";
 import "./DisasterMap.css";
 import { supabase } from "../../lib/supabase-client";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 // Fix Leaflet marker icons
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -70,7 +71,7 @@ const DisasterMap = () => {
   };
 
   if (loading) {
-    return <div className="p-4 text-accent">Loading disasters…</div>;
+    return <LoadingSpinner message="Fetching Disaster Map..." />;
   }
 
   if (error) {

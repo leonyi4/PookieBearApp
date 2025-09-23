@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import DonationCard from "./Donations/DonationCard";
 import VolunteerCard from "./Volunteer/VolunteerCard";
 import { supabase } from "../../lib/supabase-client";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function DonationsVolunteersHome() {
   const { type } = useParams(); // 'donations' or 'volunteers'
@@ -79,13 +80,10 @@ export default function DonationsVolunteersHome() {
     v.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center text-accent">
-        Loading…
-      </div>
-    );
-  }
+    if (loading) {
+      return <LoadingSpinner message="Fetching Donations and Volunteers..." />;
+    }
+  
 
   return (
     <div className="max-w-2xl mx-auto p-4">
