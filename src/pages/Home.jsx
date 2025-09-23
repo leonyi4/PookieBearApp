@@ -1,10 +1,76 @@
 import { Link } from "react-router-dom";
-import data from "../assets/test_data.json";
 import DonationCard from "./DonationsAndVolunteer/Donations/DonationCard";
 import MiniMap from "./Disasters/MiniMap";
 import VolunteerCard from "./DonationsAndVolunteer/Volunteer/VolunteerCard";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase-client";
 
 export default function Home() {
+  const [donations, setDonations] = useState([]);
+  const [volunteers, setVolunteers] = useState([]);
+  const [orgs, setOrgs] = useState([]);
+  const [sponsors, setSponsors] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch donations
+        const { data: donationsData, error: donationsError } = await supabase
+          .from("donations")
+          .select(
+            "id, name, description, goal, raised, latitude, longitude, disaster_id, image"
+          );
+
+        if (donationsError) throw donationsError;
+        setDonations(donationsData || []);
+
+        console.log(donationsData)
+        // Fetch volunteers
+        const { data: volunteersData, error: volunteersError } = await supabase
+          .from("volunteers")
+          .select("id, name, description, latitude, longitude, disaster_id, impact, image");
+
+        if (volunteersError) throw volunteersError;
+        setVolunteers(volunteersData || []);
+
+        console.log(volunteersData);
+
+        // Fetch organizations
+        const { data: orgsData, error: orgsError } = await supabase
+          .from("organizations")
+          .select("id, name, logo, tags");
+
+        if (orgsError) throw orgsError;
+        setOrgs(orgsData || []);
+
+        // Fetch sponsors
+        const { data: sponsorsData, error: sponsorsError } = await supabase
+          .from("sponsors")
+          .select("id, name, logo");
+
+        if (sponsorsError) throw sponsorsError;
+        setSponsors(sponsorsData || []);
+      } catch (err) {
+        console.error("Error fetching home data:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center text-accent">
+        Loading Home…
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {/* Donation Section */}
@@ -21,8 +87,13 @@ export default function Home() {
           </Link>
         </div>
         <div className="flex overflow-x-scroll overflow-y-hidden space-x-4 pb-2">
-          {data.donations.map((disaster, index) => (
-            <DonationCard key={index} className="w-60" home={true} data={disaster} />
+          {donations.map((disaster, index) => (
+            <DonationCard
+              key={index}
+              className="w-60"
+              home={true}
+              data={disaster}
+            />
           ))}
         </div>
       </section>
@@ -41,8 +112,13 @@ export default function Home() {
           </Link>
         </div>
         <div className="flex overflow-x-auto overflow-y-hidden space-x-4 pb-2">
-          {data.volunteers.map((vol, index) => (
-            <VolunteerCard key={index} data={vol} home={true} className="w-60 sm:w-72" />
+          {volunteers.map((vol, index) => (
+            <VolunteerCard
+              key={index}
+              data={vol}
+              home={true}
+              className="w-60 sm:w-72"
+            />
           ))}
         </div>
       </section>
@@ -62,7 +138,7 @@ export default function Home() {
         </div>
 
         <ul className="space-y-3">
-          {data.orgs.slice(0, 3).map((org, index) => (
+          {orgs.slice(0, 3).map((org, index) => (
             <li key={index} className="flex items-center space-x-3">
               <img
                 src={org.logo}
@@ -96,7 +172,7 @@ export default function Home() {
           </Link>
         </div>
         <div className="flex overflow-x-auto overflow-y-hidden space-x-4">
-          {data.sponsors.map((sponsor, index) => (
+          {sponsors.map((sponsor, index) => (
             <Link
               to={`OrgsAndSponsors/sponsors/${sponsor.id}`}
               key={index}

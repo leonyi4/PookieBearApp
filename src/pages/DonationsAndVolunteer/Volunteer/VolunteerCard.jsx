@@ -4,6 +4,8 @@ import data from "../../../assets/test_data.json";
 
 const VolunteerCard = (props) => {
 
+  console.log(props.data)
+
 
   const progress =
     (props.data.impact.volunteers_signed_up /
