@@ -37,7 +37,7 @@ export default function Home() {
             "id, name, description, latitude, longitude, disaster_id, impact, image"
           );
 
-        if (volunteersError) throw volunteersError;
+       if (volunteersError) throw volunteersError;
         const sortedVolunteers = (volunteersData || []).sort(
           (a, b) => a.id - b.id
         );
@@ -50,7 +50,7 @@ export default function Home() {
           .from("organizations")
           .select("id, name, logo, tags");
 
-        if (orgsError) throw orgsError;
+       if (orgsError) throw orgsError;
         const sortedOrgs = (orgsData || []).sort((a, b) => a.id - b.id);
         setOrgs(sortedOrgs);
 
@@ -59,7 +59,7 @@ export default function Home() {
           .from("sponsors")
           .select("id, name, logo");
 
-        if (sponsorsError) throw sponsorsError;
+         if (sponsorsError) throw sponsorsError;
         const sortedSponsors = (sponsorsData || []).sort((a, b) => a.id - b.id);
         setSponsors(sortedSponsors);
       } catch (err) {
@@ -72,13 +72,22 @@ export default function Home() {
     fetchData();
   }, []);
 
-    if (loading) {
-      return <LoadingSpinner message="Fetching Home..." />;
-    }
+  if (loading) {
+    return <LoadingSpinner message="Fetching Home..." />;
+  }
   
-
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-4">
+      {/* Customize Profile Button */}
+      <div className="flex justify-end mb-4">
+        <Link
+          to="/profile"
+          className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+        >
+          Customize Profile
+        </Link>
+      </div>
+
       {/* Donation Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
@@ -142,7 +151,6 @@ export default function Home() {
             View All
           </Link>
         </div>
-
         <ul className="space-y-3">
           {orgs.slice(0, 3).map((org, index) => (
             <li key={index} className="flex items-center space-x-3">
@@ -164,13 +172,13 @@ export default function Home() {
           ))}
         </ul>
       </section>
+
       {/* Sponsors Section */}
       <section>
-        <div className="flex items-center justify-between mb-4">
+       <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-900 uppercase">
             Active Sponsors
-          </h2>
-          <Link
+          </h2>          <Link
             to="/OrgsAndSponsors/sponsors"
             className="text-primary font-semibold"
           >
