@@ -31,6 +31,8 @@ export default function Profile() {
       if (profileError) return setFetchError(profileError.message);
       setProfile(profileData);
 
+      console.log(profileData);
+
       // Aid Requests
       const { data: requests } = await supabase
         .from("aid_requests")
@@ -46,9 +48,9 @@ export default function Profile() {
         )
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-        setAidRequests(requests || []);
+      setAidRequests(requests || []);
 
-        console.log(requests)
+      console.log(requests);
 
       // Contributions (donations/volunteering)
       const { data: contribs } = await supabase
@@ -77,8 +79,8 @@ export default function Profile() {
     );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-3xl mx-auto">
+    <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="bg-white shadow-lg rounded-xl p-6 md:p-8 w-full max-w-5xl mx-auto">
         {/* Header with back button */}
         <div className="flex items-center mb-6">
           <button
@@ -87,19 +89,21 @@ export default function Profile() {
           >
             &larr;
           </button>
-          <h1 className="text-2xl font-bold text-primary">My Profile</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-primary">
+            My Profile
+          </h1>
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-around mb-6">
+        <div className="flex flex-wrap justify-center md:justify-start gap-4 border-b border-secondary pb-2 mb-6">
           {["profile", "aid", "contributions"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-2 ${
+              className={`pb-2 transition ${
                 activeTab === tab
                   ? "font-bold border-b-2 border-primary text-primary"
-                  : "text-accent"
+                  : "text-accent hover:text-primary"
               }`}
             >
               {tab === "profile"
@@ -114,24 +118,36 @@ export default function Profile() {
         {/* Profile Tab */}
         {activeTab === "profile" && (
           <div>
-            <div className="flex flex-col items-center space-y-4">
+            {/* Profile Header */}
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
               <img
                 src={profile.profile_picture || "/default-profile.png"}
                 alt="Profile"
-                className="w-28 h-28 rounded-full object-cover border-2 border-primary"
+                className="w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-primary"
               />
-              <p className="text-lg font-semibold text-gray-900">
-                {profile.name}
-              </p>
-              <p className="text-sm text-gray-500">
-                {profile.identification || "N/A"}
-              </p>
+              <div className="text-center md:text-left">
+                <p className="text-xl font-semibold text-gray-900">
+                  {profile.name}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {profile.identification || "N/A"}
+                </p>
+              </div>
             </div>
 
+            {/* Info Grid */}
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="font-medium text-gray-700">Birthdate</p>
                 <p className="text-gray-900">{profile.birthdate || "-"}</p>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Age</p>
+                <p className="text-gray-900">{profile.age || "-"}</p>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Gender</p>
+                <p className="text-gray-900">{profile.gender || "-"}</p>
               </div>
               <div>
                 <p className="font-medium text-gray-700">Phone</p>
@@ -150,7 +166,7 @@ export default function Profile() {
             {/* Customize Button */}
             <div className="mt-6">
               <Link to="/CustomizeProfile">
-                <button className="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg">
+                <button className="w-full md:w-auto px-6 py-2 bg-primary hover:bg-accent text-white font-medium rounded-lg transition">
                   Customize Profile
                 </button>
               </Link>
@@ -161,9 +177,11 @@ export default function Profile() {
         {/* Aid Requests Tab */}
         {activeTab === "aid" && (
           <div>
-            <h2 className="font-semibold mb-3">Your Aid Requests</h2>
+            <h2 className="font-semibold text-lg text-primary mb-3">
+              Your Aid Requests
+            </h2>
             {aidRequests.length > 0 ? (
-              <div className="space-y-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {aidRequests.map((req) => (
                   <AidRequestCard key={req.id} request={req} />
                 ))}
@@ -179,20 +197,22 @@ export default function Profile() {
         {/* Contributions Tab */}
         {activeTab === "contributions" && (
           <div>
-            <h2 className="font-semibold mb-3">Your Contributions</h2>
+            <h2 className="font-semibold text-lg text-primary mb-3">
+              Your Contributions
+            </h2>
             {contributions.length > 0 ? (
-              <div className="space-y-3">
+              <div className="grid gap-4 sm:grid-cols-2">
                 {contributions.map((c) => (
                   <div
                     key={c.id}
-                    className="p-3 border rounded-lg bg-gray-50 shadow"
+                    className="p-4 border rounded-lg bg-secondary/20 shadow-sm hover:shadow-md transition"
                   >
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-accent">
                       {c.type === "donation"
                         ? `Donation: ${c.amount} Kyats`
                         : `Volunteered for ${c.campaign_name}`}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 mt-1">
                       {new Date(c.created_at).toLocaleDateString()}
                     </p>
                   </div>

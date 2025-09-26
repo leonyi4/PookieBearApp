@@ -22,7 +22,7 @@ export default function SponsorDetail() {
       try {
         setLoading(true);
 
-        // 1. Sponsor info
+        // Sponsor info
         const { data: sponsorData, error: sponsorError } = await supabase
           .from("sponsors")
           .select("*")
@@ -31,7 +31,7 @@ export default function SponsorDetail() {
         if (sponsorError) throw sponsorError;
         setSponsor(sponsorData);
 
-        // 2. Sponsored events
+        // Sponsored events
         const { data: eventData, error: eventError } = await supabase
           .from("sponsor_events")
           .select("*")
@@ -39,55 +39,43 @@ export default function SponsorDetail() {
         if (eventError) throw eventError;
         setEvents(eventData || []);
 
-        // 3. Sponsored donations (through sponsor_donations join)
-        const { data: donationLinks, error: linkError } = await supabase
+        // Sponsored donations
+        const { data: donationLinks } = await supabase
           .from("sponsor_donations")
           .select("donation_id")
           .eq("sponsor_id", sponsorId);
-        if (linkError) throw linkError;
-        if (donationLinks.length > 0) {
+        if (donationLinks?.length) {
           const ids = donationLinks.map((d) => d.donation_id);
-          const { data: donationsData, error: donationsError } = await supabase
+          const { data: donationsData } = await supabase
             .from("donations")
             .select("*")
             .in("id", ids);
-          if (donationsError) throw donationsError;
           setDonations(donationsData || []);
         }
 
-        // 4. Sponsored volunteers (through sponsor_volunteers join)
-        const { data: volunteerLinks, error: volLinkError } = await supabase
+        // Sponsored volunteers
+        const { data: volunteerLinks } = await supabase
           .from("sponsor_volunteers")
           .select("volunteer_id")
           .eq("sponsor_id", sponsorId);
-        if (volLinkError) throw volLinkError;
-        if (volunteerLinks.length > 0) {
+        if (volunteerLinks?.length) {
           const ids = volunteerLinks.map((v) => v.volunteer_id);
-          const { data: volunteersData, error: volunteersError } =
-            await supabase.from("volunteers").select("*").in("id", ids);
-          if (volunteersError) throw volunteersError;
+          const { data: volunteersData } = await supabase
+            .from("volunteers")
+            .select("*")
+            .in("id", ids);
           setVolunteers(volunteersData || []);
         }
 
-        // Inside useEffect in SponsorDetail.jsx
-        // 5. Related Organizations
-        const { data: orgDonationLinks, error: orgDonationError } =
-          await supabase
-            .from("org_donations")
-            .select("org_id")
-            .in(
-              "donation_id",
-              donationLinks.map((d) => d.donation_id)
-            );
-
-        const { data: orgVolunteerLinks, error: orgVolunteerError } =
-          await supabase
-            .from("org_volunteers")
-            .select("org_id")
-            .in(
-              "volunteer_id",
-              volunteerLinks.map((v) => v.volunteer_id)
-            );
+        // Related Orgs (via donations + volunteers)
+        const { data: orgDonationLinks } = await supabase
+          .from("org_donations")
+          .select("org_id")
+          .in("donation_id", donationLinks?.map((d) => d.donation_id) || []);
+        const { data: orgVolunteerLinks } = await supabase
+          .from("org_volunteers")
+          .select("org_id")
+          .in("volunteer_id", volunteerLinks?.map((v) => v.volunteer_id) || []);
 
         const orgIds = [
           ...(orgDonationLinks?.map((o) => o.org_id) || []),
@@ -95,11 +83,11 @@ export default function SponsorDetail() {
         ];
 
         if (orgIds.length > 0) {
-          const { data: relatedOrgs, error: orgsError } = await supabase
+          const { data: relatedOrgs } = await supabase
             .from("organizations")
             .select("*")
             .in("id", orgIds);
-          if (!orgsError) setOrganizations(relatedOrgs || []);
+          setOrganizations(relatedOrgs || []);
         }
       } catch (err) {
         console.error("Error loading sponsor details:", err.message);
@@ -111,9 +99,7 @@ export default function SponsorDetail() {
     fetchSponsorData();
   }, [sponsorId]);
 
-  if (loading) {
-    return <LoadingSpinner message="Fetching sponsor details..." />;
-  }
+  if (loading) return <LoadingSpinner message="Fetching sponsor details..." />;
 
   if (!sponsor) {
     return (
@@ -124,8 +110,8 @@ export default function SponsorDetail() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-4 space-y-6 text-black">
-      {/* Logo / Hero */}
+    <div className="max-w-5xl mx-auto p-4 space-y-6 text-black">
+      {/* Header */}
       <div className="flex items-center space-x-4">
         <button
           onClick={() => navigate(-1)}
@@ -135,10 +121,12 @@ export default function SponsorDetail() {
         </button>
         <h1 className="text-xl font-bold uppercase">{sponsor.name}</h1>
       </div>
+
+      {/* Logo */}
       <img
         src={sponsor.logo}
         alt={sponsor.name}
-        className="w-full rounded-lg object-contain"
+        className="max-h-64 mx-auto rounded-md object-contain"
       />
 
       {/* Memo */}
@@ -153,11 +141,11 @@ export default function SponsorDetail() {
       {sponsor.stats && (
         <section>
           <h2 className="font-semibold mb-2">Stats</h2>
-          <div className="flex flex-wrap gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {Object.entries(sponsor.stats).map(([key, value], idx) => (
               <div
                 key={idx}
-                className="border rounded-lg p-3 text-center min-w-[100px]"
+                className="border rounded-lg p-3 text-center flex flex-col"
               >
                 <p className="font-semibold">{value}</p>
                 <p className="text-xs text-gray-500 capitalize">
@@ -169,7 +157,7 @@ export default function SponsorDetail() {
         </section>
       )}
 
-      {/* Related Organizations */}
+      {/* Organizations */}
       <section>
         <h2 className="font-semibold mb-2">Related Organizations</h2>
         {organizations.length > 0 ? (
@@ -184,7 +172,7 @@ export default function SponsorDetail() {
                 <div>
                   <Link
                     to={`/OrgsAndSponsors/organizations/${org.id}`}
-                    className="font-medium text-gray-800"
+                    className="font-medium text-gray-800 hover:text-primary"
                   >
                     {org.name}
                   </Link>
@@ -202,13 +190,13 @@ export default function SponsorDetail() {
         )}
       </section>
 
-      {/* Sponsored Donations */}
+      {/* Donations */}
       <section>
         <h2 className="font-semibold mb-2">Sponsored Donations</h2>
         {donations.length > 0 ? (
-          <div className="flex overflow-x-auto space-x-4 pb-2">
+          <div className="grid grid-flow-col auto-cols-[75%] md:auto-cols-[45%] lg:auto-cols-[30%] overflow-x-auto gap-4 pb-2">
             {donations.map((d) => (
-              <DonationCard key={d.id} data={d} className="w-60" />
+              <DonationCard key={d.id} data={d} />
             ))}
           </div>
         ) : (
@@ -216,13 +204,13 @@ export default function SponsorDetail() {
         )}
       </section>
 
-      {/* Sponsored Volunteers */}
+      {/* Volunteers */}
       <section>
         <h2 className="font-semibold mb-2">Sponsored Volunteer Campaigns</h2>
         {volunteers.length > 0 ? (
-          <div className="flex overflow-x-auto space-x-4 pb-2">
+          <div className="grid grid-flow-col auto-cols-[75%] md:auto-cols-[45%] lg:auto-cols-[30%] overflow-x-auto gap-4 pb-2">
             {volunteers.map((v) => (
-              <VolunteerCard key={v.id} data={v} className="w-60" />
+              <VolunteerCard key={v.id} data={v} />
             ))}
           </div>
         ) : (
@@ -232,13 +220,16 @@ export default function SponsorDetail() {
         )}
       </section>
 
-      {/* Sponsored Events */}
+      {/* Events */}
       <section>
         <h2 className="font-semibold mb-2">Sponsored Events</h2>
         {events.length > 0 ? (
           <div className="space-y-4">
             {events.map((event) => (
-              <div key={event.id} className="bg-gray-50 p-3 rounded-lg shadow">
+              <div
+                key={event.id}
+                className="bg-gray-50 p-3 rounded-lg shadow-sm"
+              >
                 <p className="font-medium">{event.title}</p>
                 <p className="text-sm text-gray-500">{event.description}</p>
               </div>

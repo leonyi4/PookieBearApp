@@ -19,7 +19,6 @@ export default function DonationDetail() {
       try {
         setLoading(true);
 
-        // 1. Fetch donation details
         const { data: donation, error } = await supabase
           .from("donations")
           .select(
@@ -43,20 +42,16 @@ export default function DonationDetail() {
         if (error) throw error;
         setCampaign(donation);
 
-        // 2. Fetch organization details
         if (donation.org_id) {
-          const { data: org, error: orgError } = await supabase
+          const { data: org } = await supabase
             .from("organizations")
             .select("id, name, logo, tags, ratings")
             .eq("id", donation.org_id)
             .single();
-
-          if (orgError) throw orgError;
           setOrgData(org);
         }
 
-        // 3. Fetch contributions linked to this donation
-        const { data: contribs, error: contribError } = await supabase
+        const { data: contribs } = await supabase
           .from("donation_contributions")
           .select(
             `
@@ -69,11 +64,7 @@ export default function DonationDetail() {
           )
           .eq("donation_id", donationId);
 
-        if (contribError) throw contribError;
-
-        // Flatten the nested contributions array
-        const contribList = contribs.map((c) => c.contributions);
-        setContributions(contribList || []);
+        setContributions(contribs?.map((c) => c.contributions) || []);
       } catch (err) {
         console.error("Error fetching donation detail:", err.message);
       } finally {
@@ -84,26 +75,19 @@ export default function DonationDetail() {
     fetchDonation();
   }, [donationId]);
 
-    if (loading) {
-      return <LoadingSpinner message="Fetching Donations..." />;
-    }
-    
-
-  if (!campaign) {
+  if (loading) return <LoadingSpinner message="Fetching Donations..." />;
+  if (!campaign)
     return (
       <div className="flex h-screen items-center justify-center text-red-500">
         Donation not found.
       </div>
     );
-  }
 
-  // Progress
   const progress = Math.min(
     (campaign.raised / campaign.goal) * 100,
     100
   ).toFixed(0);
 
-  // Budget allocation calculations
   const total_budget = campaign.budget_allocation
     ? Object.values(campaign.budget_allocation).reduce((a, b) => a + b, 0)
     : 0;
@@ -120,39 +104,43 @@ export default function DonationDetail() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
-      {/* Back Button */}
-      <div className="flex items-center space-x-4 p-6">
+    <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden my-6">
+      {/* Header */}
+      <div className="flex items-center space-x-4 p-4 sm:p-6 border-b border-gray-200">
         <button
           onClick={() => navigate(-1)}
           className="text-primary text-lg hover:text-accent"
         >
           &larr;
         </button>
-        <h2 className="text-lg font-semibold text-gray-900">{campaign.name}</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+          {campaign.name}
+        </h2>
       </div>
 
       {/* Hero Image */}
-      <img
-        src={campaign.image}
-        alt={campaign.name}
-        className="w-full h-56 object-cover"
-      />
+      {campaign.image && (
+        <img
+          src={campaign.image}
+          alt={campaign.name}
+          className="w-full h-48 sm:h-64 lg:h-80 object-cover"
+        />
+      )}
 
-      <div className="p-6 space-y-6">
-        {/* Organization Info */}
+      <div className="p-4 sm:p-6 space-y-6">
+        {/* Org Info */}
         {orgData && (
           <div className="flex items-center space-x-3">
             <img
               src={orgData.logo}
               alt={orgData.name}
-              className="h-10 w-10 rounded-full"
+              className="h-10 w-10 sm:h-12 sm:w-12 rounded-full"
             />
             <div>
               <Link to={`/OrgsAndSponsors/organizations/${orgData.id}`}>
                 <p className="font-medium text-gray-800">{orgData.name}</p>
               </Link>
-              {orgData.tags && (
+              {orgData.tags?.[0] && (
                 <p className="text-xs text-gray-500">{orgData.tags[0]}</p>
               )}
             </div>
@@ -161,22 +149,22 @@ export default function DonationDetail() {
 
         {/* Ratings */}
         {orgData?.ratings && (
-          <div className="grid grid-cols-2 gap-3 text-accent">
-            <div className="flex flex-col items-center border rounded-lg py-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-accent">
+            <div className="flex flex-col items-center border rounded-lg py-3">
               <span className="text-sm font-medium">Public Rating</span>
               <RatingStars
                 rating={orgData.ratings.public_rating}
                 maxStars={5}
               />
             </div>
-            <div className="flex flex-col items-center border rounded-lg py-2">
+            <div className="flex flex-col items-center border rounded-lg py-3">
               <span className="text-sm font-medium">AI Rating</span>
               <RatingStars rating={orgData.ratings.ai_rating} maxStars={5} />
             </div>
           </div>
         )}
 
-        {/* Progress */}
+        {/* Progress Bar */}
         <div>
           <div className="flex justify-between text-sm mb-1 text-black">
             <span>
@@ -199,27 +187,28 @@ export default function DonationDetail() {
         </div>
 
         {/* Description */}
-        <p className="text-gray-700 text-sm leading-relaxed">
+        <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
           {campaign.description}
         </p>
 
-        {/* Location Map */}
+        {/* Map */}
         {campaign.latitude && campaign.longitude && (
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-2">
               Disaster Location
             </h2>
-            <LocationMap
-              position={[campaign.latitude, campaign.longitude]}
-              label={campaign.name}
-            />
+            <div className="h-40 lg:h-72  rounded-lg overflow-hidden">
+              <LocationMap
+                position={[campaign.latitude, campaign.longitude]}
+                label={campaign.name}
+              />
+            </div>
+            {/* CTA */}
+            <button className=" mt-4 w-full bg-primary text-white py-2 sm:py-3 rounded-lg hover:bg-accent transition">
+              Donate Now
+            </button>
           </div>
         )}
-
-        {/* CTA */}
-        <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-accent">
-          Donate Now
-        </button>
 
         {/* Contributions */}
         {contributions.length > 0 && (
@@ -230,7 +219,7 @@ export default function DonationDetail() {
             <div className="space-y-3">
               {contributions.map((item) => (
                 <div key={item.id} className="flex space-x-3">
-                  <div className="h-12 w-12 rounded-lg bg-gray-200 flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-lg bg-gray-200 flex items-center justify-center text-xl">
                     📦
                   </div>
                   <div>
@@ -243,7 +232,7 @@ export default function DonationDetail() {
           </div>
         )}
 
-        {/* Budget Allocation */}
+        {/* Budget */}
         {total_budget > 0 && (
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-3">

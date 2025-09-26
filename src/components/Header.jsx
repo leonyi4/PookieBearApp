@@ -1,47 +1,93 @@
 import React from "react";
 import header_logo from "../assets/header_logo.png";
-import { NavLink } from "react-router-dom";
 import vertical_logo from "../assets/Vertical_logo.png";
-import Button from "./Button.jsx";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useLockBodyScroll } from "../hooks/useLockBodyScroll.jsx";
 
-
-//
 const Header = ({ isMenuOpen, setIsMenuOpen }) => {
-  // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  useLockBodyScroll(isMenuOpen); // Lock scroll when menu is open
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
+  useLockBodyScroll(isMenuOpen);
   const { logout } = useAuth();
 
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const handleLogout = () => {
     logout();
     setIsMenuOpen(false);
   };
 
   return (
-    <header className="sticky  bg-white border-accent shadow-sm">
-      {/* Default Header */}
-      {!isMenuOpen && (
-        <header className="sticky bg-white border-b border-accent shadow-sm z-100000">
-          <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6">
-            <NavLink to="/">
-              <img src={header_logo} alt="logo" width={150} />
-            </NavLink>
-            <Button type="button" onClick={setIsMenuOpen}>
-              Menu
-            </Button>
-          </nav>
-        </header>
-      )}
+    <header className="sticky top-0 bg-background border-b border-secondary shadow-sm z-50">
+      <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-8">
+        {/* Logo (always left) */}
+        <NavLink to="/" className="flex items-center">
+          <img src={header_logo} alt="logo" width={150} className="h-auto" />
+        </NavLink>
 
-      {/* Drop Down Menu */}
+        {/* Desktop Navigation (≥ md) */}
+        <div className="hidden lg:flex items-center space-x-8 text-accent font-medium">
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : "hover:text-primary"
+            }
+          >
+            Profile
+          </NavLink>
+          <NavLink
+            to="/AidRequest"
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : "hover:text-primary"
+            }
+          >
+            Aid Request
+          </NavLink>
+          <NavLink
+            to="/DonationsAndVolunteers/donations"
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : "hover:text-primary"
+            }
+          >
+            Reliefs
+          </NavLink>
+          <NavLink
+            to="/OrgsAndSponsors/organizations"
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : "hover:text-primary"
+            }
+          >
+            Organizations
+          </NavLink>
+          <NavLink
+            to="/DisasterMap"
+            className={({ isActive }) =>
+              isActive ? "text-primary font-bold" : "hover:text-primary"
+            }
+          >
+            Disaster Map
+          </NavLink>
+          <button
+            onClick={handleLogout}
+            className="text-red-500 hover:text-red-600 font-medium"
+          >
+            Sign Out
+          </button>
+        </div>
+
+        {/* Mobile Menu Button (< lg) */}
+        <div className="lg:hidden">
+          <button
+            type="button"
+            onClick={toggleMenu}
+            className="text-background bg-primary p-4 rounded-lg font-semibold"
+          >
+            Menu
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Overlay Menu */}
       {isMenuOpen && (
-        <header className="fixed inset-0 z-1000 bg-white  flex flex-col items-center justify-center px-6 py-8 menu-overlay">
+        <div className="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center px-6 py-8 menu-overlay">
           <button
             onClick={toggleMenu}
             className="absolute top-6 right-6 text-gray-600 hover:text-red-500 text-xl font-bold"
@@ -54,60 +100,24 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               <img src={vertical_logo} alt="logo" width={150} />
             </NavLink>
 
-            {/* <NavLink
-              to="/"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Home
-            </NavLink>
-            <hr className="border-accent w-screen" /> */}
-
-            <NavLink
-              to="/profile"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Profile
-            </NavLink>
-            <hr className="border-accent w-screen" />
-
-            {/* Aid Request */}
-            <NavLink
-              to="/AidRequest"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Aid Request
-            </NavLink>
-            <hr className="border-accent w-screen" />
-
-            <NavLink
-              to="/DonationsAndVolunteers/donations"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Reliefs
-            </NavLink>
-            <hr className="border-accent w-screen" />
-
-            {/* Org and Sponsor*/}
-            <NavLink
-              to="/OrgsAndSponsors/organizations"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Organizations
-            </NavLink>
-            <hr className="border-accent w-screen" />
-            <NavLink
-              to="/DisasterMap"
-              onClick={toggleMenu}
-              className="text-2xl text-primary hover:text-accent font-medium"
-            >
-              Disaster Map
-            </NavLink>
-            <hr className="border-accent w-screen" />
+            {[
+              { to: "/profile", label: "Profile" },
+              { to: "/AidRequest", label: "Aid Request" },
+              { to: "/DonationsAndVolunteers/donations", label: "Reliefs" },
+              { to: "/OrgsAndSponsors/organizations", label: "Organizations" },
+              { to: "/DisasterMap", label: "Disaster Map" },
+            ].map((item) => (
+              <React.Fragment key={item.to}>
+                <NavLink
+                  to={item.to}
+                  onClick={toggleMenu}
+                  className="text-2xl text-primary hover:text-accent font-medium"
+                >
+                  {item.label}
+                </NavLink>
+                <hr className="border-accent w-screen" />
+              </React.Fragment>
+            ))}
 
             <button
               onClick={handleLogout}
@@ -116,7 +126,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               Sign Out
             </button>
           </nav>
-        </header>
+        </div>
       )}
     </header>
   );

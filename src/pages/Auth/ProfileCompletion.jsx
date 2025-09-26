@@ -36,10 +36,12 @@ export default function ProfileCompletion() {
       const { data, error } = await supabase
         .from("users")
         .select(
-          "name, identification, birthdate, country, city, latitude, longitude, profile_complete", "phone"
+          "name, identification, birthdate, country, city, latitude, longitude, profile_complete, phone, age, gender"
         )
         .eq("id", user.id)
         .single();
+
+      console.log(data);
 
       if (error) {
         // If no row, create minimal one so updates succeed
@@ -69,6 +71,8 @@ export default function ProfileCompletion() {
           latitude: data.latitude ?? "",
           longitude: data.longitude ?? "",
           phone: data.phone || "",
+          age: data.age || "", 
+          gender: data.gender || ""
         }));
 
         // If they somehow already completed, send them home
@@ -95,24 +99,6 @@ export default function ProfileCompletion() {
       }));
     }
   };
-
-  // const uploadImage = async (file) => {
-  //   const fileName = `${user.id}-${Date.now()}-${file.name}`;
-  //   const { error: uploadError } = await supabase.storage
-  //     .from("profile_pictures")
-  //     .upload(fileName, file);
-
-  //   if (uploadError) {
-  //     console.error("Error uploading image:", uploadError);
-  //     return null;
-  //   }
-
-  //   const { data } = supabase.storage
-  //     .from("profile_pictures")
-  //     .getPublicUrl(fileName);
-
-  //   return data.publicUrl;
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -174,8 +160,8 @@ export default function ProfileCompletion() {
   }
 
   return (
-    <div className="flex h-screen w-full items-center justify-center p-4 bg-cover bg-center">
-      <div className="bg-background rounded-2xl shadow-lg w-[90%] max-w-md p-6">
+    <div className="flex min-h-screen w-full items-center justify-center px-4 bg-cover bg-center">
+      <div className="bg-background rounded-2xl shadow-lg w-full max-w-md md:max-w-2xl p-6 sm:p-8">
         <h1 className="text-xl font-bold text-center text-primary mb-4">
           Complete Your Profile
         </h1>
@@ -185,42 +171,59 @@ export default function ProfileCompletion() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-3 text-accent">
-          {["name", "identification", "birthdate", "country", "city", "phone"].map(
-            (field) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              "name",
+              "identification",
+              "birthdate",
+              "country",
+              "city",
+              "phone",
+              "age",
+            ].map((field) => (
               <input
                 key={field}
-                type={field === "birthdate" ? "date" : "text"}
+                type={
+                  field === "birthdate"
+                    ? "date"
+                    : field === "age"
+                    ? "number"
+                    : field === "phone"
+                    ? "tel"
+                    : "text"
+                }
                 id={field}
                 placeholder={field}
-                className="w-full p-2 border rounded-lg text-accent"
-                value={formData[field]}
+                className="w-full p-2 border rounded-lg text-accent focus:ring-2 focus:ring-primary"
+                value={formData[field] || ""}
                 onChange={handleChange}
               />
-            )
-          )}
+            ))}
+
+            {/* Gender dropdown, in the same grid */}
+            <select
+              id="gender"
+              value={formData.gender || ""}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-lg text-accent focus:ring-2 focus:ring-primary"
+            >
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
           <LocationPicker onLocationSelect={setTempLocation} />
           {tempLocation && (
             <button
               type="button"
               onClick={confirmLocation}
-              className="w-full bg-primary text-white py-2 rounded-lg mt-2"
+              className="w-full bg-secondary text-accent py-2 rounded-lg mt-2 hover:bg-opacity-80"
             >
               Confirm Location
             </button>
           )}
-{/* 
-          <div className="text-accent p-2">
-            <label className="text-sm font-medium mb-2 block">
-              Upload Profile Picture (optional):
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              className="mt-1 block w-full text-accent border border-accent bg-primary rounded-md px-2"
-              onChange={(e) => setProfilePictureFile(e.target.files[0])}
-            />
-          </div> */}
 
           <button
             type="submit"

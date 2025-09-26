@@ -40,16 +40,14 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center p-4 bg-cover bg-center">
-      <div className="bg-background rounded-2xl shadow-lg w-[90%] max-w-md space-y-4">
+    <div className="flex min-h-screen w-full items-center justify-center px-4 bg-cover bg-center">
+      <div className="bg-background rounded-2xl shadow-lg w-full max-w-md md:max-w-lg p-6 sm:p-8">
         <div className="flex flex-col items-center mb-6">
-          <img src={vert_logo} alt="Logo" className="h-60" />
+          <img src={vert_logo} alt="Logo" className="h-40 sm:h-52 md:h-60" />
           <h1 className="my-2 text-primary font-bold text-2xl">Sign Up</h1>
         </div>
-        <form
-          className="space-y-4 w-[90%] max-w-lg mx-auto text-accent"
-          onSubmit={handleSubmit}
-        >
+
+        <form className="space-y-4 w-full text-accent" onSubmit={handleSubmit}>
           {["email", "password"].map((field) => (
             <div key={field} className="flex flex-col items-start">
               <label
@@ -64,22 +62,22 @@ export default function SignUp() {
                 value={formData[field]}
                 onChange={handleChange}
                 placeholder={`Enter your ${field}`}
-                className="mt-1 block w-full border bg-primary border-background text-background rounded-md shadow-sm p-2"
+                className="mt-1 block w-full border border-gray-300 bg-white text-accent rounded-md shadow-sm p-3 focus:ring-2 focus:ring-primary"
               />
             </div>
           ))}
 
-          <div className="flex justify-center p-4 space-x-2">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 mt-4">
             <button
               type="submit"
-              className="px-6 py-2 bg-primary text-background rounded hover:bg-opacity-80"
+              className="flex-1 px-6 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90"
             >
               Submit
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-6 py-2 bg-accent text-background rounded hover:bg-opacity-80"
+              className="flex-1 px-6 py-2 bg-accent text-white rounded-lg hover:bg-opacity-90"
             >
               Go Back
             </button>

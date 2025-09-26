@@ -19,8 +19,7 @@ export default function VolunteerDetail() {
       try {
         setLoading(true);
 
-        // 1. Volunteer core info
-        const { data: volunteer, error } = await supabase
+        const { data: volunteer } = await supabase
           .from("volunteers")
           .select(
             `
@@ -36,24 +35,18 @@ export default function VolunteerDetail() {
           )
           .eq("id", volunteerId)
           .single();
-
-        if (error) throw error;
         setCampaign(volunteer);
 
-        // 2. Organization
-        if (volunteer.org_id) {
-          const { data: org, error: orgError } = await supabase
+        if (volunteer?.org_id) {
+          const { data: org } = await supabase
             .from("organizations")
             .select("id, name, logo, tags, ratings")
             .eq("id", volunteer.org_id)
             .single();
-
-          if (orgError) throw orgError;
           setOrgData(org);
         }
 
-        // 3. Roles via join table
-        const { data: roleLinks, error: roleError } = await supabase
+        const { data: roleLinks } = await supabase
           .from("volunteer_roles")
           .select(
             `
@@ -67,10 +60,7 @@ export default function VolunteerDetail() {
           )
           .eq("volunteer_id", volunteerId);
 
-        if (roleError) throw roleError;
-
-        const roleList = roleLinks.map((r) => r.roles);
-        setRoles(roleList || []);
+        setRoles(roleLinks?.map((r) => r.roles) || []);
       } catch (err) {
         console.error("Error fetching volunteer detail:", err.message);
       } finally {
@@ -81,19 +71,15 @@ export default function VolunteerDetail() {
     fetchVolunteer();
   }, [volunteerId]);
 
-  if (loading) {
+  if (loading)
     return <LoadingSpinner message="Fetching Volunteer Details..." />;
-  }
-
-  if (!campaign) {
+  if (!campaign)
     return (
       <div className="flex h-screen items-center justify-center text-red-500">
         Volunteer opportunity not found.
       </div>
     );
-  }
 
-  // Calculate progress from impact JSON
   const signedUp = campaign.impact?.volunteers_signed_up ?? 0;
   const needed = campaign.impact?.volunteers_needed ?? 0;
   const progress = needed
@@ -101,16 +87,18 @@ export default function VolunteerDetail() {
     : 0;
 
   return (
-    <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
-      {/* Back Button */}
-      <div className="flex items-center space-x-4 p-6">
+    <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden my-6">
+      {/* Header */}
+      <div className="flex items-center space-x-4 p-4 sm:p-6 border-b border-gray-200">
         <button
           onClick={() => navigate(-1)}
           className="text-primary text-lg hover:text-accent"
         >
           &larr;
         </button>
-        <h2 className="text-lg font-semibold text-gray-900">{campaign.name}</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+          {campaign.name}
+        </h2>
       </div>
 
       {/* Hero Image */}
@@ -118,27 +106,26 @@ export default function VolunteerDetail() {
         <img
           src={campaign.image}
           alt={campaign.name}
-          className="w-full h-56 object-cover"
+          className="w-full h-48 sm:h-64 lg:h-80 object-cover"
         />
       )}
 
-      <div className="p-6 space-y-6">
-        {/* Title */}
+      <div className="p-4 sm:p-6 space-y-6">
         <h1 className="text-2xl font-bold text-gray-900">{campaign.name}</h1>
 
-        {/* Organization Info */}
+        {/* Org Info */}
         {orgData && (
           <div className="flex items-center space-x-3">
             <img
               src={orgData.logo}
               alt={orgData.name}
-              className="h-10 w-10 rounded-full"
+              className="h-10 w-10 sm:h-12 sm:w-12 rounded-full"
             />
             <div>
               <Link to={`/OrgsAndSponsors/organizations/${orgData.id}`}>
                 <p className="font-medium text-gray-800">{orgData.name}</p>
               </Link>
-              {orgData.tags && (
+              {orgData.tags?.[0] && (
                 <p className="text-xs text-gray-500">{orgData.tags[0]}</p>
               )}
             </div>
@@ -147,15 +134,15 @@ export default function VolunteerDetail() {
 
         {/* Ratings */}
         {orgData?.ratings && (
-          <div className="grid grid-cols-2 gap-3 text-accent">
-            <div className="flex flex-col items-center border rounded-lg py-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-accent">
+            <div className="flex flex-col items-center border rounded-lg py-3">
               <span className="text-sm font-medium">Public Rating</span>
               <RatingStars
                 rating={orgData.ratings.public_rating}
                 maxStars={5}
               />
             </div>
-            <div className="flex flex-col items-center border rounded-lg py-2">
+            <div className="flex flex-col items-center border rounded-lg py-3">
               <span className="text-sm font-medium">AI Rating</span>
               <RatingStars rating={orgData.ratings.ai_rating} maxStars={5} />
             </div>
@@ -181,7 +168,7 @@ export default function VolunteerDetail() {
         </div>
 
         {/* Description */}
-        <p className="text-gray-700 text-sm leading-relaxed">
+        <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
           {campaign.description}
         </p>
 
@@ -191,9 +178,12 @@ export default function VolunteerDetail() {
             <h2 className="text-lg font-semibold text-gray-900 mb-3">
               Volunteer Roles
             </h2>
-            <div className="space-y-3">
+            <div className="grid gap-4 sm:grid-cols-2">
               {roles.map((role) => (
-                <div key={role.id} className="p-3 border rounded-lg bg-gray-50">
+                <div
+                  key={role.id}
+                  className="p-3 border rounded-lg bg-gray-50 space-y-1"
+                >
                   <p className="font-medium text-gray-800">{role.title}</p>
                   <p className="text-sm text-gray-600">
                     Commitment: {role.commitment}
@@ -209,21 +199,23 @@ export default function VolunteerDetail() {
           </div>
         )}
 
-        {/* Location Map */}
+        {/* Map */}
         {campaign.latitude && campaign.longitude && (
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-2">
               Disaster Location
             </h2>
-            <LocationMap
-              position={[campaign.latitude, campaign.longitude]}
-              label={campaign.name}
-            />
+            <div className="h-40 lg:h-72 rounded-lg overflow-hidden">
+              <LocationMap
+                position={[campaign.latitude, campaign.longitude]}
+                label={campaign.name}
+              />
+            </div>
           </div>
         )}
 
         {/* CTA */}
-        <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-accent">
+        <button className="w-full bg-primary text-white py-2 sm:py-3 rounded-lg hover:bg-accent transition">
           Sign Up to Volunteer
         </button>
       </div>

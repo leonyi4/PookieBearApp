@@ -118,13 +118,13 @@ const DisasterMap = () => {
 
   return (
     <div className="relative h-fullbg-background">
-      <h1 className="text-primary text-xl uppercase my-2 font-bold text-center">
+      <h1 className="text-primary text-xl sm:text-2xl uppercase my-2 font-bold text-center">
         Disaster Map of Myanmar
       </h1>
 
       {/* Map Section */}
       <MapContainer
-        className="h-[600px]  w-full rounded-xl overflow-hidden shadow-md border-2 border-slate-300"
+        className="h-[600px]  lg:h-[800px]  w-full rounded-xl overflow-hidden shadow-md border-2 border-slate-300"
         center={[20.0, 96.0]}
         zoom={6}
         maxBoundsViscosity={1.0}
@@ -147,7 +147,7 @@ const DisasterMap = () => {
       {selectedMarker && (
         <div
           className="absolute bottom-0 left-0 right-0 bg-white p-3 
-          shadow-md max-h-[60%] overflow-y-auto rounded-2xl z-1000"
+          shadow-md max-h-[65%] sm:max-h-[50%] md:max-h[70%] overflow-y-auto rounded-2xl z-1000"
         >
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-bold text-primary">

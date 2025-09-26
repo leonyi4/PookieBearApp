@@ -21,7 +21,6 @@ export default function Landing() {
         .select("profile_complete")
         .eq("id", user.id)
         .single();
-      
 
       // console.log(profile)
       if (profileErr || !profile || profile.profile_complete === false) {
@@ -79,37 +78,39 @@ export default function Landing() {
 
   return (
     <div
-      className="flex h-screen w-full items-center justify-center bg-cover bg-center"
+      className="flex min-h-screen w-full items-center justify-center bg-cover bg-center px-4"
       style={{ backgroundImage: "url('/map-background.png')" }}
     >
-      <div className="bg-background p-8 rounded-2xl shadow-lg w-[90%] max-w-md">
+      <div className="bg-background p-6 sm:p-8 rounded-2xl shadow-lg w-full max-w-md md:max-w-lg">
         <div className="flex flex-col items-center mb-6">
-          <img src={logo} alt="Pookie Bear Logo" className="h-60" />
+          <img
+            src={logo}
+            alt="Pookie Bear Logo"
+            className="h-40 sm:h-52 md:h-60"
+          />
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4 text-accent">
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-3 border rounded-lg text-accent"
+            className="w-full p-3 border rounded-lg text-accent focus:ring-2 focus:ring-primary"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
           />
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-3 border rounded-lg text-accent"
+            className="w-full p-3 border rounded-lg text-accent focus:ring-2 focus:ring-primary"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
           />
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"
-            className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-80"
+            className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition"
           >
             Log In
           </button>
@@ -117,7 +118,7 @@ export default function Landing() {
           <button
             type="button"
             onClick={() => navigate("/SignUp")}
-            className="w-full bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-300 transition"
+            className="w-full bg-secondary text-accent py-3 rounded-lg font-semibold hover:bg-opacity-80 transition"
           >
             Sign Up
           </button>

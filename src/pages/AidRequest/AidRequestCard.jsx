@@ -1,35 +1,32 @@
-// src/components/AidRequestCard.jsx
 import React from "react";
 import LocationMap from "../../components/LocationMap";
 import { Link } from "react-router-dom";
 
 export default function AidRequestCard({ request }) {
   const status = request.status || "Pending";
-
   const statusColors = {
     Pending: "bg-yellow-100 text-yellow-700",
     "In Progress": "bg-blue-100 text-blue-700",
     Fulfilled: "bg-green-100 text-green-700",
   };
-
-  const org = request.organizations; // from the join
+  const org = request.organizations;
 
   return (
-    <div className="p-4 border rounded-lg bg-white shadow hover:shadow-md transition space-y-3">
-      {/* Emergency Type & Severity */}
-      <div className="flex items-center justify-between">
-        <p className="font-semibold text-primary uppercase">
+    <div className="p-4 border rounded-xl bg-background shadow hover:shadow-md transition flex flex-col gap-3">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <p className="font-semibold text-primary uppercase text-sm sm:text-base">
           {request.disaster_type}
         </p>
-        <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700 font-medium">
+        <span className="px-2 py-1 text-xs sm:text-sm rounded-full bg-red-100 text-red-700 font-medium">
           {request.severity}
         </span>
       </div>
 
       {/* Aid Types */}
       <div>
-        <div className="flex flex-wrap gap-2 mt-1 text-center">
-          <p className="text-sm font-medium text-gray-700">Requested Aid:</p>
+        <p className="text-sm font-medium text-accent">Requested Aid:</p>
+        <div className="flex flex-wrap gap-2 mt-1">
           {Array.isArray(request.aid_types) ? (
             request.aid_types.map((aid, idx) => (
               <span
@@ -47,19 +44,17 @@ export default function AidRequestCard({ request }) {
         </div>
       </div>
 
-      {/* Location Preview */}
+      {/* Location */}
       {request.latitude && request.longitude && (
-        <div className="h-32 w-full rounded-md overflow-hidden">
-          <LocationMap
-            position={[request.latitude, request.longitude]}
-            label={request.city || request.disaster_type}
-          />
-        </div>
+        <LocationMap
+          position={[request.latitude, request.longitude]}
+          label={request.city || request.disaster_type}
+        />
       )}
 
-      {/* Status & Organization Info */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs">
+      {/* Footer Info */}
+      <div className="space-y-2 text-xs sm:text-sm">
+        <div className="flex justify-between items-center">
           <span
             className={`px-2 py-1 rounded-full font-medium ${
               statusColors[status] || "bg-gray-100 text-gray-700"
@@ -76,7 +71,7 @@ export default function AidRequestCard({ request }) {
         {org && (
           <Link
             to={`/OrgsAndSponsors/organizations/${org.id}`}
-            className="flex items-center  text-sm text-gray-700 "
+            className="flex items-center gap-2 text-accent hover:text-primary transition"
           >
             <span>
               <span className="font-medium">Assigned:</span> {org.name}
@@ -85,7 +80,7 @@ export default function AidRequestCard({ request }) {
               <img
                 src={org.logo}
                 alt={org.name}
-                className="ml-1 w-6 h-6 rounded-full border"
+                className="w-6 h-6 rounded-full border"
               />
             )}
           </Link>
@@ -93,7 +88,7 @@ export default function AidRequestCard({ request }) {
 
         {/* ETA */}
         {request.eta && (
-          <p className="text-sm text-gray-700">
+          <p className="text-gray-700">
             <span className="font-medium">ETA:</span>{" "}
             {new Date(request.eta).toLocaleString()}
           </p>

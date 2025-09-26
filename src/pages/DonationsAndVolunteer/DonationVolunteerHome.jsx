@@ -1,5 +1,6 @@
+// src/pages/DonationsAndVolunteer/DonationsVolunteersHome.jsx
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import DonationCard from "./Donations/DonationCard";
 import VolunteerCard from "./Volunteer/VolunteerCard";
 import { supabase } from "../../lib/supabase-client";
@@ -30,32 +31,21 @@ export default function DonationsVolunteersHome() {
       try {
         setLoading(true);
 
-        // Fetch donations
         const { data: donationsData, error: donationsError } = await supabase
           .from("donations")
           .select(
             "id, name, description, goal, raised, latitude, longitude, disaster_id, image"
           );
-
         if (donationsError) throw donationsError;
+        setDonations((donationsData || []).sort((a, b) => a.id - b.id));
 
-        const sortedDonations = (donationsData || []).sort(
-          (a, b) => a.id - b.id
-        );
-        setDonations(sortedDonations);
-
-        // Fetch volunteers
         const { data: volunteersData, error: volunteersError } = await supabase
           .from("volunteers")
           .select(
             "id, name, description, latitude, longitude, disaster_id, impact, image"
           );
-
         if (volunteersError) throw volunteersError;
-        const sortedVolunteers = (volunteersData || []).sort(
-          (a, b) => a.id - b.id
-        );
-        setVolunteers(sortedVolunteers);
+        setVolunteers((volunteersData || []).sort((a, b) => a.id - b.id));
       } catch (err) {
         console.error("Error fetching donations/volunteers:", err.message);
       } finally {
@@ -66,13 +56,11 @@ export default function DonationsVolunteersHome() {
     fetchData();
   }, []);
 
-  // Update URL when tab is clicked
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     navigate(`/DonationsAndVolunteers/${tab}`);
   };
 
-  // Filter logic
   const filteredDonations = donations.filter((d) =>
     d.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -80,70 +68,106 @@ export default function DonationsVolunteersHome() {
     v.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-    if (loading) {
-      return <LoadingSpinner message="Fetching Donations and Volunteers..." />;
-    }
-  
+  if (loading) {
+    return <LoadingSpinner message="Fetching Donations and Volunteers..." />;
+  }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="max-w-7xl mx-auto p-4">
       {/* Tabs */}
-      <div className="flex justify-around mb-4">
-        <button
-          className={`pb-2 ${
-            activeTab === "donations"
-              ? "font-bold border-b-2 border-primary text-primary"
-              : "text-accent"
-          }`}
-          onClick={() => handleTabClick("donations")}
-        >
-          Donations
-        </button>
-        <button
-          className={`pb-2 ${
-            activeTab === "volunteers"
-              ? "font-bold border-b-2 border-primary text-primary"
-              : "text-accent"
-          }`}
-          onClick={() => handleTabClick("volunteers")}
-        >
-          Volunteers
-        </button>
+      <div className="flex justify-around mb-6">
+        {["donations", "volunteers"].map((tab) => (
+          <button
+            key={tab}
+            className={`pb-2 text-lg transition ${
+              activeTab === tab
+                ? "font-bold border-b-2 border-primary text-primary"
+                : "text-accent hover:text-primary"
+            }`}
+            onClick={() => handleTabClick(tab)}
+          >
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
+        ))}
       </div>
 
       {/* Search */}
       <input
         type="text"
         placeholder={`Search ${activeTab}`}
-        className="w-full p-2 border text-black border-secondary rounded-lg mb-4 bg-white"
+        className="w-full p-3 border text-black border-secondary rounded-lg mb-6 bg-white focus:ring-2 focus:ring-primary focus:outline-none"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
 
-      {/* Donations List */}
+      {/* Donations */}
       {activeTab === "donations" && (
-        <div className="space-y-4">
-          {filteredDonations.length > 0 ? (
-            filteredDonations.map((campaign) => (
-              <DonationCard key={campaign.id} data={campaign} home={false} />
-            ))
-          ) : (
-            <p className="text-accent text-center">No donations found</p>
-          )}
-        </div>
+        <>
+          {/* Horizontal scroll for mobile + medium */}
+          <div className="flex flex-col space-y-4 overflow-x-auto pb-4 lg:hidden">
+            {filteredDonations.length > 0 ? (
+              filteredDonations.map((campaign) => (
+                <DonationCard
+                  key={campaign.id}
+                  data={campaign}
+                  home={false}
+                  className="min-w-[16rem] sm:min-w-[20rem]"
+                />
+              ))
+            ) : (
+              <p className="text-accent text-center w-full">No donations found</p>
+            )}
+          </div>
+
+          {/* Grid for desktop */}
+          <div className="hidden lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredDonations.length > 0 ? (
+              filteredDonations.map((campaign) => (
+                <DonationCard key={campaign.id} data={campaign} home={false} />
+              ))
+            ) : (
+              <p className="text-accent text-center col-span-full">
+                No donations found
+              </p>
+            )}
+          </div>
+        </>
       )}
 
-      {/* Volunteers List */}
+      {/* Volunteers */}
       {activeTab === "volunteers" && (
-        <div className="space-y-4">
-          {filteredVolunteers.length > 0 ? (
-            filteredVolunteers.map((campaign) => (
-              <VolunteerCard key={campaign.id} data={campaign} home={false} />
-            ))
-          ) : (
-            <p className="text-accent text-center">No volunteers found</p>
-          )}
-        </div>
+        <>
+          {/* Horizontal scroll for mobile + medium */}
+          <div className="flex flex-col space-y-4 overflow-x-auto pb-4 lg:hidden">
+            {filteredVolunteers.length > 0 ? (
+              filteredVolunteers.map((campaign) => (
+                <VolunteerCard
+                  key={campaign.id}
+                  data={campaign}
+                  home={false}
+                  className="min-w-[16rem] sm:min-w-[20rem]"
+                />
+              ))
+            ) : (
+              <p className="text-accent text-center w-full">
+                No volunteers found
+              </p>
+            )}
+          </div>
+
+          {/* Grid for desktop */}
+          <div className="hidden lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredVolunteers.length > 0 ? (
+              filteredVolunteers.map((campaign) => (
+                <VolunteerCard key={campaign.id} data={campaign} home={false} />
+              ))
+            ) : (
+              <p className="text-accent text-center col-span-full">
+                No volunteers found
+              </p>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

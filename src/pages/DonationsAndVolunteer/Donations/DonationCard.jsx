@@ -4,78 +4,72 @@ import data from "../../../assets/test_data.json";
 
 const DonationCard = ({ data: donation, home: isHome, className = "" }) => {
   const progress = (donation.raised / donation.goal) * 100;
-
-  // find org for the donation
-  const org_id = donation.org_id;
-  const org_data = data.orgs.find((o) => o.id === org_id);
+  const org_data = data.orgs.find((o) => o.id === donation.org_id);
 
   return (
     <div
-      key={donation.id}
-      className={`bg-secondary border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col flex-shrink-0 ${className}`}
+      className={`bg-secondary border rounded-xl shadow-md hover:shadow-lg transition flex flex-col ${className}`}
     >
-      {/* Content */}
-      <div className="p-2 flex-1 flex flex-col">
-        {/* Image */}
-        <img
-          src={donation.image}
-          alt={donation.name}
-          className="h-40 w-full object-cover rounded-t-lg"
-        />
+      {/* Image */}
+      <img
+        src={donation.image}
+        alt={donation.name}
+        className="h-36 sm:h-44 lg:h-56 w-full object-cover rounded-t-xl"
+      />
 
-        {/* Title + Description */}
-        <h2 className="text-lg font-semibold line-clamp-2 min-h-[60px] text-gray-900 mb-1 mt-2">
+      {/* Content */}
+      <div className="p-3 flex flex-col flex-1">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900 line-clamp-2 min-h-[40px]">
           {donation.name}
         </h2>
+
         {!isHome && (
-          <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+          <p className="text-sm text-gray-600 line-clamp-2 my-2">
             {donation.description}
           </p>
         )}
 
-        {/* Progress bar */}
+        {/* Progress */}
         <div className="mt-auto">
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-black">Raised</p>
-            <p className="text-sm text-gray-700">
-              {Math.round(progress).toLocaleString()} %
-            </p>
+          <div className="flex justify-between text-xs sm:text-sm text-accent">
+            <span>Raised</span>
+            <span>{Math.round(progress)}%</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+          <div className="w-full bg-background rounded-full h-2 mt-1">
             <div
               className="bg-primary h-2 rounded-full"
               style={{ width: `${Math.min(progress, 100)}%` }}
-            ></div>
+            />
           </div>
-          <p className="text-sm text-gray-700">
-            Goal: ${donation.goal.toLocaleString()}
+          <p className="text-xs sm:text-sm text-gray-600 mt-1">
+            Goal: {donation.goal.toLocaleString()} Ks
           </p>
         </div>
 
-        {/* Organization Info */}
+        {/* Org */}
         {org_data && (
-          <div className="flex items-center mt-2 mb-1">
+          <div className="flex items-center mt-2">
             <img
               src={org_data.logo}
               alt={org_data.name}
               className="h-8 w-8 rounded-full mr-2"
             />
-            <span className="text-sm font-medium text-gray-800">
-              {org_data.name}
-            </span>
+            <span className="text-sm font-medium">{org_data.name}</span>
           </div>
         )}
 
         {/* Buttons */}
         {!isHome && (
-          <div className="mt-2 flex space-x-2 justify-between text-center">
+          <div className="mt-3 flex gap-2">
             <Link
               to={`/DonationsAndVolunteers/donations/${donation.id}`}
-              className="w-full bg-primary  text-white font-medium py-1 px-1 rounded-md hover:bg-accentS"
+              className="w-1/2"
             >
-              <button className="">View Details</button>
+              <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-accent">
+                View Details
+              </button>
             </Link>
-            <button className="w-full bg-accent text-white font-medium py-1 px-1 rounded-md hover:bg-gray-400">
+            <button className="w-1/2 bg-accent text-white py-2 rounded-lg hover:bg-gray-500">
               Share
             </button>
           </div>
