@@ -34,10 +34,21 @@ export default function Profile() {
       // Aid Requests
       const { data: requests } = await supabase
         .from("aid_requests")
-        .select("*")
+        .select(
+          `
+    *,
+    organizations (
+      id,
+      name,
+      logo
+    )
+  `
+        )
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      setAidRequests(requests || []);
+        setAidRequests(requests || []);
+
+        console.log(requests)
 
       // Contributions (donations/volunteering)
       const { data: contribs } = await supabase
@@ -64,8 +75,6 @@ export default function Profile() {
         <p className="text-red-500">{fetchError || "Profile not found."}</p>
       </div>
     );
-
-  console.log(aidRequests);
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">

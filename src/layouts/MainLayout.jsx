@@ -12,7 +12,7 @@ const MainLayout = () => {
 
       {/* Only render content if menu is closed */}
       { (
-        <main className={`flex-1 p-4 ${isMenuOpen ? "hidden" : "block"}`}>
+        <main className={`flex-1 p-2 ${isMenuOpen ? "hidden" : "block"}`}>
           <Outlet />
         </main>
       )}

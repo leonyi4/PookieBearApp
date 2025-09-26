@@ -1,9 +1,9 @@
 // src/components/AidRequestCard.jsx
 import React from "react";
-import LocationMap from "../../components/LocationMap"
+import LocationMap from "../../components/LocationMap";
+import { Link } from "react-router-dom";
 
 export default function AidRequestCard({ request }) {
-  // Fallback status if not provided
   const status = request.status || "Pending";
 
   const statusColors = {
@@ -11,6 +11,8 @@ export default function AidRequestCard({ request }) {
     "In Progress": "bg-blue-100 text-blue-700",
     Fulfilled: "bg-green-100 text-green-700",
   };
+
+  const org = request.organizations; // from the join
 
   return (
     <div className="p-4 border rounded-lg bg-white shadow hover:shadow-md transition space-y-3">
@@ -26,8 +28,8 @@ export default function AidRequestCard({ request }) {
 
       {/* Aid Types */}
       <div>
-        <p className="text-sm font-medium text-gray-700">Requested Aid:</p>
-        <div className="flex flex-wrap gap-2 mt-1">
+        <div className="flex flex-wrap gap-2 mt-1 text-center">
+          <p className="text-sm font-medium text-gray-700">Requested Aid:</p>
           {Array.isArray(request.aid_types) ? (
             request.aid_types.map((aid, idx) => (
               <span
@@ -50,23 +52,52 @@ export default function AidRequestCard({ request }) {
         <div className="h-32 w-full rounded-md overflow-hidden">
           <LocationMap
             position={[request.latitude, request.longitude]}
-            label={request.city || request.type_of_emergency}
+            label={request.city || request.disaster_type}
           />
         </div>
       )}
 
-      {/* Status & Metadata */}
-      <div className="flex items-center justify-between text-xs">
-        <span
-          className={`px-2 py-1 rounded-full font-medium ${
-            statusColors[status] || "bg-gray-100 text-gray-700"
-          }`}
-        >
-          {status}
-        </span>
-        <span className="text-gray-400">
-          {new Date(request.created_at).toLocaleDateString()}
-        </span>
+      {/* Status & Organization Info */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-xs">
+          <span
+            className={`px-2 py-1 rounded-full font-medium ${
+              statusColors[status] || "bg-gray-100 text-gray-700"
+            }`}
+          >
+            {status}
+          </span>
+          <span className="text-gray-400">
+            {new Date(request.created_at).toLocaleDateString()}
+          </span>
+        </div>
+
+        {/* Assigned Org */}
+        {org && (
+          <Link
+            to={`/OrgsAndSponsors/organizations/${org.id}`}
+            className="flex items-center  text-sm text-gray-700 "
+          >
+            <span>
+              <span className="font-medium">Assigned:</span> {org.name}
+            </span>
+            {org.logo && (
+              <img
+                src={org.logo}
+                alt={org.name}
+                className="ml-1 w-6 h-6 rounded-full border"
+              />
+            )}
+          </Link>
+        )}
+
+        {/* ETA */}
+        {request.eta && (
+          <p className="text-sm text-gray-700">
+            <span className="font-medium">ETA:</span>{" "}
+            {new Date(request.eta).toLocaleString()}
+          </p>
+        )}
       </div>
     </div>
   );
