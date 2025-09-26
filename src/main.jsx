@@ -16,6 +16,9 @@ import Profile from "./profile/Profile.jsx";
 import ProfileCompletion from "./pages/Auth/ProfileCompletion.jsx";
 
 import Home from "./pages/Home.jsx";
+
+import AidRequestForm from "./pages/AidRequest/AidRequestForm.jsx";
+
 import DisaterMap from "./pages/Disasters/DisasterMap.jsx";
 import DisasterDetail from "./pages/Disasters/DisasterDetail.jsx";
 
@@ -54,6 +57,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "profile", element: <Profile /> },
+
+      { path: "AidRequest", element: <AidRequestForm /> },
 
       { path: "DisasterMap", element: <DisaterMap /> },
       { path: "DisasterMap/:disasterId", element: <DisasterDetail /> },

@@ -6,6 +6,7 @@ import Button from "./Button.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useLockBodyScroll } from "../hooks/useLockBodyScroll.jsx";
 
+
 //
 const Header = ({ isMenuOpen, setIsMenuOpen }) => {
   // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -68,6 +69,16 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               className="text-2xl text-primary hover:text-accent font-medium"
             >
               Profile
+            </NavLink>
+            <hr className="border-accent w-screen" />
+
+            {/* Aid Request */}
+            <NavLink
+              to="/AidRequest"
+              onClick={toggleMenu}
+              className="text-2xl text-primary hover:text-accent font-medium"
+            >
+              Aid Request
             </NavLink>
             <hr className="border-accent w-screen" />
 

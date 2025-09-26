@@ -5,6 +5,7 @@ import VolunteerCard from "./DonationsAndVolunteer/Volunteer/VolunteerCard";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase-client";
 import LoadingSpinner from "../components/LoadingSpinner";
+import AidRequestCard from "./AidRequest/AidRequestCard";
 
 export default function Home() {
   const [donations, setDonations] = useState([]);
@@ -37,7 +38,7 @@ export default function Home() {
             "id, name, description, latitude, longitude, disaster_id, impact, image"
           );
 
-       if (volunteersError) throw volunteersError;
+        if (volunteersError) throw volunteersError;
         const sortedVolunteers = (volunteersData || []).sort(
           (a, b) => a.id - b.id
         );
@@ -50,7 +51,7 @@ export default function Home() {
           .from("organizations")
           .select("id, name, logo, tags");
 
-       if (orgsError) throw orgsError;
+        if (orgsError) throw orgsError;
         const sortedOrgs = (orgsData || []).sort((a, b) => a.id - b.id);
         setOrgs(sortedOrgs);
 
@@ -59,7 +60,7 @@ export default function Home() {
           .from("sponsors")
           .select("id, name, logo");
 
-         if (sponsorsError) throw sponsorsError;
+        if (sponsorsError) throw sponsorsError;
         const sortedSponsors = (sponsorsData || []).sort((a, b) => a.id - b.id);
         setSponsors(sortedSponsors);
       } catch (err) {
@@ -75,7 +76,7 @@ export default function Home() {
   if (loading) {
     return <LoadingSpinner message="Fetching Home..." />;
   }
-  
+
   return (
     <div className="space-y-4 p-4">
       {/* Customize Profile Button */}
@@ -87,6 +88,23 @@ export default function Home() {
           Customize Profile
         </Link>
       </div>
+
+      {/* Aid Requests Section */}
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-gray-900 uppercase">
+            Aid Requests
+          </h2>
+          <Link to="/AidRequest" className="text-primary font-semibold">
+            Make a Request
+          </Link>
+        </div>
+        {/* <div className="space-y-3">
+          {aidRequests.map((req) => (
+            <AidRequestCard key={req.id} request={req} />
+          ))}
+        </div> */}
+      </section>
 
       {/* Donation Section */}
       <section>
@@ -175,10 +193,11 @@ export default function Home() {
 
       {/* Sponsors Section */}
       <section>
-       <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-900 uppercase">
             Active Sponsors
-          </h2>          <Link
+          </h2>{" "}
+          <Link
             to="/OrgsAndSponsors/sponsors"
             className="text-primary font-semibold"
           >
