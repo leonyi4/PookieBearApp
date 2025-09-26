@@ -4,8 +4,8 @@ import MiniMap from "./Disasters/MiniMap";
 import VolunteerCard from "./DonationsAndVolunteer/Volunteer/VolunteerCard";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase-client";
+
 import LoadingSpinner from "../components/LoadingSpinner";
-import AidRequestCard from "./AidRequest/AidRequestCard";
 
 export default function Home() {
   const [donations, setDonations] = useState([]);
@@ -79,7 +79,7 @@ export default function Home() {
 
   return (
     <div className="space-y-4 p-4">
-      {/* Customize Profile Button */}
+      {/* Customize Profile Button
       <div className="flex justify-end mb-4">
         <Link
           to="/profile"
@@ -87,23 +87,22 @@ export default function Home() {
         >
           Customize Profile
         </Link>
-      </div>
+      </div> */}
 
-      {/* Aid Requests Section */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900 uppercase">
-            Aid Requests
-          </h2>
-          <Link to="/AidRequest" className="text-primary font-semibold">
-            Make a Request
+      {/* Aid Request CTA */}
+      <section className="rounded-2xl p-4 bg-gradient-to-r from-primary to-secondary text-white shadow">
+        <h2 className="text-xl font-bold uppercase">Need Help Right Now?</h2>
+        <p className="text-sm mt-1 opacity-95">
+          If you’re affected by a disaster, tell us what you need and where you
+          are.
+        </p>
+        <div className="mt-3">
+          <Link to="/AidRequest">
+            <button className="w-full bg-white text-accent font-semibold py-2 rounded-lg hover:bg-gray-100">
+              Request Aid
+            </button>
           </Link>
         </div>
-        {/* <div className="space-y-3">
-          {aidRequests.map((req) => (
-            <AidRequestCard key={req.id} request={req} />
-          ))}
-        </div> */}
       </section>
 
       {/* Donation Section */}

@@ -1,106 +1,55 @@
+// src/pages/Profile.jsx
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; 
-import { supabase } from "../lib/supabase-client"; 
-import LocationPicker from "../components/LocationPicker";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import AidRequestCard from "../pages/AidRequest/AidRequestCard";
+import { supabase } from "../lib/supabase-client";
 
 export default function Profile() {
-  const navigate = useNavigate();
   const { user, loading } = useAuth();
-
-  const [formData, setFormData] = useState({
-    name: "",
-    identification: "",
-    birthdate: "",
-    country: "",
-    city: "",
-    latitude: "",
-    longitude: "",
-    phone: "",
-  });
-  const [profilePictureFile, setProfilePictureFile] = useState(null);
-  const [tempLocation, setTempLocation] = useState(null);
-  const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
+  const [aidRequests, setAidRequests] = useState([]);
+  const [contributions, setContributions] = useState([]);
   const [fetchError, setFetchError] = useState("");
+  const [activeTab, setActiveTab] = useState("profile");
 
-  // Load profile data
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/Landing", { replace: true });
 
-    const loadProfile = async () => {
-      const { data, error } = await supabase
+    const loadData = async () => {
+      // Profile
+      const { data: profileData, error: profileError } = await supabase
         .from("users")
         .select(
-          "name, identification, birthdate, country, city, latitude, longitude, profile_complete, phone"
+          "name, identification, birthdate, country, city, phone, latitude, longitude, profile_picture"
         )
         .eq("id", user.id)
         .single();
 
-      if (error) return setFetchError(error.message);
-      if (data) setFormData({ ...data });
+      if (profileError) return setFetchError(profileError.message);
+      setProfile(profileData);
+
+      // Aid Requests
+      const { data: requests } = await supabase
+        .from("aid_requests")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+      setAidRequests(requests || []);
+
+      // Contributions (donations/volunteering)
+      const { data: contribs } = await supabase
+        .from("user_contributions")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+      setContributions(contribs || []);
     };
 
-    loadProfile();
+    loadData();
   }, [user, loading, navigate]);
-
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
-
-  const handleConfirmLocation = () => {
-    if (!tempLocation) return alert("Please select a location first!");
-    setFormData(prev => ({
-      ...prev,
-      latitude: tempLocation.lat,
-      longitude: tempLocation.lng,
-    }));
-    alert("Location confirmed!");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!user) return navigate("/Landing");
-
-    setSaving(true);
-
-    let profile_picture_url =
-      "https://fenufabnjvlenskedegj.supabase.co/storage/v1/object/public/profile_pictures/default.png";
-
-    if (profilePictureFile) {
-      const fileName = `${user.id}-${Date.now()}-${profilePictureFile.name}`;
-      const { error: uploadError } = await supabase.storage
-        .from("profile_pictures")
-        .upload(fileName, profilePictureFile);
-      if (!uploadError) {
-        const { data } = supabase.storage
-          .from("profile_pictures")
-          .getPublicUrl(fileName);
-        profile_picture_url = data.publicUrl;
-      }
-    }
-
-    const updates = {
-      ...formData,
-      latitude: formData.latitude ? Number(formData.latitude) : null,
-      longitude: formData.longitude ? Number(formData.longitude) : null,
-      profile_picture: profile_picture_url,
-      profile_complete: true,
-    };
-
-    const { error } = await supabase
-      .from("users")
-      .update(updates)
-      .eq("id", user.id);
-
-    setSaving(false);
-
-    if (error) return alert("Error saving profile");
-
-    alert("Profile updated successfully!");
-    navigate("/");
-  };
 
   if (loading)
     return (
@@ -108,60 +57,145 @@ export default function Profile() {
         Loading…
       </div>
     );
-  if (!user) return null;
+
+  if (!profile)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-red-500">{fetchError || "Profile not found."}</p>
+      </div>
+    );
+
+  console.log(aidRequests);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-4">
-      <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center text-primary mb-4">
-          Edit Your Profile
-        </h1>
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-3xl mx-auto">
+        {/* Header with back button */}
+        <div className="flex items-center mb-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-primary text-lg hover:text-accent mr-3"
+          >
+            &larr;
+          </button>
+          <h1 className="text-2xl font-bold text-primary">My Profile</h1>
+        </div>
 
-        {fetchError && <p className="text-red-500 text-sm mb-2">{fetchError}</p>}
+        {/* Tabs */}
+        <div className="flex justify-around mb-6">
+          {["profile", "aid", "contributions"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-2 ${
+                activeTab === tab
+                  ? "font-bold border-b-2 border-primary text-primary"
+                  : "text-accent"
+              }`}
+            >
+              {tab === "profile"
+                ? "Profile"
+                : tab === "aid"
+                ? "Aid Requests"
+                : "Contributions"}
+            </button>
+          ))}
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {["name", "identification", "birthdate", "country", "city", "phone"].map(
-            (field) => (
-              <input
-                key={field}
-                type={field === "birthdate" ? "date" : "text"}
-                id={field}
-                placeholder={`Enter ${field}`}
-                value={formData[field]}
-                onChange={handleChange}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+        {/* Profile Tab */}
+        {activeTab === "profile" && (
+          <div>
+            <div className="flex flex-col items-center space-y-4">
+              <img
+                src={profile.profile_picture || "/default-profile.png"}
+                alt="Profile"
+                className="w-28 h-28 rounded-full object-cover border-2 border-primary"
               />
-            )
-          )}
+              <p className="text-lg font-semibold text-gray-900">
+                {profile.name}
+              </p>
+              <p className="text-sm text-gray-500">
+                {profile.identification || "N/A"}
+              </p>
+            </div>
 
-          <LocationPicker onLocationSelect={setTempLocation} />
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="font-medium text-gray-700">Birthdate</p>
+                <p className="text-gray-900">{profile.birthdate || "-"}</p>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Phone</p>
+                <p className="text-gray-900">{profile.phone || "-"}</p>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Country</p>
+                <p className="text-gray-900">{profile.country || "-"}</p>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">City</p>
+                <p className="text-gray-900">{profile.city || "-"}</p>
+              </div>
+            </div>
 
-          <button
-            type="button"
-            onClick={handleConfirmLocation}
-            className="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg"
-          >
-            Confirm Location
-          </button>
+            {/* Customize Button */}
+            <div className="mt-6">
+              <Link to="/CustomizeProfile">
+                <button className="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg">
+                  Customize Profile
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
 
-          <label className="block text-gray-900">
-            Upload Profile Picture (optional):
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setProfilePictureFile(e.target.files[0])}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white text-gray-900"
-            />
-          </label>
+        {/* Aid Requests Tab */}
+        {activeTab === "aid" && (
+          <div>
+            <h2 className="font-semibold mb-3">Your Aid Requests</h2>
+            {aidRequests.length > 0 ? (
+              <div className="space-y-3">
+                {aidRequests.map((req) => (
+                  <AidRequestCard key={req.id} request={req} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-600 text-sm">
+                You haven’t made any aid requests yet.
+              </p>
+            )}
+          </div>
+        )}
 
-          <button
-            type="submit"
-            disabled={saving}
-            className="w-full bg-primary hover:bg-primary-dark text-white py-2 rounded-lg disabled:opacity-60"
-          >
-            {saving ? "Saving…" : "Save Profile"}
-          </button>
-        </form>
+        {/* Contributions Tab */}
+        {activeTab === "contributions" && (
+          <div>
+            <h2 className="font-semibold mb-3">Your Contributions</h2>
+            {contributions.length > 0 ? (
+              <div className="space-y-3">
+                {contributions.map((c) => (
+                  <div
+                    key={c.id}
+                    className="p-3 border rounded-lg bg-gray-50 shadow"
+                  >
+                    <p className="font-medium text-gray-900">
+                      {c.type === "donation"
+                        ? `Donation: ${c.amount} Kyats`
+                        : `Volunteered for ${c.campaign_name}`}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {new Date(c.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-600 text-sm">
+                You haven’t made any contributions yet.
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

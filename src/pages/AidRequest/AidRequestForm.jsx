@@ -1,114 +1,181 @@
-// src/pages/AidRequest/AidRequestForm.jsx
+// src/pages/AidRequests/NewAidRequest.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase-client";
 import { useAuth } from "../../context/AuthContext";
+import LocationPicker from "../../components/LocationPicker";
 
 export default function AidRequestForm() {
   const { user } = useAuth();
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
-    type: "",
+    disaster_type: "",
     severity: "",
-    needs: "",
-    location: "",
+    aid_types: [],
+    latitude: "",
+    longitude: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  const [tempLocation, setTempLocation] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+  const disasterOptions = ["Earthquake", "Fire", "Flood", "Other"];
+  const severityOptions = ["Low", "Moderate", "High", "Critical"];
+  const aidOptions = [
+    "Food",
+    "Water",
+    "Shelter",
+    "Medical",
+    "Evacuation",
+    "Money",
+    "Other",
+  ];
+
+  const toggleAidType = (type) => {
+    setFormData((prev) => {
+      const exists = prev.aid_types.includes(type);
+      return {
+        ...prev,
+        aid_types: exists
+          ? prev.aid_types.filter((t) => t !== type)
+          : [...prev.aid_types, type],
+      };
+    });
+  };
+
+  const confirmLocation = () => {
+    if (!tempLocation) return alert("Please select a location first.");
+    setFormData((prev) => ({
+      ...prev,
+      latitude: tempLocation.lat,
+      longitude: tempLocation.lng,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
-      alert("You must be logged in to make a request.");
-      return;
+      alert("Please log in first.");
+      return navigate("/Landing");
     }
-
-    setLoading(true);
+    setSubmitting(true);
 
     const { error } = await supabase.from("aid_requests").insert({
       user_id: user.id,
-      type: formData.type,
+      disaster_type: formData.disaster_type,
       severity: formData.severity,
-      needs: formData.needs,
-      location: formData.location,
+      aid_types: formData.aid_types,
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+      status: "pending",
     });
 
-    setLoading(false);
+    setSubmitting(false);
 
     if (error) {
       console.error(error);
-      alert("Error submitting aid request");
+      alert("Error submitting request");
       return;
     }
 
     alert("Aid request submitted successfully!");
-    navigate("/");
+    navigate("/Profile");
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center p-4 bg-background">
-      <div className="bg-white rounded-2xl shadow-lg w-[90%] max-w-md p-6">
-        <h1 className="text-xl font-bold text-center text-primary mb-4">
+    <div className="max-w-lg mx-auto bg-white p-6 shadow-md rounded-xl text-gray-900">
+      <div className="flex items-center justify-between p-4 mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-md text-sm hover:text-accent flex items-center"
+        >
+          &larr;
+        </button>
+        <h2 className="text-xl font-bold text-primary text-center flex-1">
           Request Aid
-        </h1>
-
-        <form onSubmit={handleSubmit} className="space-y-3 text-accent">
-          <input
-            id="type"
-            type="text"
-            placeholder="Type of Emergency"
-            className="w-full p-3 border rounded-lg text-black"
-            value={formData.type}
-            onChange={handleChange}
-            required
-          />
-          <select
-            id="severity"
-            className="w-full p-3 border rounded-lg text-black"
-            value={formData.severity}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Severity</option>
-            <option value="low">Low</option>
-            <option value="moderate">Moderate</option>
-            <option value="high">High</option>
-            <option value="critical">Critical</option>
-          </select>
-          <textarea
-            id="needs"
-            placeholder="What do you need?"
-            className="w-full p-3 border rounded-lg text-black"
-            rows="3"
-            value={formData.needs}
-            onChange={handleChange}
-            required
-          />
-          <input
-            id="location"
-            type="text"
-            placeholder="Your Current Location"
-            className="w-full p-3 border rounded-lg text-black"
-            value={formData.location}
-            onChange={handleChange}
-            required
-          />
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary text-white py-3 rounded-lg font-semibold disabled:opacity-50"
-          >
-            {loading ? "Submitting…" : "Submit Request"}
-          </button>
-        </form>
+        </h2>
       </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Disaster Type */}
+        <div>
+          <label className="block font-medium mb-2">Type of Emergency</label>
+          <select
+            value={formData.disaster_type}
+            onChange={(e) =>
+              setFormData({ ...formData, disaster_type: e.target.value })
+            }
+            className="w-full border rounded-lg p-2"
+            required
+          >
+            <option value="">Select one</option>
+            {disasterOptions.map((d) => (
+              <option key={d} value={d.toLowerCase()}>
+                {d}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Severity */}
+        <div>
+          <label className="block font-medium mb-2">Severity</label>
+          <select
+            value={formData.severity}
+            onChange={(e) =>
+              setFormData({ ...formData, severity: e.target.value })
+            }
+            className="w-full border rounded-lg p-2"
+            required
+          >
+            <option value="">Select one</option>
+            {severityOptions.map((s) => (
+              <option key={s} value={s.toLowerCase()}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Aid Types */}
+        <div>
+          <label className="block font-medium mb-2">What do you need?</label>
+          <div className="flex flex-wrap gap-2">
+            {aidOptions.map((a) => (
+              <button
+                type="button"
+                key={a}
+                onClick={() => toggleAidType(a.toLowerCase())}
+                className={`px-3 py-1 rounded-lg border ${
+                  formData.aid_types.includes(a.toLowerCase())
+                    ? "bg-primary text-white"
+                    : "bg-white text-gray-700"
+                }`}
+              >
+                {a}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Location */}
+        <LocationPicker onLocationSelect={setTempLocation} />
+        <button
+          type="button"
+          onClick={confirmLocation}
+          className="w-full bg-primary text-white py-2 rounded-lg mt-2"
+        >
+          Confirm Location
+        </button>
+
+        <button
+          type="submit"
+          disabled={submitting}
+          className="w-full bg-primary text-white py-2 rounded-lg mt-4 disabled:opacity-60"
+        >
+          {submitting ? "Submitting…" : "Submit Request"}
+        </button>
+      </form>
     </div>
   );
 }
