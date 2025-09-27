@@ -29,7 +29,7 @@ const FitMyanmarBounds = ({ bounds }) => {
       map.fitBounds(bounds, { padding: [25, 25] });
       map.setMaxBounds(bounds);
     }
-  }, [map, bounds]);
+  }, []); // ✅ run only once, not on every re-render
   return null;
 };
 
@@ -147,7 +147,7 @@ const DisasterMap = () => {
       {selectedMarker && (
         <div
           className="absolute bottom-0 left-0 right-0 bg-white p-3 
-          shadow-md max-h-[65%] sm:max-h-[50%] md:max-h[70%] overflow-y-auto rounded-2xl z-1000"
+          shadow-md max-h-[65%] sm:max-h-[50%] md:max-h-[70%] overflow-y-auto rounded-2xl z-1000"
         >
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-bold text-primary">

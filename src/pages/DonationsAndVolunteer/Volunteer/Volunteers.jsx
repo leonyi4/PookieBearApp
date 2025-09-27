@@ -40,7 +40,7 @@ const Volunteers = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center text-accent">
+      <div className="flex h-screen items-center justify-center text-primary">
         Loading…
       </div>
     );

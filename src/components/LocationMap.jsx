@@ -1,7 +1,9 @@
+// src/components/LocationMap.jsx
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { Link } from "react-router-dom";
 
-export default function LocationMap({ position, label }) {
+export default function LocationMap({ position, label, disaster_id }) {
   if (!position || position.length !== 2) return null;
 
   return (
@@ -18,7 +20,22 @@ export default function LocationMap({ position, label }) {
         attributionControl={false}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <Marker position={position}>{label && <Popup>{label}</Popup>}</Marker>
+        <Marker position={position}>
+          {label && (
+            <Popup
+              autoPan={true}
+              autoPanPadding={[40, 20]} // gives extra space around popup
+              maxWidth={200} // prevents text stretching popup too wide
+              className="custom-leaflet-popup"
+            >
+              <Link to={`/DisasterMap/${disaster_id}`}>
+                <button className="px-3 py-1 text-md sm:text-sm text-white font-medium rounded-md ">
+                  View Disaster Details
+                </button>
+              </Link>
+            </Popup>
+          )}
+        </Marker>
       </MapContainer>
     </div>
   );

@@ -110,7 +110,7 @@ export default function SponsorDetail() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-4 space-y-6 text-black">
+    <div className="max-w-5xl mx-auto p-4 space-y-6 text-primary">
       {/* Header */}
       <div className="flex items-center space-x-4">
         <button
@@ -119,7 +119,7 @@ export default function SponsorDetail() {
         >
           &larr;
         </button>
-        <h1 className="text-xl font-bold uppercase">{sponsor.name}</h1>
+        <h1 className="text-xl font-bold uppercase text-primary">{sponsor.name}</h1>
       </div>
 
       {/* Logo */}
@@ -145,10 +145,10 @@ export default function SponsorDetail() {
             {Object.entries(sponsor.stats).map(([key, value], idx) => (
               <div
                 key={idx}
-                className="border rounded-lg p-3 text-center flex flex-col"
+                className="border border-gray-500 rounded-lg p-3 text-center flex flex-col bg-secondary "
               >
-                <p className="font-semibold">{value}</p>
-                <p className="text-xs text-gray-500 capitalize">
+                <p className="font-semibold text-white">{value}</p>
+                <p className="text-xs text-accent capitalize">
                   {key.replace(/([A-Z])/g, " $1")}
                 </p>
               </div>
@@ -163,7 +163,7 @@ export default function SponsorDetail() {
         {organizations.length > 0 ? (
           <ul className="space-y-3">
             {organizations.map((org) => (
-              <li key={org.id} className="flex items-center space-x-3">
+              <li key={org.id} className="flex items-center space-x-3 ">
                 <img
                   src={org.logo}
                   alt={org.name}

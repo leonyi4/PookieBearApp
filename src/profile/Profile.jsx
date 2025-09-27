@@ -1,83 +1,103 @@
 // src/pages/Profile.jsx
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AidRequestCard from "../pages/AidRequest/AidRequestCard";
 import { supabase } from "../lib/supabase-client";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Profile() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [profile, setProfile] = useState(null);
   const [aidRequests, setAidRequests] = useState([]);
   const [contributions, setContributions] = useState([]);
   const [fetchError, setFetchError] = useState("");
   const [activeTab, setActiveTab] = useState("profile");
+  const [dataLoading, setDataLoading] = useState(true); // ✅ new loading state
 
+  // Switch tab if navigation state includes one
+  useEffect(() => {
+    if (location.state?.tab) {
+      setActiveTab(location.state.tab);
+    }
+  }, [location.state]);
+
+  // Fetch profile + related data
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/Landing", { replace: true });
 
     const loadData = async () => {
+      setDataLoading(true);
+
       // Profile
       const { data: profileData, error: profileError } = await supabase
         .from("users")
         .select(
-          "name, identification, birthdate, country, city, phone, latitude, longitude, profile_picture"
+          "name, identification, birthdate, country, city, phone, latitude, longitude, profile_picture, age, gender"
         )
         .eq("id", user.id)
         .single();
 
-      if (profileError) return setFetchError(profileError.message);
-      setProfile(profileData);
-
-      console.log(profileData);
+      if (profileError) {
+        setFetchError(profileError.message);
+      } else {
+        setProfile(profileData);
+      }
 
       // Aid Requests
       const { data: requests } = await supabase
         .from("aid_requests")
         .select(
           `
-    *,
-    organizations (
-      id,
-      name,
-      logo
-    )
-  `
+          *,
+          organizations (
+            id,
+            name,
+            logo
+          )
+        `
         )
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
       setAidRequests(requests || []);
 
-      console.log(requests);
-
-      // Contributions (donations/volunteering)
+      // Contributions
       const { data: contribs } = await supabase
         .from("user_contributions")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
       setContributions(contribs || []);
+
+      setDataLoading(false); // ✅ finished loading
     };
 
     loadData();
   }, [user, loading, navigate]);
 
-  if (loading)
+  // Loading screen
+  if (loading || dataLoading) {
     return (
       <div className="flex items-center justify-center h-screen text-primary">
-        Loading…
+        <LoadingSpinner message='Loading Profile' />
       </div>
     );
+  }
 
-  if (!profile)
+  // Error / not found
+  if (!profile) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p className="text-red-500">{fetchError || "Profile not found."}</p>
       </div>
     );
+  }
 
+  // Main UI
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="bg-white shadow-lg rounded-xl p-6 md:p-8 w-full max-w-5xl mx-auto">

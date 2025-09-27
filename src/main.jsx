@@ -19,6 +19,7 @@ import Home from "./pages/Home.jsx";
 
 import AidRequestForm from "./pages/AidRequest/AidRequestForm.jsx";
 import CustomizeProfile from "./profile/CustomizeProfile.jsx";
+import AidRequestSubmitted from "./pages/AidRequest/AidRequestSubmitted.jsx";
 
 import DisaterMap from "./pages/Disasters/DisasterMap.jsx";
 import DisasterDetail from "./pages/Disasters/DisasterDetail.jsx";
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
       { path: "CustomizeProfile", element: <CustomizeProfile /> },
 
       { path: "AidRequest", element: <AidRequestForm /> },
+      { path: "AidRequestSubmitted", element: <AidRequestSubmitted /> },
 
       { path: "DisasterMap", element: <DisaterMap /> },
       { path: "DisasterMap/:disasterId", element: <DisasterDetail /> },

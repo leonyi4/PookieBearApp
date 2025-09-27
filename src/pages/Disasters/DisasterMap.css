@@ -1,11 +1,23 @@
 @import "tailwindcss";
 
+@theme{
+  --color-primary: #699ECC;
+  --color-secondary: #C1E3EE;
+  --color-accent: #203E5B;
+  --color-background: #F6FDFF;
+}
+
+/* tailwind + leaflet overrides */
 .leaflet-popup-content-wrapper {
-  @apply bg-gradient-to-br from-blue-900 to-blue-600 text-white font-medium rounded-lg p-3 shadow-lg;
+  @apply bg-gradient-to-br from-primary to-secondary text-white font-medium rounded-lg shadow-lg p-2;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important; /* remove weird default padding */
 }
 
 .leaflet-popup-tip {
-  @apply bg-blue-900;
+  @apply bg-accent;
 }
 
 .leaflet-marker-icon {

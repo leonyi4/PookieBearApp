@@ -18,6 +18,8 @@ export default function AidRequestForm() {
 
   const [tempLocation, setTempLocation] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [locationConfirmed, setLocationConfirmed] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const disasterOptions = ["Earthquake", "Fire", "Flood", "Other"];
   const severityOptions = ["Low", "Moderate", "High", "Critical"];
@@ -43,13 +45,33 @@ export default function AidRequestForm() {
     });
   };
 
-  const confirmLocation = () => {
-    if (!tempLocation) return alert("Please select a location first.");
+  const handleConfirmLocation = () => {
+    if (!tempLocation) {
+      setErrors((prev) => ({
+        ...prev,
+        location: "Please select a location first.",
+      }));
+      return;
+    }
     setFormData((prev) => ({
       ...prev,
       latitude: tempLocation.lat,
       longitude: tempLocation.lng,
     }));
+    setLocationConfirmed(true);
+    setErrors((prev) => ({ ...prev, location: "" }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.disaster_type)
+      newErrors.disaster_type = "Emergency type is required.";
+    if (!formData.severity) newErrors.severity = "Severity is required.";
+    if (formData.aid_types.length === 0)
+      newErrors.aid_types = "Select at least one aid type.";
+    if (!locationConfirmed) newErrors.location = "Confirm your location.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
@@ -58,6 +80,8 @@ export default function AidRequestForm() {
       alert("Please log in first.");
       return navigate("/Landing");
     }
+    if (!validateForm()) return;
+
     setSubmitting(true);
 
     const { error } = await supabase.from("aid_requests").insert({
@@ -78,25 +102,24 @@ export default function AidRequestForm() {
       return;
     }
 
-    alert("Aid request submitted successfully!");
-    navigate("/Profile");
+    navigate("/AidRequestSubmitted");
   };
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 shadow-md rounded-xl text-gray-900">
-      <div className="flex items-center justify-between p-4 mb-6">
+      <div className="flex items-center justify-between p-4 mb-2">
         <button
           onClick={() => navigate(-1)}
           className="text-md text-sm hover:text-accent flex items-center"
         >
           &larr;
         </button>
-        <h2 className="text-xl font-bold text-primary text-center flex-1">
+        <h2 className="text-lg md:text-3xl font-bold text-primary text-center flex-1">
           Request Aid
         </h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-2 lg:space-y-4">
         {/* Disaster Type */}
         <div>
           <label className="block font-medium mb-2">Type of Emergency</label>
@@ -106,7 +129,6 @@ export default function AidRequestForm() {
               setFormData({ ...formData, disaster_type: e.target.value })
             }
             className="w-full border rounded-lg p-2"
-            required
           >
             <option value="">Select one</option>
             {disasterOptions.map((d) => (
@@ -115,6 +137,9 @@ export default function AidRequestForm() {
               </option>
             ))}
           </select>
+          {errors.disaster_type && (
+            <p className="text-red-500 text-sm mt-1">{errors.disaster_type}</p>
+          )}
         </div>
 
         {/* Severity */}
@@ -126,7 +151,6 @@ export default function AidRequestForm() {
               setFormData({ ...formData, severity: e.target.value })
             }
             className="w-full border rounded-lg p-2"
-            required
           >
             <option value="">Select one</option>
             {severityOptions.map((s) => (
@@ -135,6 +159,9 @@ export default function AidRequestForm() {
               </option>
             ))}
           </select>
+          {errors.severity && (
+            <p className="text-red-500 text-sm mt-1">{errors.severity}</p>
+          )}
         </div>
 
         {/* Aid Types */}
@@ -156,25 +183,46 @@ export default function AidRequestForm() {
               </button>
             ))}
           </div>
+          {errors.aid_types && (
+            <p className="text-red-500 text-sm mt-1">{errors.aid_types}</p>
+          )}
         </div>
 
         {/* Location */}
         <LocationPicker onLocationSelect={setTempLocation} />
-        <button
-          type="button"
-          onClick={confirmLocation}
-          className="w-full bg-primary text-white py-2 rounded-lg mt-2"
-        >
-          Confirm Location
-        </button>
+        <div>
+          {formData.latitude && formData.longitude && (
+            <p className="text-sm text-gray-600">
+              Selected Location: {formData.latitude.toFixed(4)},{" "}
+              {formData.longitude.toFixed(4)}
+            </p>
+          )}
+          {errors.location && (
+            <p className="text-red-500 text-sm">{errors.location}</p>
+          )}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full bg-primary text-white py-2 rounded-lg mt-4 disabled:opacity-60"
-        >
-          {submitting ? "Submitting…" : "Submit Request"}
-        </button>
+          <button
+            type="button"
+            onClick={handleConfirmLocation}
+            className={`w-full py-2 rounded-lg ${
+              locationConfirmed
+                ? "bg-green-500 text-white"
+                : "bg-primary hover:bg-primary-dark text-white"
+            }`}
+          >
+            {locationConfirmed ? "Location Confirmed" : "Confirm Location"}
+          </button>
+        </div>
+        <div>
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full bg-primary text-white py-2 rounded-lg disabled:opacity-60"
+          >
+            {submitting ? "Submitting…" : "Submit Request"}
+          </button>
+        </div>
       </form>
     </div>
   );

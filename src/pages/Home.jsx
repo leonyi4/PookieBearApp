@@ -229,7 +229,7 @@ export default function Home() {
               </button>
             </Link>
             <button className="mt-1 w-full bg-accent text-white font-medium py-2 rounded-lg hover:bg-accent/90">
-              Learn More About Us
+              <a href='https://youtu.be/dQw4w9WgXcQ?si=sA3QwFW9WSFnnCzR'>Learn More About Us</a>
             </button>
           </div>
         </section>

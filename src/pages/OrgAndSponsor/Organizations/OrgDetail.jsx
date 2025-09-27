@@ -47,6 +47,15 @@ export default function OrgDetail() {
     fetchData();
   }, [orgId]);
 
+  // 🔹 Utility to make keys human-readable
+  const formatKey = (str) => {
+    if (!str) return "";
+    return str
+      .replace(/_/g, " ") // snake_case -> words
+      .replace(/([a-z])([A-Z])/g, "$1 $2") // camelCase -> words
+      .replace(/\b\w/g, (char) => char.toUpperCase()); // capitalize
+  };
+
   if (loading)
     return <LoadingSpinner message="Fetching organization details..." />;
 
@@ -59,7 +68,7 @@ export default function OrgDetail() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 p-4 text-black">
+    <div className="max-w-5xl mx-auto space-y-6 p-4 text-primary">
       {/* Header */}
       <div className="flex items-center space-x-4">
         <button
@@ -68,7 +77,9 @@ export default function OrgDetail() {
         >
           &larr;
         </button>
-        <h1 className="text-xl uppercase font-bold text-accent">{org.name}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-primary uppercase">
+          {org.name}
+        </h1>
       </div>
       <img
         src={org.logo}
@@ -140,7 +151,7 @@ export default function OrgDetail() {
                 className="border shadow p-2 bg-primary text-white rounded-md text-center"
               >
                 <p className="text-lg font-bold">{val}</p>
-                <p className="text-xs">{key}</p>
+                <p className="text-xs">{formatKey(key)}</p>
               </div>
             ))}
           </div>

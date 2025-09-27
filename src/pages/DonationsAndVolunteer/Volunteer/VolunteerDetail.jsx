@@ -30,7 +30,8 @@ export default function VolunteerDetail() {
             impact,
             org_id,
             latitude,
-            longitude
+            longitude,
+            disaster_id
           `
           )
           .eq("id", volunteerId)
@@ -86,8 +87,10 @@ export default function VolunteerDetail() {
     ? Math.min((signedUp / needed) * 100, 100).toFixed(0)
     : 0;
 
+    console.log(campaign)
+
   return (
-    <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden my-6">
+    <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden lg:my-6">
       {/* Header */}
       <div className="flex items-center space-x-4 p-4 sm:p-6 border-b border-gray-200">
         <button
@@ -96,7 +99,7 @@ export default function VolunteerDetail() {
         >
           &larr;
         </button>
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+        <h2 className="text-lg sm:text-xl font-semibold text-primary">
           {campaign.name}
         </h2>
       </div>
@@ -115,7 +118,7 @@ export default function VolunteerDetail() {
 
         {/* Org Info */}
         {orgData && (
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center lg:space-x-3">
             <img
               src={orgData.logo}
               alt={orgData.name}
@@ -123,7 +126,7 @@ export default function VolunteerDetail() {
             />
             <div>
               <Link to={`/OrgsAndSponsors/organizations/${orgData.id}`}>
-                <p className="font-medium text-gray-800">{orgData.name}</p>
+                <p className="font-medium text-gray-800">{orgData.name}{'  '}ⓘ</p>
               </Link>
               {orgData.tags?.[0] && (
                 <p className="text-xs text-gray-500">{orgData.tags[0]}</p>
@@ -209,6 +212,7 @@ export default function VolunteerDetail() {
               <LocationMap
                 position={[campaign.latitude, campaign.longitude]}
                 label={campaign.name}
+                disaster_id={campaign.disaster_id}
               />
             </div>
           </div>
@@ -216,7 +220,7 @@ export default function VolunteerDetail() {
 
         {/* CTA */}
         <button className="w-full bg-primary text-white py-2 sm:py-3 rounded-lg hover:bg-accent transition">
-          Sign Up to Volunteer
+          <a href='https://youtu.be/dQw4w9WgXcQ?si=sA3QwFW9WSFnnCzR'>Sign Up to Volunteer</a>
         </button>
       </div>
     </div>

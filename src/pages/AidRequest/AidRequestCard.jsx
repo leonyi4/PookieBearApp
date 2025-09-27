@@ -49,6 +49,7 @@ export default function AidRequestCard({ request }) {
         <LocationMap
           position={[request.latitude, request.longitude]}
           label={request.city || request.disaster_type}
+          className="z-0"
         />
       )}
 

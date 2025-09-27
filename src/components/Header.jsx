@@ -16,7 +16,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
   };
 
   return (
-    <header className="sticky top-0 bg-background border-b border-secondary shadow-sm z-50">
+    <header className="sticky top-0 bg-background border-b border-secondary shadow-sm z-10000">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-8">
         {/* Logo (always left) */}
         <NavLink to="/" className="flex items-center">
