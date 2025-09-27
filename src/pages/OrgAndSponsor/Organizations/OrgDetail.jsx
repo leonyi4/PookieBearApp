@@ -1,4 +1,3 @@
-// src/pages/Organizations/OrgDetail.jsx
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../../lib/supabase-client";

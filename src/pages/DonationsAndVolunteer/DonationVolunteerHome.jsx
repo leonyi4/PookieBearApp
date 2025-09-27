@@ -1,4 +1,3 @@
-// src/pages/DonationsAndVolunteer/DonationsVolunteersHome.jsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DonationCard from "./Donations/DonationCard";
@@ -13,6 +12,7 @@ export default function DonationsVolunteersHome() {
   const [activeTab, setActiveTab] = useState("donations");
   const [donations, setDonations] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -25,27 +25,66 @@ export default function DonationsVolunteersHome() {
     }
   }, [type, navigate]);
 
-  // Fetch donations and volunteers
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
+        // Fetch donations
         const { data: donationsData, error: donationsError } = await supabase
           .from("donations")
           .select(
             "id, name, description, goal, raised, latitude, longitude, disaster_id, image"
           );
         if (donationsError) throw donationsError;
-        setDonations((donationsData || []).sort((a, b) => a.id - b.id));
 
+        // Fetch volunteers
         const { data: volunteersData, error: volunteersError } = await supabase
           .from("volunteers")
           .select(
             "id, name, description, latitude, longitude, disaster_id, impact, image"
           );
         if (volunteersError) throw volunteersError;
-        setVolunteers((volunteersData || []).sort((a, b) => a.id - b.id));
+
+        // Fetch organizations
+        const { data: orgsData, error: orgsError } = await supabase
+          .from("organizations")
+          .select("id, name, logo");
+        if (orgsError) throw orgsError;
+
+        // Fetch relationships
+        const { data: orgDonations, error: orgDonationsError } = await supabase
+          .from("org_donations")
+          .select("donation_id, org_id");
+
+        if (orgDonationsError)
+          console.error("orgDonations error:", orgDonationsError);
+
+        const { data: orgVolunteers, error: orgVolunteersError } =
+          await supabase
+            .from("org_volunteers")
+            .select("volunteer_id, org_id");
+
+        if (orgVolunteersError)
+          console.error("orgVolunteers error:", orgVolunteersError);
+
+        // Attach organizations to donations
+        const donationsWithOrg = (donationsData || []).map((don) => {
+          const rel = orgDonations?.find((od) => od.donation_id === don.id);
+          const org = orgsData?.find((o) => o.id === rel?.org_id);
+          return { ...don, organization: org || null };
+        });
+
+        // Attach organizations to volunteers
+        const volunteersWithOrg = (volunteersData || []).map((vol) => {
+          const rel = orgVolunteers?.find((ov) => ov.volunteer_id === vol.id);
+          const org = orgsData?.find((o) => o.id === rel?.org_id);
+          return { ...vol, organization: org || null };
+        });
+
+        setDonations(donationsWithOrg.sort((a, b) => a.id - b.id));
+        setVolunteers(volunteersWithOrg.sort((a, b) => a.id - b.id));
+        setOrganizations(orgsData || []);
       } catch (err) {
         console.error("Error fetching donations/volunteers:", err.message);
       } finally {
@@ -103,7 +142,6 @@ export default function DonationsVolunteersHome() {
       {/* Donations */}
       {activeTab === "donations" && (
         <>
-          {/* Horizontal scroll for mobile + medium */}
           <div className="flex flex-col space-y-4 overflow-x-auto pb-4 lg:hidden">
             {filteredDonations.length > 0 ? (
               filteredDonations.map((campaign) => (
@@ -115,11 +153,12 @@ export default function DonationsVolunteersHome() {
                 />
               ))
             ) : (
-              <p className="text-accent text-center w-full">No donations found</p>
+              <p className="text-accent text-center w-full">
+                No donations found
+              </p>
             )}
           </div>
 
-          {/* Grid for desktop */}
           <div className="hidden lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredDonations.length > 0 ? (
               filteredDonations.map((campaign) => (
@@ -137,7 +176,6 @@ export default function DonationsVolunteersHome() {
       {/* Volunteers */}
       {activeTab === "volunteers" && (
         <>
-          {/* Horizontal scroll for mobile + medium */}
           <div className="flex flex-col space-y-4 overflow-x-auto pb-4 lg:hidden">
             {filteredVolunteers.length > 0 ? (
               filteredVolunteers.map((campaign) => (
@@ -155,7 +193,6 @@ export default function DonationsVolunteersHome() {
             )}
           </div>
 
-          {/* Grid for desktop */}
           <div className="hidden lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredVolunteers.length > 0 ? (
               filteredVolunteers.map((campaign) => (

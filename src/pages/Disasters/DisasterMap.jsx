@@ -1,4 +1,3 @@
-// src/pages/Disasters/DisasterMap.jsx
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";

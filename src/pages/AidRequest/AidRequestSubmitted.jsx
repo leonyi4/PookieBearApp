@@ -1,4 +1,3 @@
-// src/pages/AidRequests/RequestSubmitted.jsx
 import { Link } from "react-router-dom";
 import Vertical_Logo from "../../assets/Vertical_logo.png";
 

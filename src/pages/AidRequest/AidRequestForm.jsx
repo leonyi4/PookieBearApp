@@ -1,4 +1,3 @@
-// src/pages/AidRequests/NewAidRequest.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase-client";

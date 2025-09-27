@@ -10,38 +10,51 @@ import {
 import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
+// Auth pages
 import Landing from "./pages/Auth/Landing.jsx";
 import SignUp from "./pages/Auth/SignUp.jsx";
-import Profile from "./profile/Profile.jsx";
+
 import ProfileCompletion from "./pages/Auth/ProfileCompletion.jsx";
 
 import Home from "./pages/Home.jsx";
 
-import AidRequestForm from "./pages/AidRequest/AidRequestForm.jsx";
+// Profile pages
+import Profile from "./profile/Profile.jsx";
 import CustomizeProfile from "./profile/CustomizeProfile.jsx";
+
+// Aid Request pages
+import AidRequestForm from "./pages/AidRequest/AidRequestForm.jsx";
 import AidRequestSubmitted from "./pages/AidRequest/AidRequestSubmitted.jsx";
 
+// Disaster pages
 import DisaterMap from "./pages/Disasters/DisasterMap.jsx";
 import DisasterDetail from "./pages/Disasters/DisasterDetail.jsx";
 
+// Donation and Volunteer pages
 import DonationVolunteerHome from "./pages/DonationsAndVolunteer/DonationVolunteerHome.jsx";
-import Donations from "./pages/DonationsAndVolunteer/Donations/Donations.jsx";
 import DonationDetail from "./pages/DonationsAndVolunteer/Donations/DonationDetail.jsx";
-import Volunteers from "./pages/DonationsAndVolunteer/Volunteer/Volunteers.jsx";
 import VolunteerDetail from "./pages/DonationsAndVolunteer/Volunteer/VolunteerDetail.jsx";
 
+import Donations from "./pages/DonationsAndVolunteer/Donations/Donations.jsx";
+import Volunteers from "./pages/DonationsAndVolunteer/Volunteer/Volunteers.jsx";
+
+
+// Org and Sponsor pages
+import OrgSponsorsHome from "./pages/OrgAndSponsor/OrgSponsorHome.jsx";
+import SponsorDetail from "./pages/OrgAndSponsor/Sponsors/SponsorDetail.jsx";
+import Organizations from "./pages/OrgAndSponsor/Organizations/Organizations.jsx";
+
 import Sponsors from "./pages/OrgAndSponsor/Sponsors/Sponsors.jsx";
-
-
+import OrgDetail from "./pages/OrgAndSponsor/Organizations/OrgDetail.jsx";
+// not used anymore
 import StartFundRaiser from "./pages/Fundraisers/StartFundRaiser.jsx";
 import FundRaiserDashboard from "./pages/Fundraisers/FundRaiserDashboard.jsx";
 
-import OrgDetail from "./pages/OrgAndSponsor/Organizations/OrgDetail.jsx";
-import SponsorDetail from "./pages/OrgAndSponsor/Sponsors/SponsorDetail.jsx";
-
+// Layout and not found page
 import MainLayout from "./layouts/MainLayout.jsx";
-import OrgSponsorsHome from "./pages/OrgAndSponsor/OrgSponsorHome.jsx";
-import Organizations from "./pages/OrgAndSponsor/Organizations/Organizations.jsx";
+import NotFoundPage from './pages/NotFoundPage.jsx'
+
+
 
 const router = createBrowserRouter([
   { path: "/Landing", element: <Landing /> },
@@ -106,6 +119,7 @@ const router = createBrowserRouter([
       { path: "Sponsors", element: <Sponsors />},
     ],
   },
+  { path: "*", element: <NotFoundPage /> },
 ]);
 
 createRoot(document.getElementById("root")).render(

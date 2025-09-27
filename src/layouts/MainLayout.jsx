@@ -7,10 +7,9 @@ const MainLayout = () => {
 
   return (
     <div className="min-h-screen min-w-screen flex flex-col bg-background p-0 relative">
-      {/* Pass down state so Header can toggle */}
+
       <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
-      {/* Only render content if menu is closed */}
       { (
         <main className={`flex-1 p-2 ${isMenuOpen ? "hidden" : "block"}`}>
           <Outlet />

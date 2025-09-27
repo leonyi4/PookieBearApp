@@ -1,24 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import data from "../../../assets/test_data.json";
-
+import ShareButton from "../../../components/ShareButton";
+  
 const VolunteerCard = ({ data: vol, home, className = "" }) => {
   const progress =
     (vol.impact.volunteers_signed_up / vol.impact.volunteers_needed) * 100;
-  const org_data = data.orgs.find((o) => o.id === vol.org_id);
+  const org = vol.organization;
 
   return (
     <div
       className={`bg-secondary border rounded-xl shadow-md hover:shadow-lg transition flex flex-col ${className}`}
     >
-      {/* Image */}
       <img
         src={vol.image}
         alt={vol.name}
         className="w-full h-36 sm:h-44 lg:h-56 object-cover rounded-t-xl"
       />
 
-      {/* Content */}
       <div className="p-3 flex flex-col flex-1">
         <h2 className="text-base sm:text-lg font-semibold text-gray-900 line-clamp-2">
           {vol.name}
@@ -42,14 +40,14 @@ const VolunteerCard = ({ data: vol, home, className = "" }) => {
         </div>
 
         {/* Org */}
-        {org_data && (
+        {org && (
           <div className="flex items-center mt-2">
             <img
-              src={org_data.logo}
-              alt={org_data.name}
+              src={org.logo}
+              alt={org.name}
               className="h-8 w-8 rounded-full mr-2"
             />
-            <span className="text-sm font-medium">{org_data.name}</span>
+            <span className="text-sm font-medium">{org.name}</span>
           </div>
         )}
 
@@ -64,9 +62,11 @@ const VolunteerCard = ({ data: vol, home, className = "" }) => {
                 View Details
               </button>
             </Link>
-            <button className="w-1/2 bg-accent text-white py-2 rounded-lg hover:bg-gray-500">
-              Share
-            </button>
+            <ShareButton
+              url={`${window.location.origin}/DonationsAndVolunteers/volunteers/${vol.id}`}
+              title={vol.name}
+              className="w-1/2"
+            />
           </div>
         )}
       </div>

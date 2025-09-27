@@ -1,4 +1,3 @@
-// src/components/MiniMap.jsx
 import React from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
