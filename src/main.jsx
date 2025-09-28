@@ -36,33 +36,20 @@ import DonationVolunteerHome from "./pages/DonationsAndVolunteer/DonationVolunte
 import DonationDetail from "./pages/DonationsAndVolunteer/Donations/DonationDetail.jsx";
 import VolunteerDetail from "./pages/DonationsAndVolunteer/Volunteer/VolunteerDetail.jsx";
 
-import Donations from "./pages/DonationsAndVolunteer/Donations/Donations.jsx";
-import Volunteers from "./pages/DonationsAndVolunteer/Volunteer/Volunteers.jsx";
-
-
 // Org and Sponsor pages
 import OrgSponsorsHome from "./pages/OrgAndSponsor/OrgSponsorHome.jsx";
 import SponsorDetail from "./pages/OrgAndSponsor/Sponsors/SponsorDetail.jsx";
-import Organizations from "./pages/OrgAndSponsor/Organizations/Organizations.jsx";
-
-import Sponsors from "./pages/OrgAndSponsor/Sponsors/Sponsors.jsx";
 import OrgDetail from "./pages/OrgAndSponsor/Organizations/OrgDetail.jsx";
-// not used anymore
-import StartFundRaiser from "./pages/Fundraisers/StartFundRaiser.jsx";
-import FundRaiserDashboard from "./pages/Fundraisers/FundRaiserDashboard.jsx";
 
 // Layout and not found page
 import MainLayout from "./layouts/MainLayout.jsx";
-import NotFoundPage from './pages/NotFoundPage.jsx'
-
-
+import NotFoundPage from "./pages/NotFoundPage.jsx";
 
 const router = createBrowserRouter([
   { path: "/Landing", element: <Landing /> },
   { path: "/SignUp", element: <SignUp /> },
   { path: "ProfileCompletion", element: <ProfileCompletion /> },
   { path: "ResetPassword", element: <ResetPassword /> },
-
 
   // Main App (Protected)
   {
@@ -100,13 +87,6 @@ const router = createBrowserRouter([
         path: "DonationsAndVolunteers/volunteers/:volunteerId",
         element: <VolunteerDetail />,
       },
-
-      { path: "donations", element: <Donations /> },
-      { path: "volunteers", element: <Volunteers /> },
-
-      // { path: "StartFundRaiser", element: <StartFundRaiser /> },
-      // { path: "FundraiserDashboard", element: <FundRaiserDashboard /> },
-
       {
         path: "OrgsAndSponsors",
         element: <Navigate to="/OrgsAndSponsors/organizations" replace />,
@@ -117,9 +97,6 @@ const router = createBrowserRouter([
         path: "OrgsAndSponsors/sponsors/:sponsorId",
         element: <SponsorDetail />,
       },
-
-      { path: "Organizations", element: <Organizations/>},
-      { path: "Sponsors", element: <Sponsors />},
     ],
   },
   { path: "*", element: <NotFoundPage /> },

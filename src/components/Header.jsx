@@ -1,5 +1,5 @@
 import React from "react";
-import header_logo from "../assets/header_logo.png";
+import header_logo from "../assets/Header_logo.png";
 import vertical_logo from "../assets/Vertical_logo.png";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
