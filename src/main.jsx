@@ -20,8 +20,8 @@ import ProfileCompletion from "./pages/Auth/ProfileCompletion.jsx";
 import Home from "./pages/Home.jsx";
 
 // Profile pages
-import Profile from "./profile/Profile.jsx";
-import CustomizeProfile from "./profile/CustomizeProfile.jsx";
+import Profile from "./pages/profile/Profile.jsx";
+import CustomizeProfile from "./pages/profile/CustomizeProfile.jsx";
 
 // Aid Request pages
 import AidRequestForm from "./pages/AidRequest/AidRequestForm.jsx";

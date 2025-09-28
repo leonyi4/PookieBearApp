@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function ShareButton({
   url,
   title = "Check this out!",

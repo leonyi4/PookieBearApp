@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./DisasterMap.css";
 import { supabase } from "../../lib/supabase-client";
-import { Link } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import DisasterCard from "./DisasterCard";
 

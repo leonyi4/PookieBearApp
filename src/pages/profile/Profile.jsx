@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import AidRequestCard from "../pages/AidRequest/AidRequestCard";
-import { supabase } from "../lib/supabase-client";
-import LoadingSpinner from "../components/LoadingSpinner";
+import { useAuth } from "../../context/AuthContext";
+import AidRequestCard from "../AidRequest/AidRequestCard";
+import { supabase } from "../../lib/supabase-client";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function Profile() {
   const { user, loading } = useAuth();

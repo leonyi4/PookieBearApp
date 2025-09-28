@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { supabase } from "../lib/supabase-client";
-import LocationPicker from "../components/LocationPicker";
-import LoadingSpinner from "../components/LoadingSpinner";
+import { useAuth } from "../../context/AuthContext";
+import { supabase } from "../../lib/supabase-client";
+import LocationPicker from "../../components/LocationPicker";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function CustomizeProfile() {
   const navigate = useNavigate();
@@ -25,6 +25,7 @@ export default function CustomizeProfile() {
   const [tempLocation, setTempLocation] = useState(null);
   const [saving, setSaving] = useState(false);
   const [fetchError, setFetchError] = useState("");
+  const [successful, setSuccessful] = useState(false);
 
   const [locationConfirmed, setLocationConfirmed] = useState(false);
   useEffect(() => {
@@ -101,9 +102,12 @@ export default function CustomizeProfile() {
 
     if (error) return alert("Error saving profile");
 
-    alert("Profile updated successfully!");
-    navigate("/Profile");
+    setSuccessful(true);
+    setTimeout(() => {
+      navigate("/Profile");
+    }, 2000);
   };
+
 
   if (loading)
     return (
@@ -232,6 +236,11 @@ export default function CustomizeProfile() {
           </label>
 
           {/* Save button */}
+          {successful && (
+            <p className="text-green-600 text-sm mb-2">
+              Profile updated successfully!
+            </p>
+          )}
           <button
             type="submit"
             disabled={saving || !isFormValid()}
