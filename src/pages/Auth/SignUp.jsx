@@ -7,6 +7,7 @@ export default function SignUp() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMsg, setErrorMsg] = useState("");
   const [successful, setSuccessful] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -16,6 +17,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
+    setLoading(true);
 
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
@@ -31,6 +33,7 @@ export default function SignUp() {
       return;
     }
 
+    setLoading(false);
     setSuccessful(true);
     setTimeout(() => navigate("/Landing"), 500);
   };
@@ -68,6 +71,14 @@ export default function SignUp() {
           ))}
 
           {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
+          {loading && (
+            <div className="flex flex-col items-center justify-center py-2">
+              <div className="w-6 h-6 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <p className="mt-2 text-xs sm:text-sm animate-pulse">
+                Signing up...
+              </p>
+            </div>
+          )}
           {successful && (
             <p className="text-green-500 text-sm mb-2">
               Sign up successful! Please check your email to confirm your
