@@ -39,7 +39,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               isActive ? "text-primary font-bold" : "hover:text-primary"
             }
           >
-            Aid Request
+            Request Aid
           </NavLink>
           <NavLink
             to="/DonationsAndVolunteers/donations"
@@ -47,7 +47,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               isActive ? "text-primary font-bold" : "hover:text-primary"
             }
           >
-            Reliefs
+            Relief Operations
           </NavLink>
           <NavLink
             to="/OrgsAndSponsors/organizations"
@@ -55,7 +55,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               isActive ? "text-primary font-bold" : "hover:text-primary"
             }
           >
-            Organizations
+            Orgs & Sponsors
           </NavLink>
           <NavLink
             to="/DisasterMap"

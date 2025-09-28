@@ -188,6 +188,7 @@ export default function AidRequestForm() {
         </div>
 
         {/* Location */}
+        <label className="block font-medium mb-2">Tell us where you are</label>
         <LocationPicker onLocationSelect={setTempLocation} />
         <div>
           {formData.latitude && formData.longitude && (
