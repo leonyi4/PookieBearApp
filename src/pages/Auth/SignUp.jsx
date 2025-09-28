@@ -6,6 +6,8 @@ import vert_logo from "../../assets/Vertical_logo.png";
 export default function SignUp() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successful, setSuccessful] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -14,6 +16,7 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
 
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
@@ -21,22 +24,16 @@ export default function SignUp() {
     });
 
     if (error) {
-      alert("Sign up failed: " + error.message);
+      if (error.message.includes("already registered")) {
+        setErrorMsg("This email is already registered. Please log in.");
+      } else {
+        setErrorMsg("Sign up failed: " + error.message);
+      }
       return;
     }
 
-    const user = data.user;
-    if (user) {
-      // Insert minimal row into users table
-      await supabase.from("users").insert({
-        id: user.id,
-        email: formData.email,
-        profile_complete: false,
-      });
-    }
-
-    alert("Sign up successful! Please confirm your email.");
-    navigate("/Landing");
+    setSuccessful(true);
+    setTimeout(() => navigate("/Landing"), 3000);
   };
 
   return (
@@ -67,7 +64,15 @@ export default function SignUp() {
             </div>
           ))}
 
+          {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
+
           <div className="flex flex-col sm:flex-row justify-center gap-3 mt-4">
+            {successful && (
+              <p className="text-green-500 text-sm mb-2">
+                Sign up successful! Please check your email to confirm your
+                account.
+              </p>
+            )}
             <button
               type="submit"
               className="flex-1 px-6 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90"

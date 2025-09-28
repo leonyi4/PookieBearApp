@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 // Auth pages
 import Landing from "./pages/Auth/Landing.jsx";
 import SignUp from "./pages/Auth/SignUp.jsx";
+import ResetPassword from "./pages/Auth/ResetPassword.jsx";
 
 import ProfileCompletion from "./pages/Auth/ProfileCompletion.jsx";
 
@@ -60,6 +61,8 @@ const router = createBrowserRouter([
   { path: "/Landing", element: <Landing /> },
   { path: "/SignUp", element: <SignUp /> },
   { path: "ProfileCompletion", element: <ProfileCompletion /> },
+  { path: "ResetPassword", element: <ResetPassword /> },
+
 
   // Main App (Protected)
   {
