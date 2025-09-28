@@ -108,7 +108,7 @@ export default function CustomizeProfile() {
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen text-primary">
-        <LoadingSpinner message='Loading Form' />
+        <LoadingSpinner message="Loading Form" />
       </div>
     );
   if (!user) return null;
@@ -132,9 +132,17 @@ export default function CustomizeProfile() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="bg-white shadow-lg rounded-xl p-6 md:p-8 w-full max-w-2xl">
-        <h1 className="text-2xl md:text-3xl font-bold text-center text-primary mb-6">
-          Edit Your Profile
-        </h1>
+        <div className="flex items-center space-x-4 sm:p-6 mb-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-primary text-lg hover:text-accent"
+          >
+            &larr;
+          </button>
+          <h2 className="text-2xl md:text-3xl font-bold text-primary">
+            Edit Your Profile
+          </h2>
+        </div>
 
         {fetchError && (
           <p className="text-red-500 text-sm mb-2">{fetchError}</p>
@@ -217,7 +225,8 @@ export default function CustomizeProfile() {
             {/* show successful upload*/}
             {profilePictureFile && (
               <p className="text-sm text-green-600 mt-1">
-                Selected: <span className="text-accent">{profilePictureFile.name}</span>
+                Selected:{" "}
+                <span className="text-accent">{profilePictureFile.name}</span>
               </p>
             )}
           </label>

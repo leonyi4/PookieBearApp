@@ -23,6 +23,7 @@ export default function ProfileCompletion() {
   const [tempLocation, setTempLocation] = useState(null);
   const [saving, setSaving] = useState(false);
   const [fetchError, setFetchError] = useState("");
+  const [locationConfirmed, setLocationConfirmed] = useState(false);
 
   // Fetch current profile row to prefill (so users can resume)
   useEffect(() => {
@@ -41,7 +42,7 @@ export default function ProfileCompletion() {
         .eq("id", user.id)
         .single();
 
-      console.log(data);
+      // console.log(data);
 
       if (error) {
         // If no row, create minimal one so updates succeed
@@ -90,7 +91,7 @@ export default function ProfileCompletion() {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const confirmLocation = () => {
+  const handleConfirmLocation = () => {
     if (tempLocation) {
       setFormData((prev) => ({
         ...prev,
@@ -98,6 +99,7 @@ export default function ProfileCompletion() {
         longitude: tempLocation.lng,
       }));
     }
+    setLocationConfirmed(true);
   };
 
   const handleSubmit = async (e) => {
@@ -128,6 +130,8 @@ export default function ProfileCompletion() {
       profile_picture: profile_picture_url,
       profile_complete: true,
       phone: formData.phone,
+      age: formData.age || null,
+      gender: formData.gender || null
     };
 
     const { error } = await supabase
@@ -170,7 +174,7 @@ export default function ProfileCompletion() {
           <p className="text-red-500 text-sm mb-2">{fetchError}</p>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-3 text-accent">
+      <form onSubmit={handleSubmit} className="space-y-1 lg:space-y-3 text-accent">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               "name",
@@ -218,8 +222,10 @@ export default function ProfileCompletion() {
           {tempLocation && (
             <button
               type="button"
-              onClick={confirmLocation}
-              className="w-full bg-secondary text-accent py-2 rounded-lg mt-2 hover:bg-opacity-80"
+              onClick={handleConfirmLocation}
+              className={`w-full  text-accent py-2 rounded-lg mt-2 hover:bg-opacity-80 ${
+                locationConfirmed ? "bg-green-300" : "bg-secondary"
+              }`}
             >
               Confirm Location
             </button>

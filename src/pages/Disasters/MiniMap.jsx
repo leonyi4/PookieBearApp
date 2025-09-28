@@ -1,8 +1,7 @@
-import React from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
-import data from "../../assets/test_data.json";
+import L from "leaflet";
 
 // Fix Leaflet marker icons
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -16,14 +15,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const MiniMap = () => {
+const MiniMap = ({ disasters = [] }) => {
   const navigate = useNavigate();
 
   const handleMarkerClick = () => {
     navigate("/DisasterMap");
   };
 
-  const markers = data.disasters;
   const central_myanmar = [21.9162, 95.956];
 
   return (
@@ -39,13 +37,11 @@ const MiniMap = () => {
         className="w-full h-full"
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {markers.map((marker) => (
+
+        {disasters.map((d) => (
           <Marker
-            key={marker.id}
-            position={[
-              marker.location_data.latitude,
-              marker.location_data.longitude,
-            ]}
+            key={d.id}
+            position={[d.latitude, d.longitude]}
             eventHandlers={{ click: handleMarkerClick }}
           />
         ))}

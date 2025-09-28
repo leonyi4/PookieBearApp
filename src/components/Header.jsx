@@ -102,9 +102,9 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
 
             {[
               { to: "/profile", label: "Profile" },
-              { to: "/AidRequest", label: "Aid Request" },
-              { to: "/DonationsAndVolunteers/donations", label: "Reliefs" },
-              { to: "/OrgsAndSponsors/organizations", label: "Organizations" },
+              { to: "/AidRequest", label: "Request Aid" },
+              { to: "/DonationsAndVolunteers/donations", label: "Relief Operations" },
+              { to: "/OrgsAndSponsors/organizations", label: "Orgs & Sponsors" },
               { to: "/DisasterMap", label: "Disaster Map" },
             ].map((item) => (
               <React.Fragment key={item.to}>
