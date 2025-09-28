@@ -5,31 +5,24 @@ import { supabase } from "../../lib/supabase-client";
 
 export default function Landing() {
   const navigate = useNavigate();
-  const { user, login, loading } = useAuth();
+  const { user, profile, login, loading } = useAuth(); // now includes profile
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [resetMode, setResetMode] = useState(false); // toggle state
+  const [resetMode, setResetMode] = useState(false);
 
-  // If already logged in, route away from Landing immediately
+  // If already logged in, redirect based on profile_complete
   useEffect(() => {
-    const routeIfLoggedIn = async () => {
-      if (!user) return;
-      const { data: profile, error: profileErr } = await supabase
-        .from("users")
-        .select("profile_complete")
-        .eq("id", user.id)
-        .single();
+    if (loading) return;
+    if (!user) return;
 
-      if (profileErr || !profile || profile.profile_complete === false) {
-        navigate("/ProfileCompletion", { replace: true });
-      } else {
-        navigate("/", { replace: true });
-      }
-    };
-    if (!loading) routeIfLoggedIn();
-  }, [user, loading, navigate]);
+    if (!profile || profile.profile_complete === false) {
+      navigate("/ProfileCompletion", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
+  }, [user, profile, loading, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -38,26 +31,9 @@ export default function Landing() {
       const authedUser = await login(email, password);
       if (!authedUser) return;
 
-      const { data: profile, error: fetchErr } = await supabase
-        .from("users")
-        .select("profile_complete")
-        .eq("id", authedUser.id)
-        .single();
-
-      if (fetchErr || !profile) {
-        await supabase.from("users").insert({
-          id: authedUser.id,
-          email,
-          profile_complete: false,
-        });
-        return navigate("/ProfileCompletion");
-      }
-
-      if (!profile.profile_complete) {
-        navigate("/ProfileCompletion");
-      } else {
-        navigate("/");
-      }
+      // The AuthContext will auto-load profile for us,
+      // so we don’t need to check or insert here anymore.
+      // Routing happens in the effect above.
     } catch (err) {
       setError(err.message || "Login failed");
     }
@@ -99,7 +75,11 @@ export default function Landing() {
     >
       <div className="bg-background p-6 sm:p-8 rounded-2xl shadow-lg w-full max-w-md md:max-w-lg">
         <div className="flex flex-col items-center mb-6">
-          <img src="/Vertical_logo.png" alt="Logo" className="h-40 sm:h-52 md:h-60" />
+          <img
+            src="/Vertical_logo.png"
+            alt="Logo"
+            className="h-40 sm:h-52 md:h-60"
+          />
         </div>
 
         {!resetMode ? (
@@ -149,11 +129,8 @@ export default function Landing() {
           </form>
         ) : (
           // ---- Reset form ----
-          <form
-            onSubmit={handleResetPassword}
-            className="space-y-4 text-accent"
-          >
-            <label className='text-xs sm:text-sm md:text-md  font-medium'>
+          <form onSubmit={handleResetPassword} className="space-y-4 text-accent">
+            <label className="text-xs sm:text-sm md:text-md font-medium">
               Enter Your Email
             </label>
             <input
