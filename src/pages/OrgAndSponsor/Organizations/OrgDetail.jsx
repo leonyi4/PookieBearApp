@@ -56,7 +56,11 @@ export default function OrgDetail() {
   };
 
   if (loading)
-    return <LoadingSpinner message="Fetching organization details..." />;
+    return (
+      <div className="flex items-center justify-center h-screen text-primary">
+        <LoadingSpinner message="Fetching organization details..." />
+      </div>
+    );
 
   if (!org) {
     return (

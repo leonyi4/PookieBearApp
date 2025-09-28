@@ -111,7 +111,12 @@ const DisasterMap = () => {
     }
   };
 
-  if (loading) return <LoadingSpinner message="Fetching Disaster Map..." />;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen text-primary">
+        <LoadingSpinner message="Fetching Disaster Map..." />
+      </div>
+    );
   if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
 
   return (

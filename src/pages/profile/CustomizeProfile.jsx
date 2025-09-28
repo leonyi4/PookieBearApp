@@ -105,7 +105,7 @@ export default function CustomizeProfile() {
     setSuccessful(true);
     setTimeout(() => {
       navigate("/Profile");
-    }, 2000);
+    }, 500);
   };
 
 

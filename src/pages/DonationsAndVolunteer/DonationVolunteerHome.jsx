@@ -108,7 +108,11 @@ export default function DonationsVolunteersHome() {
   );
 
   if (loading) {
-    return <LoadingSpinner message="Fetching Donations and Volunteers..." />;
+    return (
+      <div className="flex items-center justify-center h-screen text-primary">
+        <LoadingSpinner message="Fetching Donations and Volunteers..." />
+      </div>
+    );
   }
 
   return (

@@ -69,7 +69,12 @@ const DisasterDetail = () => {
     fetchDisasterDetails();
   }, [disasterId]);
 
-  if (loading) return <LoadingSpinner message="Loading Disaster…" />;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen text-primary">
+        <LoadingSpinner message="Loading Disaster…" />
+      </div>
+    );
   if (!disaster)
     return (
       <div className="max-w-3xl mx-auto p-4">

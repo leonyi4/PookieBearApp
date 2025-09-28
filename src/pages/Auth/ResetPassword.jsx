@@ -28,7 +28,7 @@ export default function ResetPassword() {
     }
 
     setSuccess("Password updated successfully! Redirecting to login...");
-    setTimeout(() => navigate("/Landing"), 2000);
+    setTimeout(() => navigate("/Landing"), 500);
   };
 
   return (

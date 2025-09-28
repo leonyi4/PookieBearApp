@@ -65,7 +65,11 @@ export default function OrgSponsorsHome() {
   );
 
   if (loading) {
-    return <LoadingSpinner message="Fetching Organizations and Sponsors..." />;
+    return (
+      <div className="flex items-center justify-center h-screen text-primary">
+        <LoadingSpinner message="Fetching Organizations and Sponsors..." />
+      </div>
+    );
   }
 
   return (

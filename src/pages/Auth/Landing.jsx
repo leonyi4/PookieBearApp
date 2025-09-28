@@ -2,40 +2,70 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../lib/supabase-client";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function Landing() {
   const navigate = useNavigate();
-  const { user, profile, login, loading } = useAuth(); // now includes profile
+  const { user, login, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [resetMode, setResetMode] = useState(false);
+  const [resetMode, setResetMode] = useState(false); // toggle state
+  const [loadingAction, setLoadingAction] = useState(false);
 
-  // If already logged in, redirect based on profile_complete
+  // If already logged in, route away from Landing immediately
   useEffect(() => {
-    if (loading) return;
-    if (!user) return;
+    const routeIfLoggedIn = async () => {
+      if (!user) return;
+      const { data: profile, error: profileErr } = await supabase
+        .from("users")
+        .select("profile_complete")
+        .eq("id", user.id)
+        .single();
 
-    if (!profile || profile.profile_complete === false) {
-      navigate("/ProfileCompletion", { replace: true });
-    } else {
-      navigate("/", { replace: true });
-    }
-  }, [user, profile, loading, navigate]);
+      if (profileErr || !profile || profile.profile_complete === false) {
+        navigate("/ProfileCompletion", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+    };
+    if (!loading) routeIfLoggedIn();
+  }, [user, loading, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoadingAction(true);
+
     try {
       const authedUser = await login(email, password);
       if (!authedUser) return;
 
-      // The AuthContext will auto-load profile for us,
-      // so we don’t need to check or insert here anymore.
-      // Routing happens in the effect above.
+      const { data: profile, error: fetchErr } = await supabase
+        .from("users")
+        .select("profile_complete")
+        .eq("id", authedUser.id)
+        .single();
+
+      if (fetchErr || !profile) {
+        await supabase.from("users").insert({
+          id: authedUser.id,
+          email,
+          profile_complete: false,
+        });
+        return navigate("/ProfileCompletion");
+      }
+
+      if (!profile.profile_complete) {
+        navigate("/ProfileCompletion");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       setError(err.message || "Login failed");
+    } finally {
+      setLoadingAction(false);
     }
   };
 
@@ -43,9 +73,11 @@ export default function Landing() {
     e.preventDefault();
     setError("");
     setMessage("");
+    setLoadingAction(true);
 
     if (!email) {
       setError("Please enter your email address");
+      setLoadingAction(false);
       return;
     }
 
@@ -58,6 +90,8 @@ export default function Landing() {
     } else {
       setMessage("Check your email for the reset link.");
     }
+
+    setLoadingAction(false);
   };
 
   if (loading) {
@@ -101,10 +135,17 @@ export default function Landing() {
             />
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
-
+            {loadingAction ? (
+              <div className="flex flex-col items-center justify-center py-2">
+                <div className="w-6 h-6 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <p className="mt-2 text-xs sm:text-sm animate-pulse">
+                  Logging in...
+                </p>
+              </div>
+            ) : null}
             <button
               type="submit"
-              className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition"
+              className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 active:bg-accent transition"
             >
               Log In
             </button>
@@ -112,7 +153,7 @@ export default function Landing() {
             <button
               type="button"
               onClick={() => navigate("/SignUp")}
-              className="w-full bg-secondary text-accent py-3 rounded-lg font-semibold hover:bg-opacity-80 transition"
+              className="w-full bg-secondary text-accent py-3 rounded-lg font-semibold hover:bg-opacity-80 active:bg-primary transition"
             >
               Sign Up
             </button>
@@ -129,8 +170,11 @@ export default function Landing() {
           </form>
         ) : (
           // ---- Reset form ----
-          <form onSubmit={handleResetPassword} className="space-y-4 text-accent">
-            <label className="text-xs sm:text-sm md:text-md font-medium">
+          <form
+            onSubmit={handleResetPassword}
+            className="space-y-4 text-accent"
+          >
+            <label className="text-xs sm:text-sm md:text-md  font-medium">
               Enter Your Email
             </label>
             <input
@@ -142,11 +186,20 @@ export default function Landing() {
             />
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
+
+            {loadingAction && (
+              <div className="flex flex-col items-center justify-center py-2">
+                <div className="w-6 h-6 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <p className="mt-2 text-xs sm:text-sm animate-pulse">
+                  Resetting Password...
+                </p>
+              </div>
+            )}
             {message && <p className="text-green-600 text-sm">{message}</p>}
 
             <button
               type="submit"
-              className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition"
+              className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 active:bg-accent transition"
             >
               Send Reset Link
             </button>

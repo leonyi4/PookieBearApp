@@ -84,8 +84,12 @@ export default function DonationDetail() {
     fetchDonation();
   }, [donationId]);
 
-
-  if (loading) return <LoadingSpinner message="Fetching Donations..." />;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen text-primary">
+        <LoadingSpinner message="Fetching Donations..." />
+      </div>
+    );
   if (!campaign)
     return (
       <div className="flex h-screen items-center justify-center text-red-500">
@@ -148,7 +152,7 @@ export default function DonationDetail() {
             />
             <div>
               <Link to={`/OrgsAndSponsors/organizations/${orgData.id}`}>
-                <p className="font-medium text-gray-800">{orgData.name}{' '}ⓘ</p>
+                <p className="font-medium text-gray-800">{orgData.name} ⓘ</p>
               </Link>
               {orgData.tags?.[0] && (
                 <p className="text-xs text-gray-500">{orgData.tags[0]}</p>
@@ -215,7 +219,9 @@ export default function DonationDetail() {
               />
             </div>
             <button className="mt-4 w-full bg-primary text-white py-2 sm:py-3 rounded-lg hover:bg-accent transition">
-              <a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'>Donate Now</a>
+              <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                Donate Now
+              </a>
             </button>
           </div>
         )}

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DonationCard from "./DonationsAndVolunteer/Donations/DonationCard";
 import MiniMap from "./Disasters/MiniMap";
 import VolunteerCard from "./DonationsAndVolunteer/Volunteer/VolunteerCard";
@@ -13,6 +13,31 @@ export default function Home() {
   const [sponsors, setSponsors] = useState([]);
   const [disasters, setDisasters] = useState([]); // 👈 add disasters
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkProfile = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/Landing", { replace: true });
+        return;
+      }
+
+      const { data: profile, error } = await supabase
+        .from("users")
+        .select("profile_complete")
+        .eq("id", user.id)
+        .single();
+
+      if (error || !profile || profile.profile_complete === false) {
+        navigate("/ProfileCompletion", { replace: true });
+      }
+    };
+
+    checkProfile();
+  }, [navigate]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +81,12 @@ export default function Home() {
     fetchData();
   }, []);
 
-  if (loading) return <LoadingSpinner message="Fetching Home..." />;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen text-primary">
+        <LoadingSpinner message="Fetching Home..." />
+      </div>
+    );
 
   return (
     <div className="space-y-10 p-4 md:p-8 bg-background min-h-screen">

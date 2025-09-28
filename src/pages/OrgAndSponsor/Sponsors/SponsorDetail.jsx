@@ -98,7 +98,12 @@ export default function SponsorDetail() {
     fetchSponsorData();
   }, [sponsorId]);
 
-  if (loading) return <LoadingSpinner message="Fetching sponsor details..." />;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen text-primary">
+        <LoadingSpinner message="Fetching sponsor details..." />
+      </div>
+    );
 
   if (!sponsor) {
     return (
@@ -118,7 +123,9 @@ export default function SponsorDetail() {
         >
           &larr;
         </button>
-        <h1 className="text-xl font-bold uppercase text-primary">{sponsor.name}</h1>
+        <h1 className="text-xl font-bold uppercase text-primary">
+          {sponsor.name}
+        </h1>
       </div>
 
       {/* Logo */}
