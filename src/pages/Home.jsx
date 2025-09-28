@@ -11,6 +11,7 @@ export default function Home() {
   const [volunteers, setVolunteers] = useState([]);
   const [orgs, setOrgs] = useState([]);
   const [sponsors, setSponsors] = useState([]);
+  const [disasters, setDisasters] = useState([]); // 👈 add disasters
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,6 +40,12 @@ export default function Home() {
           .from("sponsors")
           .select("id, name, logo");
         setSponsors((sponsorsData || []).sort((a, b) => a.id - b.id));
+
+        // 👇 fetch disasters
+        const { data: disastersData } = await supabase
+          .from("disasters")
+          .select("id, name, latitude, longitude");
+        setDisasters((disastersData || []).sort((a, b) => a.id - b.id));
       } catch (err) {
         console.error("Error fetching home data:", err.message);
       } finally {
@@ -56,9 +63,12 @@ export default function Home() {
       <div className="max-w-7xl mx-auto space-y-10">
         {/* Aid Request CTA */}
         <section className="rounded-2xl p-5 bg-gradient-to-r from-primary to-secondary text-white shadow">
-          <h2 className="text-2xl font-bold uppercase ">Do You Need Help Right Now?</h2>
+          <h2 className="text-2xl font-bold uppercase ">
+            Do You Need Help Right Now?
+          </h2>
           <p className="text-sm lg:text-md mt-2 opacity-90">
-            If you’re affected by a disaster, tell us what you need and where you are.
+            If you’re affected by a disaster, tell us what you need and where
+            you are.
           </p>
           <div className="mt-4">
             <Link to="/AidRequest">
@@ -220,7 +230,8 @@ export default function Home() {
             Real Time Updates
           </h2>
           <div className="rounded-xl overflow-hidden shadow">
-            <MiniMap />
+            {/* pass disasters as prop 👇 */}
+            <MiniMap disasters={disasters} />
           </div>
           <div className="mt-2 space-y-2">
             <Link to="/DisasterMap">
@@ -229,7 +240,9 @@ export default function Home() {
               </button>
             </Link>
             <button className="mt-1 w-full bg-accent text-white font-medium py-2 rounded-lg hover:bg-accent/90">
-              <a href='https://youtu.be/dQw4w9WgXcQ?si=sA3QwFW9WSFnnCzR'>Learn More About Us</a>
+              <a href="https://youtu.be/dQw4w9WgXcQ?si=sA3QwFW9WSFnnCzR">
+                Learn More About Us
+              </a>
             </button>
           </div>
         </section>
