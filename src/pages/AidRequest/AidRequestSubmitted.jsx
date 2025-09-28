@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Vertical_Logo from "../../assets/Vertical_logo.png";
 
 export default function AidRequestSubmitted() {
   return (
@@ -7,7 +6,7 @@ export default function AidRequestSubmitted() {
       {/* Logo */}
       <div className="mb-6">
         <img
-          src={Vertical_Logo}
+          src="/Vertical_logo.png"
           alt="Pookie Bear"
           className="h-60 mt-12 sm:h-56 md:h-72 lg:h-80 w-auto mx-auto"
         />

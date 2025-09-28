@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase-client";
-import logo from "../../assets/Vertical_logo.png";
 
 
 export default function ResetPassword() {
@@ -36,7 +35,7 @@ export default function ResetPassword() {
     <div className="flex min-h-screen w-full items-center justify-center px-4 bg-cover bg-center">
       <div className="bg-background rounded-2xl shadow-lg w-full max-w-md p-6 sm:p-8">
         <div className="flex flex-col items-center mb-6">
-          <img src={logo} alt="Logo" className="h-40 sm:h-52 md:h-60" />
+          <img src="/Vertical_logo.png" alt="Logo" className="h-40 sm:h-52 md:h-60" />
         </div>
         <h1 className="text-xl font-bold text-center text-primary mb-6">
           Reset Password

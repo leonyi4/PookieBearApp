@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase-client";
-import vert_logo from "../../assets/Vertical_logo.png";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -40,7 +39,7 @@ export default function SignUp() {
     <div className="flex min-h-screen w-full items-center justify-center px-4 bg-cover bg-center">
       <div className="bg-background rounded-2xl shadow-lg w-full max-w-md md:max-w-lg p-6 sm:p-8">
         <div className="flex flex-col items-center mb-6">
-          <img src={vert_logo} alt="Logo" className="h-40 sm:h-52 md:h-60" />
+          <img src="/Vertical_logo.png" alt="Logo" className="h-40 sm:h-52 md:h-60" />
           <h1 className="my-2 text-primary font-bold text-2xl">Sign Up</h1>
         </div>
 

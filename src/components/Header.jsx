@@ -1,6 +1,4 @@
 import React from "react";
-import header_logo from "../assets/Header_logo.png";
-import vertical_logo from "../assets/Vertical_logo.png";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useLockBodyScroll } from "../hooks/useLockBodyScroll.jsx";
@@ -20,7 +18,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-8">
         {/* Logo (always left) */}
         <NavLink to="/" className="flex items-center">
-          <img src={header_logo} alt="logo" width={150} className="h-auto" />
+          <img src="/Header_logo.png" alt="header_logo" width={150} className="h-auto" />
         </NavLink>
 
         {/* Desktop Navigation (≥ md) */}
@@ -97,7 +95,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
 
           <nav className="space-y-6 text-center flex flex-col items-center">
             <NavLink to="/" onClick={toggleMenu}>
-              <img src={vertical_logo} alt="logo" width={150} />
+              <img src='/Vertical_logo.png' alt="vertical_logo" width={150} />
             </NavLink>
 
             {[

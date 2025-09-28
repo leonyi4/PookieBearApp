@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../lib/supabase-client";
-import logo from "../../assets/Vertical_logo.png";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -100,7 +99,7 @@ export default function Landing() {
     >
       <div className="bg-background p-6 sm:p-8 rounded-2xl shadow-lg w-full max-w-md md:max-w-lg">
         <div className="flex flex-col items-center mb-6">
-          <img src={logo} alt="Logo" className="h-40 sm:h-52 md:h-60" />
+          <img src="/Vertical_logo.png" alt="Logo" className="h-40 sm:h-52 md:h-60" />
         </div>
 
         {!resetMode ? (

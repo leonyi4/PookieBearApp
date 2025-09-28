@@ -1,4 +1,3 @@
-// src/components/LocationPicker.jsx
 import {
   MapContainer,
   TileLayer,
@@ -7,13 +6,11 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import booleanPointInPolygon from "@turf/boolean-point-in-polygon";
 import bbox from "@turf/bbox";
 import { point as turfPoint } from "@turf/helpers";
-
-import myanmarGeo from "../assets/myanmar_geo.json"; // adjust path as needed
 
 function FitToMyanmar({ feature }) {
   const map = useMap();
@@ -34,15 +31,25 @@ export default function LocationPicker({ onLocationSelect }) {
   const [position, setPosition] = useState(null);
   const [error, setError] = useState(""); // validation message
   const [outlineColor, setOutlineColor] = useState("#699ECC"); // default primary
+  const [mmFeature, setMmFeature] = useState(null);
 
-  // Normalize incoming GeoJSON to a single Feature
-  const mmFeature = useMemo(() => {
-    if (!myanmarGeo) return null;
-    if (myanmarGeo.type === "FeatureCollection") {
-      return myanmarGeo.features?.[0] ?? null;
-    }
-    if (myanmarGeo.type === "Feature") return myanmarGeo;
-    return { type: "Feature", properties: {}, geometry: myanmarGeo };
+  // Fetch Myanmar GeoJSON from /public
+  useEffect(() => {
+    fetch("/myanmar_geo.json")
+      .then((res) => res.json())
+      .then((geo) => {
+        // Normalize to a single feature
+        if (geo.type === "FeatureCollection") {
+          setMmFeature(geo.features?.[0] ?? null);
+        } else if (geo.type === "Feature") {
+          setMmFeature(geo);
+        } else {
+          setMmFeature({ type: "Feature", properties: {}, geometry: geo });
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load Myanmar GeoJSON:", err);
+      });
   }, []);
 
   const LocationMarker = () => {
