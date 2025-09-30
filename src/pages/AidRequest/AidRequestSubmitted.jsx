@@ -11,9 +11,6 @@ export default function AidRequestSubmitted() {
           className="h-60 mt-12 sm:h-56 md:h-72 lg:h-80 w-auto mx-auto"
         />
       </div>
-
-      {/* App Title */}
-
       {/* Confirmation message */}
       <div className="bg-primary text-white text-base sm:text-lg font-semibold px-6 py-3 rounded-full shadow-md mb-4 max-w-sm w-full">
         Help request received

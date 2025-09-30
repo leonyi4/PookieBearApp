@@ -2,19 +2,22 @@ import { Link, useNavigate } from "react-router-dom";
 import DonationCard from "./DonationsAndVolunteer/Donations/DonationCard";
 import MiniMap from "./Disasters/MiniMap";
 import VolunteerCard from "./DonationsAndVolunteer/Volunteer/VolunteerCard";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchDonations,
+  fetchVolunteers,
+  fetchOrgs,
+  fetchSponsors,
+  fetchDisasters,
+} from "../lib/api";
 import { supabase } from "../lib/supabase-client";
+import { useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Home() {
-  const [donations, setDonations] = useState([]);
-  const [volunteers, setVolunteers] = useState([]);
-  const [orgs, setOrgs] = useState([]);
-  const [sponsors, setSponsors] = useState([]);
-  const [disasters, setDisasters] = useState([]); // 👈 add disasters
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // ✅ Profile check stays the same
   useEffect(() => {
     const checkProfile = async () => {
       const {
@@ -24,69 +27,63 @@ export default function Home() {
         navigate("/Landing", { replace: true });
         return;
       }
-
       const { data: profile, error } = await supabase
         .from("users")
         .select("profile_complete")
         .eq("id", user.id)
         .single();
-
       if (error || !profile || profile.profile_complete === false) {
         navigate("/ProfileCompletion", { replace: true });
       }
     };
-
     checkProfile();
   }, [navigate]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data: donationsData } = await supabase
-          .from("donations")
-          .select(
-            "id, name, description, goal, raised, latitude, longitude, disaster_id, image"
-          );
-        setDonations((donationsData || []).sort((a, b) => a.id - b.id));
+  // ✅ Use React Query instead of useEffect/useState
+  const { data: donations = [], isLoading: donationsLoading } = useQuery({
+    queryKey: ["donations"],
+    queryFn: fetchDonations,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 
-        const { data: volunteersData } = await supabase
-          .from("volunteers")
-          .select(
-            "id, name, description, latitude, longitude, disaster_id, impact, image"
-          );
-        setVolunteers((volunteersData || []).sort((a, b) => a.id - b.id));
+  const { data: volunteers = [], isLoading: volunteersLoading } = useQuery({
+    queryKey: ["volunteers"],
+    queryFn: fetchVolunteers,
+    staleTime: 1000 * 60 * 5,
+  });
 
-        const { data: orgsData } = await supabase
-          .from("organizations")
-          .select("id, name, logo, tags");
-        setOrgs((orgsData || []).sort((a, b) => a.id - b.id));
+  const { data: orgs = [], isLoading: orgsLoading } = useQuery({
+    queryKey: ["orgs"],
+    queryFn: fetchOrgs,
+    staleTime: 1000 * 60 * 5,
+  });
 
-        const { data: sponsorsData } = await supabase
-          .from("sponsors")
-          .select("id, name, logo");
-        setSponsors((sponsorsData || []).sort((a, b) => a.id - b.id));
+  const { data: sponsors = [], isLoading: sponsorsLoading } = useQuery({
+    queryKey: ["sponsors"],
+    queryFn: fetchSponsors,
+    staleTime: 1000 * 60 * 5,
+  });
 
-        // 👇 fetch disasters
-        const { data: disastersData } = await supabase
-          .from("disasters")
-          .select("id, name, latitude, longitude");
-        setDisasters((disastersData || []).sort((a, b) => a.id - b.id));
-      } catch (err) {
-        console.error("Error fetching home data:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: disasters = [], isLoading: disastersLoading } = useQuery({
+    queryKey: ["disasters"],
+    queryFn: fetchDisasters,
+    staleTime: 1000 * 60 * 5,
+  });
 
-    fetchData();
-  }, []);
-
-  if (loading)
+  // ✅ Combine loading states
+  if (
+    donationsLoading ||
+    volunteersLoading ||
+    orgsLoading ||
+    sponsorsLoading ||
+    disastersLoading
+  ) {
     return (
       <div className="flex items-center justify-center h-screen text-primary">
         <LoadingSpinner message="Fetching Home..." />
       </div>
     );
+  }
 
   return (
     <div className="space-y-10 p-4 md:p-8 bg-background min-h-screen">

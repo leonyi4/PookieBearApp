@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../lib/supabase-client";
 import { useAuth } from "../../context/AuthContext";
+import { useCreateAidRequest } from "../../lib/api"; // ✅ new hook
 import LocationPicker from "../../components/LocationPicker";
 
 export default function AidRequestForm() {
   const { user } = useAuth();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     disaster_type: "",
     severity: "",
@@ -16,7 +17,6 @@ export default function AidRequestForm() {
   });
 
   const [tempLocation, setTempLocation] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
   const [locationConfirmed, setLocationConfirmed] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -73,7 +73,10 @@ export default function AidRequestForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  // ✅ use centralized hook
+  const mutation = useCreateAidRequest(user?.id);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!user) {
       alert("Please log in first.");
@@ -81,27 +84,25 @@ export default function AidRequestForm() {
     }
     if (!validateForm()) return;
 
-    setSubmitting(true);
-
-    const { error } = await supabase.from("aid_requests").insert({
-      user_id: user.id,
-      disaster_type: formData.disaster_type,
-      severity: formData.severity,
-      aid_types: formData.aid_types,
-      latitude: formData.latitude,
-      longitude: formData.longitude,
-      status: "pending",
-    });
-
-    setSubmitting(false);
-
-    if (error) {
-      console.error(error);
-      alert("Error submitting request");
-      return;
-    }
-
-    navigate("/AidRequestSubmitted");
+    mutation.mutate(
+      {
+        user_id: user.id,
+        disaster_type: formData.disaster_type,
+        severity: formData.severity,
+        aid_types: formData.aid_types,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
+        status: "pending",
+      },
+      {
+        onSuccess: () => {
+          navigate("/AidRequestSubmitted");
+        },
+        onError: () => {
+          alert("Error submitting request. Please try again.");
+        },
+      }
+    );
   };
 
   return (
@@ -200,7 +201,6 @@ export default function AidRequestForm() {
           {errors.location && (
             <p className="text-red-500 text-sm">{errors.location}</p>
           )}
-
           <button
             type="button"
             onClick={handleConfirmLocation}
@@ -213,14 +213,15 @@ export default function AidRequestForm() {
             {locationConfirmed ? "Location Confirmed" : "Confirm Location"}
           </button>
         </div>
+
+        {/* Submit */}
         <div>
-          {/* Submit */}
           <button
             type="submit"
-            disabled={submitting}
+            disabled={mutation.isLoading}
             className="w-full bg-primary text-white py-2 rounded-lg disabled:opacity-60"
           >
-            {submitting ? "Submitting…" : "Submit Request"}
+            {mutation.isLoading ? "Submitting…" : "Submit Request"}
           </button>
         </div>
       </form>

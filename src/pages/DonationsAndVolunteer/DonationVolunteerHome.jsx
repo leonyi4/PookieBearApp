@@ -1,22 +1,25 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useQueries } from "@tanstack/react-query";
+
 import DonationCard from "./Donations/DonationCard";
 import VolunteerCard from "./Volunteer/VolunteerCard";
-import { supabase } from "../../lib/supabase-client";
 import LoadingSpinner from "../../components/LoadingSpinner";
+
+import {
+  fetchDonations,
+  fetchVolunteers,
+  fetchOrgs,
+  fetchOrgRelations,
+} from "../../lib/api";
 
 export default function DonationsVolunteersHome() {
   const { type } = useParams(); // 'donations' or 'volunteers'
   const navigate = useNavigate();
-
   const [activeTab, setActiveTab] = useState("donations");
-  const [donations, setDonations] = useState([]);
-  const [volunteers, setVolunteers] = useState([]);
-  const [organizations, setOrganizations] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Sync URL param with state
+  // Sync tab with URL
   useEffect(() => {
     if (type === "donations" || type === "volunteers") {
       setActiveTab(type);
@@ -25,95 +28,63 @@ export default function DonationsVolunteersHome() {
     }
   }, [type, navigate]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  // Run all queries in parallel
+  const results = useQueries({
+    queries: [
+      { queryKey: ["donations"], queryFn: fetchDonations },
+      { queryKey: ["volunteers"], queryFn: fetchVolunteers },
+      { queryKey: ["organizations"], queryFn: fetchOrgs },
+      { queryKey: ["orgRelations"], queryFn: fetchOrgRelations },
+    ],
+  });
 
-        // Fetch donations
-        const { data: donationsData, error: donationsError } = await supabase
-          .from("donations")
-          .select(
-            "id, name, description, goal, raised, latitude, longitude, disaster_id, image"
-          );
-        if (donationsError) throw donationsError;
+  const isLoading = results.some((r) => r.isLoading);
+  const isError = results.some((r) => r.isError);
 
-        // Fetch volunteers
-        const { data: volunteersData, error: volunteersError } = await supabase
-          .from("volunteers")
-          .select(
-            "id, name, description, latitude, longitude, disaster_id, impact, image"
-          );
-        if (volunteersError) throw volunteersError;
-
-        // Fetch organizations
-        const { data: orgsData, error: orgsError } = await supabase
-          .from("organizations")
-          .select("id, name, logo");
-        if (orgsError) throw orgsError;
-
-        // Fetch relationships
-        const { data: orgDonations, error: orgDonationsError } = await supabase
-          .from("org_donations")
-          .select("donation_id, org_id");
-
-        if (orgDonationsError)
-          console.error("orgDonations error:", orgDonationsError);
-
-        const { data: orgVolunteers, error: orgVolunteersError } =
-          await supabase
-            .from("org_volunteers")
-            .select("volunteer_id, org_id");
-
-        if (orgVolunteersError)
-          console.error("orgVolunteers error:", orgVolunteersError);
-
-        // Attach organizations to donations
-        const donationsWithOrg = (donationsData || []).map((don) => {
-          const rel = orgDonations?.find((od) => od.donation_id === don.id);
-          const org = orgsData?.find((o) => o.id === rel?.org_id);
-          return { ...don, organization: org || null };
-        });
-
-        // Attach organizations to volunteers
-        const volunteersWithOrg = (volunteersData || []).map((vol) => {
-          const rel = orgVolunteers?.find((ov) => ov.volunteer_id === vol.id);
-          const org = orgsData?.find((o) => o.id === rel?.org_id);
-          return { ...vol, organization: org || null };
-        });
-
-        setDonations(donationsWithOrg.sort((a, b) => a.id - b.id));
-        setVolunteers(volunteersWithOrg.sort((a, b) => a.id - b.id));
-        setOrganizations(orgsData || []);
-      } catch (err) {
-        console.error("Error fetching donations/volunteers:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    navigate(`/DonationsAndVolunteers/${tab}`);
-  };
-
-  const filteredDonations = donations.filter((d) =>
-    d.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredVolunteers = volunteers.filter((v) =>
-    v.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen text-primary">
         <LoadingSpinner message="Fetching Donations and Volunteers..." />
       </div>
     );
   }
+
+  if (isError) {
+    return <p className="text-red-500">Error fetching data.</p>;
+  }
+
+  // Destructure results
+  const [donationsRes, volunteersRes, orgsRes, relsRes] = results;
+  const donations = donationsRes.data || [];
+  const volunteers = volunteersRes.data || [];
+  const organizations = orgsRes.data || [];
+  const { orgDonations, orgVolunteers } = relsRes.data;
+
+  // Attach organizations
+  const donationsWithOrg = donations.map((don) => {
+    const rel = orgDonations?.find((od) => od.donation_id === don.id);
+    const org = organizations.find((o) => o.id === rel?.org_id);
+    return { ...don, organization: org || null };
+  });
+
+  const volunteersWithOrg = volunteers.map((vol) => {
+    const rel = orgVolunteers?.find((ov) => ov.volunteer_id === vol.id);
+    const org = organizations.find((o) => o.id === rel?.org_id);
+    return { ...vol, organization: org || null };
+  });
+
+  // Filtering
+  const filteredDonations = donationsWithOrg.filter((d) =>
+    d.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const filteredVolunteers = volunteersWithOrg.filter((v) =>
+    v.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    navigate(`/DonationsAndVolunteers/${tab}`);
+  };
 
   return (
     <div className="max-w-7xl mx-auto p-4">

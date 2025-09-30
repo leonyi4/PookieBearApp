@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { supabase } from "../../../lib/supabase-client";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchVolunteerById,
+  fetchOrgById,
+  fetchVolunteerRoles,
+} from "../../../lib/api";
 import RatingStars from "../../../components/RatingStars";
 import LocationMap from "../../../components/LocationMap";
 import LoadingSpinner from "../../../components/LoadingSpinner";
@@ -9,85 +13,48 @@ export default function VolunteerDetail() {
   const { volunteerId } = useParams();
   const navigate = useNavigate();
 
-  const [campaign, setCampaign] = useState(null);
-  const [orgData, setOrgData] = useState(null);
-  const [roles, setRoles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Volunteer
+  const {
+    data: campaign,
+    isLoading: loadingVolunteer,
+    error: volunteerError,
+  } = useQuery({
+    queryKey: ["volunteer", volunteerId],
+    queryFn: () => fetchVolunteerById(volunteerId),
+    enabled: !!volunteerId,
+  });
 
-  useEffect(() => {
-    const fetchVolunteer = async () => {
-      try {
-        setLoading(true);
+  // Org
+  const { data: orgData, isLoading: loadingOrg } = useQuery({
+    queryKey: ["org", campaign?.org_id],
+    queryFn: () => fetchOrgById(campaign.org_id),
+    enabled: !!campaign?.org_id,
+  });
 
-        const { data: volunteer } = await supabase
-          .from("volunteers")
-          .select(
-            `
-            id,
-            name,
-            description,
-            image,
-            impact,
-            org_id,
-            latitude,
-            longitude,
-            disaster_id
-          `
-          )
-          .eq("id", volunteerId)
-          .single();
-        setCampaign(volunteer);
+  // Roles
+  const { data: roles, isLoading: loadingRoles } = useQuery({
+    queryKey: ["volunteerRoles", volunteerId],
+    queryFn: () => fetchVolunteerRoles(volunteerId),
+    enabled: !!volunteerId,
+  });
 
-        if (volunteer?.org_id) {
-          const { data: org } = await supabase
-            .from("organizations")
-            .select("id, name, logo, tags, ratings")
-            .eq("id", volunteer.org_id)
-            .single();
-          setOrgData(org);
-        }
-
-        const { data: roleLinks } = await supabase
-          .from("volunteer_roles")
-          .select(
-            `
-            roles (
-              id,
-              title,
-              commitment,
-              skills_required
-            )
-          `
-          )
-          .eq("volunteer_id", volunteerId);
-
-        setRoles(roleLinks?.map((r) => r.roles) || []);
-      } catch (err) {
-        console.error("Error fetching volunteer detail:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVolunteer();
-  }, [volunteerId]);
-
-  if (loading)
+  if (loadingVolunteer || loadingOrg || loadingRoles) {
     return <LoadingSpinner message="Fetching Volunteer Details..." />;
-  if (!campaign)
+  }
+
+  if (volunteerError || !campaign) {
     return (
       <div className="flex h-screen items-center justify-center text-red-500">
         Volunteer opportunity not found.
       </div>
     );
+  }
 
   const signedUp = campaign.impact?.volunteers_signed_up ?? 0;
   const needed = campaign.impact?.volunteers_needed ?? 0;
   const progress = needed
     ? Math.min((signedUp / needed) * 100, 100).toFixed(0)
     : 0;
-
-    console.log(campaign)
 
   return (
     <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden lg:my-6">
@@ -126,7 +93,7 @@ export default function VolunteerDetail() {
             />
             <div>
               <Link to={`/OrgsAndSponsors/organizations/${orgData.id}`}>
-                <p className="font-medium text-gray-800">{orgData.name}{'  '}ⓘ</p>
+                <p className="font-medium text-gray-800">{orgData.name} ⓘ</p>
               </Link>
               {orgData.tags?.[0] && (
                 <p className="text-xs text-gray-500">{orgData.tags[0]}</p>
@@ -167,7 +134,9 @@ export default function VolunteerDetail() {
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-sm text-gray-500 mt-1">Needed: {needed}</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Needed: {needed} volunteers
+          </p>
         </div>
 
         {/* Description */}
@@ -176,7 +145,7 @@ export default function VolunteerDetail() {
         </p>
 
         {/* Roles */}
-        {roles.length > 0 && (
+        {roles?.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-3">
               Volunteer Roles
@@ -220,7 +189,9 @@ export default function VolunteerDetail() {
 
         {/* CTA */}
         <button className="w-full bg-primary text-white py-2 sm:py-3 rounded-lg hover:bg-accent transition">
-          <a href='https://youtu.be/dQw4w9WgXcQ?si=sA3QwFW9WSFnnCzR'>Sign Up to Volunteer</a>
+          <a href="https://youtu.be/dQw4w9WgXcQ?si=sA3QwFW9WSFnnCzR">
+            Sign Up to Volunteer
+          </a>
         </button>
       </div>
     </div>

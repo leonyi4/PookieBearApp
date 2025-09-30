@@ -1,6 +1,12 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { supabase } from "../../../lib/supabase-client";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchSponsorById,
+  fetchSponsorEvents,
+  fetchSponsorDonations,
+  fetchSponsorVolunteers,
+  fetchSponsorOrganizations,
+} from "../../../lib/api";
 import DonationCard from "../../DonationsAndVolunteer/Donations/DonationCard";
 import VolunteerCard from "../../DonationsAndVolunteer/Volunteer/VolunteerCard";
 import LoadingSpinner from "../../../components/LoadingSpinner";
@@ -9,103 +15,51 @@ export default function SponsorDetail() {
   const { sponsorId } = useParams();
   const navigate = useNavigate();
 
-  const [sponsor, setSponsor] = useState(null);
-  const [events, setEvents] = useState([]);
-  const [donations, setDonations] = useState([]);
-  const [volunteers, setVolunteers] = useState([]);
-  const [organizations, setOrganizations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    data: sponsor,
+    isLoading: loadingSponsor,
+    error: sponsorError,
+  } = useQuery({
+    queryKey: ["sponsor", sponsorId],
+    queryFn: () => fetchSponsorById(sponsorId),
+    enabled: !!sponsorId,
+  });
 
-  useEffect(() => {
-    const fetchSponsorData = async () => {
-      try {
-        setLoading(true);
+  const { data: events, isLoading: loadingEvents } = useQuery({
+    queryKey: ["sponsorEvents", sponsorId],
+    queryFn: () => fetchSponsorEvents(sponsorId),
+    enabled: !!sponsorId,
+  });
 
-        // Sponsor info
-        const { data: sponsorData, error: sponsorError } = await supabase
-          .from("sponsors")
-          .select("*")
-          .eq("id", sponsorId)
-          .single();
-        if (sponsorError) throw sponsorError;
-        setSponsor(sponsorData);
+  const { data: donations, isLoading: loadingDonations } = useQuery({
+    queryKey: ["sponsorDonations", sponsorId],
+    queryFn: () => fetchSponsorDonations(sponsorId),
+    enabled: !!sponsorId,
+  });
 
-        // Sponsored events
-        const { data: eventData, error: eventError } = await supabase
-          .from("sponsor_events")
-          .select("*")
-          .eq("sponsor_id", sponsorId);
-        if (eventError) throw eventError;
-        setEvents(eventData || []);
+  const { data: volunteers, isLoading: loadingVolunteers } = useQuery({
+    queryKey: ["sponsorVolunteers", sponsorId],
+    queryFn: () => fetchSponsorVolunteers(sponsorId),
+    enabled: !!sponsorId,
+  });
 
-        // Sponsored donations
-        const { data: donationLinks } = await supabase
-          .from("sponsor_donations")
-          .select("donation_id")
-          .eq("sponsor_id", sponsorId);
-        if (donationLinks?.length) {
-          const ids = donationLinks.map((d) => d.donation_id);
-          const { data: donationsData } = await supabase
-            .from("donations")
-            .select("*")
-            .in("id", ids);
-          setDonations(donationsData || []);
-        }
+  const { data: organizations, isLoading: loadingOrgs } = useQuery({
+    queryKey: ["sponsorOrganizations", sponsorId],
+    queryFn: () => fetchSponsorOrganizations(donations, volunteers),
+    enabled: !!sponsorId && !!donations && !!volunteers,
+  });
 
-        // Sponsored volunteers
-        const { data: volunteerLinks } = await supabase
-          .from("sponsor_volunteers")
-          .select("volunteer_id")
-          .eq("sponsor_id", sponsorId);
-        if (volunteerLinks?.length) {
-          const ids = volunteerLinks.map((v) => v.volunteer_id);
-          const { data: volunteersData } = await supabase
-            .from("volunteers")
-            .select("*")
-            .in("id", ids);
-          setVolunteers(volunteersData || []);
-        }
+  if (
+    loadingSponsor ||
+    loadingEvents ||
+    loadingDonations ||
+    loadingVolunteers ||
+    loadingOrgs
+  ) {
+    return <LoadingSpinner message="Fetching sponsor details..." />;
+  }
 
-        // Related Orgs (via donations + volunteers)
-        const { data: orgDonationLinks } = await supabase
-          .from("org_donations")
-          .select("org_id")
-          .in("donation_id", donationLinks?.map((d) => d.donation_id) || []);
-        const { data: orgVolunteerLinks } = await supabase
-          .from("org_volunteers")
-          .select("org_id")
-          .in("volunteer_id", volunteerLinks?.map((v) => v.volunteer_id) || []);
-
-        const orgIds = [
-          ...(orgDonationLinks?.map((o) => o.org_id) || []),
-          ...(orgVolunteerLinks?.map((o) => o.org_id) || []),
-        ];
-
-        if (orgIds.length > 0) {
-          const { data: relatedOrgs } = await supabase
-            .from("organizations")
-            .select("*")
-            .in("id", orgIds);
-          setOrganizations(relatedOrgs || []);
-        }
-      } catch (err) {
-        console.error("Error loading sponsor details:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSponsorData();
-  }, [sponsorId]);
-
-  if (loading)
-    return (
-      <div className="flex items-center justify-center h-screen text-primary">
-        <LoadingSpinner message="Fetching sponsor details..." />
-      </div>
-    );
-
-  if (!sponsor) {
+  if (sponsorError || !sponsor) {
     return (
       <div className="max-w-4xl mx-auto p-6 bg-background min-h-screen">
         <p className="text-red-600">Sponsor not found.</p>
@@ -166,7 +120,7 @@ export default function SponsorDetail() {
       {/* Organizations */}
       <section>
         <h2 className="font-semibold mb-2">Related Organizations</h2>
-        {organizations.length > 0 ? (
+        {organizations?.length > 0 ? (
           <ul className="space-y-3">
             {organizations.map((org) => (
               <li key={org.id} className="flex items-center space-x-3 ">
@@ -199,7 +153,7 @@ export default function SponsorDetail() {
       {/* Donations */}
       <section>
         <h2 className="font-semibold mb-2">Sponsored Donations</h2>
-        {donations.length > 0 ? (
+        {donations?.length > 0 ? (
           <div className="grid grid-flow-col auto-cols-[75%] md:auto-cols-[45%] lg:auto-cols-[30%] overflow-x-auto gap-4 pb-2">
             {donations.map((d) => (
               <DonationCard key={d.id} data={d} />
@@ -213,7 +167,7 @@ export default function SponsorDetail() {
       {/* Volunteers */}
       <section>
         <h2 className="font-semibold mb-2">Sponsored Volunteer Campaigns</h2>
-        {volunteers.length > 0 ? (
+        {volunteers?.length > 0 ? (
           <div className="grid grid-flow-col auto-cols-[75%] md:auto-cols-[45%] lg:auto-cols-[30%] overflow-x-auto gap-4 pb-2">
             {volunteers.map((v) => (
               <VolunteerCard key={v.id} data={v} />
@@ -229,7 +183,7 @@ export default function SponsorDetail() {
       {/* Events */}
       <section>
         <h2 className="font-semibold mb-2">Sponsored Events</h2>
-        {events.length > 0 ? (
+        {events?.length > 0 ? (
           <div className="space-y-4">
             {events.map((event) => (
               <div

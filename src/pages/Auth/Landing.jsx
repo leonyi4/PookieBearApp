@@ -1,67 +1,54 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { supabase } from "../../lib/supabase-client";
-import LoadingSpinner from "../../components/LoadingSpinner";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUserProfile } from "../../lib/api";
+import { supabase } from "../../lib/supabase-client"; // only for reset flow if you keep it here
 
 export default function Landing() {
   const navigate = useNavigate();
   const { user, login, loading } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [resetMode, setResetMode] = useState(false); // toggle state
+  const [resetMode, setResetMode] = useState(false);
   const [loadingAction, setLoadingAction] = useState(false);
 
-  // If already logged in, route away from Landing immediately
-  useEffect(() => {
-    const routeIfLoggedIn = async () => {
-      if (!user) return;
-      const { data: profile, error: profileErr } = await supabase
-        .from("users")
-        .select("profile_complete")
-        .eq("id", user.id)
-        .single();
+  // Profile query (only runs when user exists)
+  const {
+    data: profile,
+    isLoading: profileLoading,
+    isFetched: profileFetched,
+  } = useQuery({
+    queryKey: ["userProfile", user?.id],
+    queryFn: () => fetchUserProfile(user.id),
+    enabled: !!user, // don't run if not logged in
+    staleTime: 1000 * 60, // 1 minute cache
+  });
 
-      if (profileErr || !profile || profile.profile_complete === false) {
-        navigate("/ProfileCompletion", { replace: true });
-      } else {
-        navigate("/", { replace: true });
-      }
-    };
-    if (!loading) routeIfLoggedIn();
-  }, [user, loading, navigate]);
+  // Redirect when we know the profile state
+  useEffect(() => {
+    if (loading) return; // waiting for auth to initialize
+    if (!user) return; // user not logged in → stay on Landing
+
+    if (profileLoading) return; // profile is being fetched
+
+    // If profile row doesn't exist or profile_complete is false → complete profile
+    if (!profile || profile.profile_complete === false) {
+      navigate("/ProfileCompletion", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
+  }, [loading, user, profileLoading, profile, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setLoadingAction(true);
-
     try {
-      const authedUser = await login(email, password);
-      if (!authedUser) return;
-
-      const { data: profile, error: fetchErr } = await supabase
-        .from("users")
-        .select("profile_complete")
-        .eq("id", authedUser.id)
-        .single();
-
-      if (fetchErr || !profile) {
-        await supabase.from("users").insert({
-          id: authedUser.id,
-          email,
-          profile_complete: false,
-        });
-        return navigate("/ProfileCompletion");
-      }
-
-      if (!profile.profile_complete) {
-        navigate("/ProfileCompletion");
-      } else {
-        navigate("/");
-      }
+      await login(email, password); // profile query will run & redirect
     } catch (err) {
       setError(err.message || "Login failed");
     } finally {
@@ -85,11 +72,8 @@ export default function Landing() {
       redirectTo: `${window.location.origin}/ResetPassword`,
     });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      setMessage("Check your email for the reset link.");
-    }
+    if (error) setError(error.message);
+    else setMessage("Check your email for the reset link.");
 
     setLoadingAction(false);
   };
@@ -117,7 +101,6 @@ export default function Landing() {
         </div>
 
         {!resetMode ? (
-          // ---- Login form ----
           <form onSubmit={handleLogin} className="space-y-4 text-accent">
             <input
               type="email"
@@ -135,14 +118,15 @@ export default function Landing() {
             />
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            {loadingAction ? (
+            {loadingAction && (
               <div className="flex flex-col items-center justify-center py-2">
                 <div className="w-6 h-6 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                 <p className="mt-2 text-xs sm:text-sm animate-pulse">
                   Logging in...
                 </p>
               </div>
-            ) : null}
+            )}
+
             <button
               type="submit"
               className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 active:bg-accent transition"
@@ -169,12 +153,11 @@ export default function Landing() {
             </div>
           </form>
         ) : (
-          // ---- Reset form ----
           <form
             onSubmit={handleResetPassword}
             className="space-y-4 text-accent"
           >
-            <label className="text-xs sm:text-sm md:text-md  font-medium">
+            <label className="text-xs sm:text-sm md:text-md font-medium">
               Enter Your Email
             </label>
             <input
@@ -186,7 +169,6 @@ export default function Landing() {
             />
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
-
             {loadingAction && (
               <div className="flex flex-col items-center justify-center py-2">
                 <div className="w-6 h-6 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>

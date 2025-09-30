@@ -1,81 +1,50 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { supabase } from "../../lib/supabase-client";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchDisasterById,
+  fetchDisasterDonations,
+  fetchDisasterVolunteers,
+} from "../../lib/api";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import LocationMap from "../../components/LocationMap";
 import DonationCard from "../DonationsAndVolunteer/Donations/DonationCard";
 import VolunteerCard from "../DonationsAndVolunteer/Volunteer/VolunteerCard";
 
 const DisasterDetail = () => {
   const { disasterId } = useParams();
   const navigate = useNavigate();
-
-  const [disaster, setDisaster] = useState(null);
-  const [donations, setDonations] = useState([]);
-  const [volunteers, setVolunteers] = useState([]);
   const [activeTab, setActiveTab] = useState("donations");
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchDisasterDetails = async () => {
-      try {
-        setLoading(true);
+  const {
+    data: disaster,
+    isLoading: loadingDisaster,
+    error: disasterError,
+  } = useQuery({
+    queryKey: ["disaster", disasterId],
+    queryFn: () => fetchDisasterById(disasterId),
+    enabled: !!disasterId,
+  });
 
-        // 1. Disaster
-        const { data: disasterData, error: disasterError } = await supabase
-          .from("disasters")
-          .select("*")
-          .eq("id", disasterId)
-          .single();
-        if (disasterError) throw disasterError;
-        setDisaster(disasterData);
+  const { data: donations, isLoading: loadingDonations } = useQuery({
+    queryKey: ["disasterDonations", disasterId],
+    queryFn: () => fetchDisasterDonations(disasterId),
+    enabled: !!disasterId,
+  });
 
-        // 2. Donations linked
-        const { data: donationLinks } = await supabase
-          .from("disaster_donations")
-          .select("donation_id")
-          .eq("disaster_id", disasterId);
+  const { data: volunteers, isLoading: loadingVolunteers } = useQuery({
+    queryKey: ["disasterVolunteers", disasterId],
+    queryFn: () => fetchDisasterVolunteers(disasterId),
+    enabled: !!disasterId,
+  });
 
-        if (donationLinks?.length) {
-          const donationIds = donationLinks.map((d) => d.donation_id);
-          const { data: donationData } = await supabase
-            .from("donations")
-            .select("*")
-            .in("id", donationIds);
-          setDonations(donationData || []);
-        }
-
-        // 3. Volunteers linked
-        const { data: volunteerLinks } = await supabase
-          .from("disaster_volunteers")
-          .select("volunteers_id")
-          .eq("disaster_id", disasterId);
-
-        if (volunteerLinks?.length) {
-          const volunteerIds = volunteerLinks.map((v) => v.volunteers_id);
-          const { data: volunteerData } = await supabase
-            .from("volunteers")
-            .select("*")
-            .in("id", volunteerIds);
-          setVolunteers(volunteerData || []);
-        }
-      } catch (err) {
-        console.error("Error fetching disaster details:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDisasterDetails();
-  }, [disasterId]);
-
-  if (loading)
+  if (loadingDisaster || loadingDonations || loadingVolunteers)
     return (
       <div className="flex items-center justify-center h-screen text-primary">
         <LoadingSpinner message="Loading Disaster…" />
       </div>
     );
-  if (!disaster)
+
+  if (disasterError || !disaster)
     return (
       <div className="max-w-3xl mx-auto p-4">
         <p className="text-red-500">Disaster not found.</p>
@@ -110,27 +79,22 @@ const DisasterDetail = () => {
 
         {/* Info */}
         <div className="flex-1 space-y-2">
-          {/* <h2 className="text-2xl font-bold text-primary uppercase">
-            {disaster.name}
-          </h2> */}
           <div className="flex justify-between">
             <p className="text-sm text-gray-500 w-fit">
               Date: {new Date(disaster.date).toLocaleDateString()}
             </p>
             <span
-              className={` px-3 py-1 text-xs font-semibold rounded-full 
-        ${
-          disaster.severity === "High"
-            ? "bg-red-100 text-red-700"
-            : disaster.severity === "Moderate"
-            ? "bg-yellow-100 text-yellow-700"
-            : "bg-green-100 text-green-700"
-        }`}
+              className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                disaster.severity === "High"
+                  ? "bg-red-100 text-red-700"
+                  : disaster.severity === "Moderate"
+                  ? "bg-yellow-100 text-yellow-700"
+                  : "bg-green-100 text-green-700"
+              }`}
             >
               Severity: {disaster.severity}
             </span>
           </div>
-
           <p className="text-gray-700 text-sm leading-relaxed">
             {disaster.description}
           </p>
@@ -167,7 +131,7 @@ const DisasterDetail = () => {
 
         {/* Tab content */}
         {activeTab === "donations" ? (
-          donations.length > 0 ? (
+          donations?.length > 0 ? (
             <div className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[45%] md:auto-cols-[35%] overflow-x-auto gap-4 pb-2">
               {donations.map((donation) => (
                 <DonationCard key={donation.id} data={donation} />
@@ -179,7 +143,7 @@ const DisasterDetail = () => {
             </p>
           )
         ) : activeTab === "volunteers" ? (
-          volunteers.length > 0 ? (
+          volunteers?.length > 0 ? (
             <div className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[45%] md:auto-cols-[35%] overflow-x-auto gap-4 pb-2">
               {volunteers.map((vol) => (
                 <VolunteerCard key={vol.id} data={vol} />

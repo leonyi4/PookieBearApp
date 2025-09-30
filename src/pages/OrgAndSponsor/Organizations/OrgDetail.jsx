@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { supabase } from "../../../lib/supabase-client";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchOrgById,
+  fetchOrgDonations,
+  fetchOrgVolunteers,
+} from "../../../lib/api";
 import DonationCard from "../../DonationsAndVolunteer/Donations/DonationCard";
 import VolunteerCard from "../../DonationsAndVolunteer/Volunteer/VolunteerCard";
 import RatingStars from "../../../components/RatingStars";
@@ -10,41 +14,27 @@ export default function OrgDetail() {
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  const [org, setOrg] = useState(null);
-  const [donations, setDonations] = useState([]);
-  const [volunteers, setVolunteers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    data: org,
+    isLoading: loadingOrg,
+    error: orgError,
+  } = useQuery({
+    queryKey: ["organization", orgId],
+    queryFn: () => fetchOrgById(orgId),
+    enabled: !!orgId,
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const { data: orgData } = await supabase
-          .from("organizations")
-          .select("*")
-          .eq("id", orgId)
-          .single();
-        setOrg(orgData);
+  const { data: donations, isLoading: loadingDonations } = useQuery({
+    queryKey: ["orgDonations", orgId],
+    queryFn: () => fetchOrgDonations(orgId),
+    enabled: !!orgId,
+  });
 
-        const { data: donationData } = await supabase
-          .from("donations")
-          .select("*")
-          .eq("org_id", orgId);
-        setDonations(donationData || []);
-
-        const { data: volunteerData } = await supabase
-          .from("volunteers")
-          .select("*")
-          .eq("org_id", orgId);
-        setVolunteers(volunteerData || []);
-      } catch (err) {
-        console.error("Error fetching org details:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [orgId]);
+  const { data: volunteers, isLoading: loadingVolunteers } = useQuery({
+    queryKey: ["orgVolunteers", orgId],
+    queryFn: () => fetchOrgVolunteers(orgId),
+    enabled: !!orgId,
+  });
 
   // 🔹 Utility to make keys human-readable
   const formatKey = (str) => {
@@ -55,21 +45,21 @@ export default function OrgDetail() {
       .replace(/\b\w/g, (char) => char.toUpperCase()); // capitalize
   };
 
-  if (loading)
+  if (loadingOrg || loadingDonations || loadingVolunteers) {
     return (
       <div className="flex items-center justify-center h-screen text-primary">
         <LoadingSpinner message="Fetching organization details..." />
       </div>
     );
+  }
 
-  if (!org) {
+  if (orgError || !org) {
     return (
       <div className="flex h-screen items-center justify-center text-red-500">
         Organization not found
       </div>
     );
   }
-
   return (
     <div className="max-w-5xl mx-auto space-y-6 p-4 text-primary">
       {/* Header */}

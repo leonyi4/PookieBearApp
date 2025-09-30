@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { supabase } from "../../lib/supabase-client";
+import { useState, useEffect } from "react";
+import { useQueries } from "@tanstack/react-query";
+
+import { fetchOrgs, fetchSponsors } from "../../lib/api";
+
 import RatingStars from "../../components/RatingStars";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
@@ -9,37 +12,7 @@ export default function OrgSponsorsHome() {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState("organizations");
-  const [organizations, setOrganizations] = useState([]);
-  const [sponsors, setSponsors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  // Fetch orgs + sponsors
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        const { data: orgs, error: orgError } = await supabase
-          .from("organizations")
-          .select("id, name, description, logo, tags, ratings");
-        if (orgError) throw orgError;
-        setOrganizations(orgs || []);
-
-        const { data: sponsorData, error: sponsorError } = await supabase
-          .from("sponsors")
-          .select("id, name, logo");
-        if (sponsorError) throw sponsorError;
-        setSponsors(sponsorData || []);
-      } catch (err) {
-        console.error("Error fetching orgs/sponsors:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   // Sync URL param with state
   useEffect(() => {
@@ -49,6 +22,32 @@ export default function OrgSponsorsHome() {
       navigate("/OrgsAndSponsors/organizations", { replace: true });
     }
   }, [type, navigate]);
+
+  const results = useQueries({
+    queries: [
+      { queryKey: ["organizations"], queryFn: fetchOrgs },
+      { queryKey: ["sponsors"], queryFn: fetchSponsors },
+    ],
+  });
+
+  const isLoading = results.some((r) => r.isLoading);
+  const isError = results.some((r) => r.isError);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-primary">
+        <LoadingSpinner message="Fetching Organizations and Sponsors..." />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <p className="text-red-500">Error fetching data.</p>;
+  }
+
+  const [orgsRes, sponsorsRes] = results;
+  const organizations = orgsRes.data || [];
+  const sponsors = sponsorsRes.data || [];
 
   // Update URL when tab is clicked
   const handleTabClick = (tab) => {
@@ -63,14 +62,6 @@ export default function OrgSponsorsHome() {
   const filteredSponsors = sponsors.filter((sponsor) =>
     sponsor.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen text-primary">
-        <LoadingSpinner message="Fetching Organizations and Sponsors..." />
-      </div>
-    );
-  }
 
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-6">

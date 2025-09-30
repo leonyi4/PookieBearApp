@@ -1,9 +1,12 @@
+// src/pages/Auth/SignUp.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../lib/supabase-client";
+import { useAuth } from "../../context/AuthContext";
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const { signup } = useAuth();
+
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMsg, setErrorMsg] = useState("");
   const [successful, setSuccessful] = useState(false);
@@ -19,23 +22,21 @@ export default function SignUp() {
     setErrorMsg("");
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-    });
-
-    if (error) {
-      if (error.message.includes("already registered")) {
+    try {
+      await signup(formData.email, formData.password);
+      // If email confirmation is ON, Supabase may not return a user immediately.
+      setSuccessful(true);
+      setTimeout(() => navigate("/Landing"), 600);
+    } catch (error) {
+      const msg = error?.message || "Sign up failed";
+      if (msg.toLowerCase().includes("registered")) {
         setErrorMsg("This email is already registered. Please log in.");
       } else {
-        setErrorMsg("Sign up failed: " + error.message);
+        setErrorMsg(msg);
       }
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
-    setSuccessful(true);
-    setTimeout(() => navigate("/Landing"), 500);
   };
 
   return (
@@ -85,6 +86,7 @@ export default function SignUp() {
               account.
             </p>
           )}
+
           <div className="flex flex-col sm:flex-row justify-center gap-3 mt-4">
             <button
               type="submit"

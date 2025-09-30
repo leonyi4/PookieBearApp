@@ -28,7 +28,7 @@ import AidRequestForm from "./pages/AidRequest/AidRequestForm.jsx";
 import AidRequestSubmitted from "./pages/AidRequest/AidRequestSubmitted.jsx";
 
 // Disaster pages
-import DisaterMap from "./pages/Disasters/DisasterMap.jsx";
+import DisasterMap from "./pages/Disasters/DisasterMap.jsx";
 import DisasterDetail from "./pages/Disasters/DisasterDetail.jsx";
 
 // Donation and Volunteer pages
@@ -41,9 +41,12 @@ import OrgSponsorsHome from "./pages/OrgAndSponsor/OrgSponsorHome.jsx";
 import SponsorDetail from "./pages/OrgAndSponsor/Sponsors/SponsorDetail.jsx";
 import OrgDetail from "./pages/OrgAndSponsor/Organizations/OrgDetail.jsx";
 
-// Layout and not found page
+// Layout and 404 page
 import MainLayout from "./layouts/MainLayout.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
+
+// React Query
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   { path: "/Landing", element: <Landing /> },
@@ -67,7 +70,7 @@ const router = createBrowserRouter([
       { path: "AidRequest", element: <AidRequestForm /> },
       { path: "AidRequestSubmitted", element: <AidRequestSubmitted /> },
 
-      { path: "DisasterMap", element: <DisaterMap /> },
+      { path: "DisasterMap", element: <DisasterMap /> },
       { path: "DisasterMap/:disasterId", element: <DisasterDetail /> },
 
       {
@@ -102,10 +105,22 @@ const router = createBrowserRouter([
   { path: "*", element: <NotFoundPage /> },
 ]);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // cache is "fresh" for 5 min
+      refetchOnWindowFocus: false, // avoid jumpy refetch on tab focus
+      retry: 1, // 1 retry on failure
+    },
+  },
+});
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

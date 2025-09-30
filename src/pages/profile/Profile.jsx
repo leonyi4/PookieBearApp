@@ -1,106 +1,67 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import AidRequestCard from "../AidRequest/AidRequestCard";
-import { supabase } from "../../lib/supabase-client";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import {
+  useUserProfile,
+  useUserAidRequests,
+  useUserContributions,
+} from "../../lib/api";
+import { useState, useEffect } from "react";
 
 export default function Profile() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [profile, setProfile] = useState(null);
-  const [aidRequests, setAidRequests] = useState([]);
-  const [contributions, setContributions] = useState([]);
-  const [fetchError, setFetchError] = useState("");
   const [activeTab, setActiveTab] = useState("profile");
-  const [dataLoading, setDataLoading] = useState(true); // ✅ new loading state
 
-  // Switch tab if navigation state includes one
   useEffect(() => {
     if (location.state?.tab) {
       setActiveTab(location.state.tab);
     }
   }, [location.state]);
 
-  // Fetch profile + related data
-  useEffect(() => {
-    if (loading) return;
-    if (!user) return navigate("/Landing", { replace: true });
+  const {
+    data: profile,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useUserProfile(user?.id);
 
-    const loadData = async () => {
-      setDataLoading(true);
+  const {
+    data: aidRequests = [],
+    isLoading: aidLoading,
+  } = useUserAidRequests(user?.id);
 
-      // Profile
-      const { data: profileData, error: profileError } = await supabase
-        .from("users")
-        .select(
-          "name, identification, birthdate, country, city, phone, latitude, longitude, profile_picture, age, gender"
-        )
-        .eq("id", user.id)
-        .single();
+  const {
+    data: contributions = [],
+    isLoading: contribLoading,
+  } = useUserContributions(user?.id);
 
-      if (profileError) {
-        setFetchError(profileError.message);
-      } else {
-        setProfile(profileData);
-      }
-
-      // Aid Requests
-      const { data: requests } = await supabase
-        .from("aid_requests")
-        .select(
-          `
-          *,
-          organizations (
-            id,
-            name,
-            logo
-          )
-        `
-        )
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      setAidRequests(requests || []);
-
-      // Contributions
-      const { data: contribs } = await supabase
-        .from("user_contributions")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-      setContributions(contribs || []);
-
-      setDataLoading(false); // ✅ finished loading
-    };
-
-    loadData();
-  }, [user, loading, navigate]);
-
-  // Loading screen
-  if (loading || dataLoading) {
+  if (loading || profileLoading || aidLoading || contribLoading) {
     return (
       <div className="flex items-center justify-center h-screen text-primary">
-        <LoadingSpinner message='Loading Profile' />
+        <LoadingSpinner message="Loading Profile" />
       </div>
     );
   }
 
-  // Error / not found
+  if (!user) return navigate("/Landing", { replace: true });
+
   if (!profile) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-red-500">{fetchError || "Profile not found."}</p>
+        <p className="text-red-500">
+          {profileError?.message || "Profile not found."}
+        </p>
       </div>
     );
   }
 
-  // Main UI
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="bg-white shadow-lg rounded-xl p-6 md:p-8 w-full max-w-5xl mx-auto">
-        {/* Header with back button */}
+        {/* Header */}
         <div className="flex items-center mb-6 justify-between">
           <button
             onClick={() => navigate(-1)}
@@ -134,10 +95,10 @@ export default function Profile() {
           ))}
         </div>
 
-        {/* Profile Tab */}
+        {/* Tabs Content */}
         {activeTab === "profile" && (
           <div>
-            {/* Profile Header */}
+            {/* Profile header */}
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
               <img
                 src={profile.profile_picture || "/default-profile.png"}
@@ -154,35 +115,24 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Info Grid */}
+            {/* Info */}
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="font-medium text-gray-700">Birthdate</p>
-                <p className="text-gray-900">{profile.birthdate || "-"}</p>
-              </div>
-              <div>
-                <p className="font-medium text-gray-700">Age</p>
-                <p className="text-gray-900">{profile.age || "-"}</p>
-              </div>
-              <div>
-                <p className="font-medium text-gray-700">Gender</p>
-                <p className="text-gray-900">{profile.gender || "-"}</p>
-              </div>
-              <div>
-                <p className="font-medium text-gray-700">Phone</p>
-                <p className="text-gray-900">{profile.phone || "-"}</p>
-              </div>
-              <div>
-                <p className="font-medium text-gray-700">Country</p>
-                <p className="text-gray-900">{profile.country || "-"}</p>
-              </div>
-              <div>
-                <p className="font-medium text-gray-700">City</p>
-                <p className="text-gray-900">{profile.city || "-"}</p>
-              </div>
+              {[
+                ["Birthdate", profile.birthdate],
+                ["Age", profile.age],
+                ["Gender", profile.gender],
+                ["Phone", profile.phone],
+                ["Country", profile.country],
+                ["City", profile.city],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <p className="font-medium text-gray-700">{label}</p>
+                  <p className="text-gray-900">{value || "-"}</p>
+                </div>
+              ))}
             </div>
 
-            {/* Customize Button */}
+            {/* Customize button */}
             <div className="mt-6">
               <Link to="/CustomizeProfile">
                 <button className="w-full md:w-auto px-6 py-2 bg-primary hover:bg-accent text-white font-medium rounded-lg transition">
@@ -193,7 +143,6 @@ export default function Profile() {
           </div>
         )}
 
-        {/* Aid Requests Tab */}
         {activeTab === "aid" && (
           <div>
             <h2 className="font-semibold text-lg text-primary mb-3">
@@ -213,7 +162,6 @@ export default function Profile() {
           </div>
         )}
 
-        {/* Contributions Tab */}
         {activeTab === "contributions" && (
           <div>
             <h2 className="font-semibold text-lg text-primary mb-3">
