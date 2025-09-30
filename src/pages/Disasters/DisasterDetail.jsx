@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
-  fetchDisasterById,
-  fetchDisasterDonations,
-  fetchDisasterVolunteers,
+  useDisasterById,
+  useDisasterDonations,
+  useDisasterVolunteers,
 } from "../../lib/api";
+
 import LoadingSpinner from "../../components/LoadingSpinner";
 import DonationCard from "../DonationsAndVolunteer/Donations/DonationCard";
 import VolunteerCard from "../DonationsAndVolunteer/Volunteer/VolunteerCard";
@@ -19,23 +20,13 @@ const DisasterDetail = () => {
     data: disaster,
     isLoading: loadingDisaster,
     error: disasterError,
-  } = useQuery({
-    queryKey: ["disaster", disasterId],
-    queryFn: () => fetchDisasterById(disasterId),
-    enabled: !!disasterId,
-  });
+  } = useDisasterById(disasterId);
 
-  const { data: donations, isLoading: loadingDonations } = useQuery({
-    queryKey: ["disasterDonations", disasterId],
-    queryFn: () => fetchDisasterDonations(disasterId),
-    enabled: !!disasterId,
-  });
+  const { data: donations, isLoading: loadingDonations } =
+    useDisasterDonations(disasterId);
 
-  const { data: volunteers, isLoading: loadingVolunteers } = useQuery({
-    queryKey: ["disasterVolunteers", disasterId],
-    queryFn: () => fetchDisasterVolunteers(disasterId),
-    enabled: !!disasterId,
-  });
+  const { data: volunteers, isLoading: loadingVolunteers } =
+    useDisasterVolunteers(disasterId);
 
   if (loadingDisaster || loadingDonations || loadingVolunteers)
     return (

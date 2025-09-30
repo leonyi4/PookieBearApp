@@ -1,9 +1,8 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import {
-  fetchVolunteerById,
-  fetchOrgById,
-  fetchVolunteerRoles,
+  useVolunteerById,
+  useVolunteerRoles,
+  useOrgById,
 } from "../../../lib/api";
 import RatingStars from "../../../components/RatingStars";
 import LocationMap from "../../../components/LocationMap";
@@ -13,30 +12,16 @@ export default function VolunteerDetail() {
   const { volunteerId } = useParams();
   const navigate = useNavigate();
 
-  // Volunteer
   const {
     data: campaign,
     isLoading: loadingVolunteer,
     error: volunteerError,
-  } = useQuery({
-    queryKey: ["volunteer", volunteerId],
-    queryFn: () => fetchVolunteerById(volunteerId),
-    enabled: !!volunteerId,
-  });
+  } = useVolunteerById(volunteerId);
 
-  // Org
-  const { data: orgData, isLoading: loadingOrg } = useQuery({
-    queryKey: ["org", campaign?.org_id],
-    queryFn: () => fetchOrgById(campaign.org_id),
-    enabled: !!campaign?.org_id,
-  });
+  const { data: orgData, isLoading: loadingOrg } = useOrgById(campaign?.org_id);
 
-  // Roles
-  const { data: roles, isLoading: loadingRoles } = useQuery({
-    queryKey: ["volunteerRoles", volunteerId],
-    queryFn: () => fetchVolunteerRoles(volunteerId),
-    enabled: !!volunteerId,
-  });
+  const { data: roles, isLoading: loadingRoles } =
+    useVolunteerRoles(volunteerId);
 
   if (loadingVolunteer || loadingOrg || loadingRoles) {
     return <LoadingSpinner message="Fetching Volunteer Details..." />;

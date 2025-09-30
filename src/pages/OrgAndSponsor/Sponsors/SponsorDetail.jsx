@@ -1,11 +1,11 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
-  fetchSponsorById,
-  fetchSponsorEvents,
-  fetchSponsorDonations,
-  fetchSponsorVolunteers,
-  fetchSponsorOrganizations,
+  useSponsorById,
+  useSponsorEvents,
+  useSponsorDonations,
+  useSponsorVolunteers,
+  useSponsorOrganizations,
 } from "../../../lib/api";
 import DonationCard from "../../DonationsAndVolunteer/Donations/DonationCard";
 import VolunteerCard from "../../DonationsAndVolunteer/Volunteer/VolunteerCard";
@@ -19,35 +19,15 @@ export default function SponsorDetail() {
     data: sponsor,
     isLoading: loadingSponsor,
     error: sponsorError,
-  } = useQuery({
-    queryKey: ["sponsor", sponsorId],
-    queryFn: () => fetchSponsorById(sponsorId),
-    enabled: !!sponsorId,
-  });
-
-  const { data: events, isLoading: loadingEvents } = useQuery({
-    queryKey: ["sponsorEvents", sponsorId],
-    queryFn: () => fetchSponsorEvents(sponsorId),
-    enabled: !!sponsorId,
-  });
-
-  const { data: donations, isLoading: loadingDonations } = useQuery({
-    queryKey: ["sponsorDonations", sponsorId],
-    queryFn: () => fetchSponsorDonations(sponsorId),
-    enabled: !!sponsorId,
-  });
-
-  const { data: volunteers, isLoading: loadingVolunteers } = useQuery({
-    queryKey: ["sponsorVolunteers", sponsorId],
-    queryFn: () => fetchSponsorVolunteers(sponsorId),
-    enabled: !!sponsorId,
-  });
-
-  const { data: organizations, isLoading: loadingOrgs } = useQuery({
-    queryKey: ["sponsorOrganizations", sponsorId],
-    queryFn: () => fetchSponsorOrganizations(donations, volunteers),
-    enabled: !!sponsorId && !!donations && !!volunteers,
-  });
+  } = useSponsorById(sponsorId);
+  const { data: events, isLoading: loadingEvents } =
+    useSponsorEvents(sponsorId);
+  const { data: donations, isLoading: loadingDonations } =
+    useSponsorDonations(sponsorId);
+  const { data: volunteers, isLoading: loadingVolunteers } =
+    useSponsorVolunteers(sponsorId);
+  const { data: organizations, isLoading: loadingOrgs } =
+    useSponsorOrganizations(sponsorId, donations, volunteers);
 
   if (
     loadingSponsor ||
@@ -70,14 +50,14 @@ export default function SponsorDetail() {
   return (
     <div className="max-w-5xl mx-auto p-4 space-y-6 text-primary">
       {/* Header */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 justify-between">
         <button
           onClick={() => navigate(-1)}
           className="text-primary text-lg hover:text-accent"
         >
           &larr;
         </button>
-        <h1 className="text-xl font-bold uppercase text-primary">
+        <h1 className="text-xl font-bold uppercase text-primary flex-1 text-center">
           {sponsor.name}
         </h1>
       </div>

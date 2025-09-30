@@ -1,9 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import {
-  fetchOrgById,
-  fetchOrgDonations,
-  fetchOrgVolunteers,
+  useOrgById,
+  useOrgDonations,
+  useOrgVolunteers,
 } from "../../../lib/api";
 import DonationCard from "../../DonationsAndVolunteer/Donations/DonationCard";
 import VolunteerCard from "../../DonationsAndVolunteer/Volunteer/VolunteerCard";
@@ -14,27 +13,9 @@ export default function OrgDetail() {
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  const {
-    data: org,
-    isLoading: loadingOrg,
-    error: orgError,
-  } = useQuery({
-    queryKey: ["organization", orgId],
-    queryFn: () => fetchOrgById(orgId),
-    enabled: !!orgId,
-  });
-
-  const { data: donations, isLoading: loadingDonations } = useQuery({
-    queryKey: ["orgDonations", orgId],
-    queryFn: () => fetchOrgDonations(orgId),
-    enabled: !!orgId,
-  });
-
-  const { data: volunteers, isLoading: loadingVolunteers } = useQuery({
-    queryKey: ["orgVolunteers", orgId],
-    queryFn: () => fetchOrgVolunteers(orgId),
-    enabled: !!orgId,
-  });
+  const { data: org, isLoading: loadingOrg, error: orgError } = useOrgById(orgId);
+  const { data: donations, isLoading: loadingDonations } = useOrgDonations(orgId);
+  const { data: volunteers, isLoading: loadingVolunteers } = useOrgVolunteers(orgId);
 
   // 🔹 Utility to make keys human-readable
   const formatKey = (str) => {
@@ -60,6 +41,7 @@ export default function OrgDetail() {
       </div>
     );
   }
+
   return (
     <div className="max-w-5xl mx-auto space-y-6 p-4 text-primary">
       {/* Header */}
@@ -108,7 +90,7 @@ export default function OrgDetail() {
       {/* Donations */}
       <section>
         <h2 className="font-semibold mb-2">Donations</h2>
-        {donations.length > 0 ? (
+        {donations?.length > 0 ? (
           <div className="grid grid-flow-col auto-cols-[75%] md:auto-cols-[45%] lg:auto-cols-[30%] overflow-x-auto gap-4 pb-2">
             {donations.map((donation) => (
               <DonationCard key={donation.id} data={donation} />
@@ -122,7 +104,7 @@ export default function OrgDetail() {
       {/* Volunteers */}
       <section>
         <h2 className="font-semibold mb-2">Volunteer Campaigns</h2>
-        {volunteers.length > 0 ? (
+        {volunteers?.length > 0 ? (
           <div className="grid grid-flow-col auto-cols-[75%] md:auto-cols-[45%] lg:auto-cols-[30%] overflow-x-auto gap-4 pb-2">
             {volunteers.map((vol) => (
               <VolunteerCard key={vol.id} data={vol} />

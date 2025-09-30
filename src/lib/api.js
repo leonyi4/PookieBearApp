@@ -72,6 +72,48 @@ export async function fetchDisasterById(id) {
 }
 
 /* =========================================================
+   🌍 DISASTER DETAIL (with relations)
+   ========================================================= */
+
+export async function fetchDisasterDonations(disasterId) {
+  const { data: links, error } = await supabase
+    .from("disaster_donations")
+    .select("donation_id")
+    .eq("disaster_id", disasterId);
+
+  if (error) throw new Error(error.message);
+  if (!links?.length) return [];
+
+  const ids = links.map((l) => l.donation_id);
+  const { data: donations, error: donationsError } = await supabase
+    .from("donations")
+    .select("*")
+    .in("id", ids);
+
+  if (donationsError) throw new Error(donationsError.message);
+  return donations || [];
+}
+
+export async function fetchDisasterVolunteers(disasterId) {
+  const { data: links, error } = await supabase
+    .from("disaster_volunteers")
+    .select("volunteers_id")
+    .eq("disaster_id", disasterId);
+
+  if (error) throw new Error(error.message);
+  if (!links?.length) return [];
+
+  const ids = links.map((l) => l.volunteers_id);
+  const { data: volunteers, error: volunteersError } = await supabase
+    .from("volunteers")
+    .select("*")
+    .in("id", ids);
+
+  if (volunteersError) throw new Error(volunteersError.message);
+  return volunteers || [];
+}
+
+/* =========================================================
    💰 DONATIONS PAGE
    ========================================================= */
 
@@ -268,16 +310,16 @@ export async function fetchSponsorVolunteers(sponsorId) {
   return volunteers || [];
 }
 
-export async function fetchSponsorOrganizations(donationLinks, volunteerLinks) {
+export async function fetchSponsorOrganizations(donations, volunteers) {
   const { data: orgDonationLinks } = await supabase
     .from("org_donations")
     .select("org_id")
-    .in("donation_id", donationLinks?.map((d) => d.donation_id) || []);
+    .in("donation_id", donations?.map((d) => d.id) || []); // ✅ use id
 
   const { data: orgVolunteerLinks } = await supabase
     .from("org_volunteers")
     .select("org_id")
-    .in("volunteer_id", volunteerLinks?.map((v) => v.volunteer_id) || []);
+    .in("volunteer_id", volunteers?.map((v) => v.id) || []); // ✅ use id
 
   const orgIds = [
     ...(orgDonationLinks?.map((o) => o.org_id) || []),
@@ -290,6 +332,7 @@ export async function fetchSponsorOrganizations(donationLinks, volunteerLinks) {
     .from("organizations")
     .select("*")
     .in("id", orgIds);
+
   if (error) throw new Error(error.message);
   return relatedOrgs || [];
 }
@@ -399,4 +442,134 @@ export const useUserContributions = (userId) =>
     queryKey: ["contributions", userId],
     queryFn: () => fetchUserContributions(userId),
     enabled: !!userId,
+  });
+
+// Hooks
+
+// --- Disasters
+export const useDisasterById = (disasterId) =>
+  useQuery({
+    queryKey: ["disaster", disasterId],
+    queryFn: () => fetchDisasterById(disasterId),
+    enabled: !!disasterId,
+  });
+
+export const useDisasterDonations = (disasterId) =>
+  useQuery({
+    queryKey: ["disasterDonations", disasterId],
+    queryFn: () => fetchDisasterDonations(disasterId),
+    enabled: !!disasterId,
+  });
+
+export const useDisasterVolunteers = (disasterId) =>
+  useQuery({
+    queryKey: ["disasterVolunteers", disasterId],
+    queryFn: () => fetchDisasterVolunteers(disasterId),
+    enabled: !!disasterId,
+  });
+
+// -- Sponsor
+export const useSponsors = () =>
+  useQuery({
+    queryKey: ["sponsors"],
+    queryFn: fetchSponsors,
+  });
+
+export const useSponsorById = (sponsorId) =>
+  useQuery({
+    queryKey: ["sponsor", sponsorId],
+    queryFn: () => fetchSponsorById(sponsorId),
+    enabled: !!sponsorId,
+  });
+
+export const useSponsorEvents = (sponsorId) =>
+  useQuery({
+    queryKey: ["sponsorEvents", sponsorId],
+    queryFn: () => fetchSponsorEvents(sponsorId),
+    enabled: !!sponsorId,
+  });
+
+export const useSponsorDonations = (sponsorId) =>
+  useQuery({
+    queryKey: ["sponsorDonations", sponsorId],
+    queryFn: () => fetchSponsorDonations(sponsorId),
+    enabled: !!sponsorId,
+  });
+
+export const useSponsorVolunteers = (sponsorId) =>
+  useQuery({
+    queryKey: ["sponsorVolunteers", sponsorId],
+    queryFn: () => fetchSponsorVolunteers(sponsorId),
+    enabled: !!sponsorId,
+  });
+
+export const useSponsorOrganizations = (sponsorId, donations, volunteers) =>
+  useQuery({
+    queryKey: ["sponsorOrganizations", sponsorId],
+    queryFn: () => fetchSponsorOrganizations(donations, volunteers),
+    enabled: !!sponsorId && !!donations && !!volunteers,
+  });
+
+// --- Organizations
+export const useOrgs = () =>
+  useQuery({
+    queryKey: ["organizations"],
+    queryFn: fetchOrgs,
+  });
+
+export const useOrgById = (orgId) =>
+  useQuery({
+    queryKey: ["organization", orgId],
+    queryFn: () => fetchOrgById(orgId),
+    enabled: !!orgId,
+  });
+
+export const useOrgDonations = (orgId) =>
+  useQuery({
+    queryKey: ["orgDonations", orgId],
+    queryFn: () => fetchOrgDonations(orgId),
+    enabled: !!orgId,
+  });
+
+export const useOrgVolunteers = (orgId) =>
+  useQuery({
+    queryKey: ["orgVolunteers", orgId],
+    queryFn: () => fetchOrgVolunteers(orgId),
+    enabled: !!orgId,
+  });
+
+/* =========================================================
+   💰 DONATION HOOKS
+   ========================================================= */
+
+export const useDonationById = (donationId) =>
+  useQuery({
+    queryKey: ["donation", donationId],
+    queryFn: () => fetchDonationById(donationId),
+    enabled: !!donationId,
+  });
+
+export const useDonationContributions = (donationId) =>
+  useQuery({
+    queryKey: ["donationContributions", donationId],
+    queryFn: () => fetchDonationContributions(donationId),
+    enabled: !!donationId,
+  });
+
+/* =========================================================
+   🙋 VOLUNTEER HOOKS
+   ========================================================= */
+
+export const useVolunteerById = (volunteerId) =>
+  useQuery({
+    queryKey: ["volunteer", volunteerId],
+    queryFn: () => fetchVolunteerById(volunteerId),
+    enabled: !!volunteerId,
+  });
+
+export const useVolunteerRoles = (volunteerId) =>
+  useQuery({
+    queryKey: ["volunteerRoles", volunteerId],
+    queryFn: () => fetchVolunteerRoles(volunteerId),
+    enabled: !!volunteerId,
   });

@@ -18,7 +18,12 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-8">
         {/* Logo (always left) */}
         <NavLink to="/" className="flex items-center">
-          <img src="/Header_logo.png" alt="header_logo" width={150} className="h-auto" />
+          <img
+            src="/Header_logo.png"
+            alt="header_logo"
+            width={150}
+            className="h-auto"
+          />
         </NavLink>
 
         {/* Desktop Navigation (≥ md) */}
@@ -40,7 +45,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
             Request Aid
           </NavLink>
           <NavLink
-            to="/DonationsAndVolunteers/donations"
+            to="/DonationsAndVolunteers/"
             className={({ isActive }) =>
               isActive ? "text-primary font-bold" : "hover:text-primary"
             }
@@ -48,7 +53,8 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
             Relief Operations
           </NavLink>
           <NavLink
-            to="/OrgsAndSponsors/organizations"
+            to="/OrgsAndSponsors"
+            end={false}
             className={({ isActive }) =>
               isActive ? "text-primary font-bold" : "hover:text-primary"
             }
@@ -95,14 +101,20 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
 
           <nav className="space-y-6 text-center flex flex-col items-center">
             <NavLink to="/" onClick={toggleMenu}>
-              <img src='/Vertical_logo.png' alt="vertical_logo" width={150} />
+              <img src="/Vertical_logo.png" alt="vertical_logo" width={150} />
             </NavLink>
 
             {[
               { to: "/profile", label: "Profile" },
               { to: "/AidRequest", label: "Request Aid" },
-              { to: "/DonationsAndVolunteers/donations", label: "Relief Operations" },
-              { to: "/OrgsAndSponsors/organizations", label: "Orgs & Sponsors" },
+              {
+                to: "/DonationsAndVolunteers/donations",
+                label: "Relief Operations",
+              },
+              {
+                to: "/OrgsAndSponsors/organizations",
+                label: "Orgs & Sponsors",
+              },
               { to: "/DisasterMap", label: "Disaster Map" },
             ].map((item) => (
               <React.Fragment key={item.to}>
