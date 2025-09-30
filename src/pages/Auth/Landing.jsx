@@ -9,8 +9,8 @@ export default function Landing() {
   const navigate = useNavigate();
   const { user, login, loading } = useAuth();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("SamplePookieBearUser@gmail.com");
+  const [password, setPassword] = useState("weLovePookieBears");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [resetMode, setResetMode] = useState(false);

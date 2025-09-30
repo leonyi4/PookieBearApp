@@ -75,7 +75,7 @@ export default function Profile() {
         </div>
 
         {/* Tabs */}
-        <div className="flex flex-wrap justify-center md:justify-start gap-4 border-b border-secondary pb-2 mb-6">
+        <div className="flex flex-wrap justify-center md:justify-start gap-4 border-b border-t py-2 md:py-0 md:border-t-0 border-secondary pb-0 mb-6">
           {["profile", "aid", "contributions"].map((tab) => (
             <button
               key={tab}
