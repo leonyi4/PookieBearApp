@@ -108,7 +108,6 @@ export default function CustomizeProfile() {
     }, 500);
   };
 
-
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen text-primary">
@@ -135,15 +134,15 @@ export default function CustomizeProfile() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="bg-white shadow-lg rounded-xl p-6 md:p-8 w-full max-w-2xl">
-        <div className="flex items-center space-x-4 sm:p-6 mb-6">
+      <div className="bg-white shadow-lg rounded-xl p-6 md:p-8 w-full max-w-2xl ">
+        <div className="flex items-center justify-between p-4 mb-2 ">
           <button
             onClick={() => navigate(-1)}
             className="text-primary text-lg hover:text-accent"
           >
             &larr;
           </button>
-          <h2 className="text-2xl md:text-3xl font-bold text-primary">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary text-center flex-1">
             Edit Your Profile
           </h2>
         </div>
@@ -163,37 +162,52 @@ export default function CustomizeProfile() {
               "phone",
               "age",
             ].map((field) => (
-              <input
-                key={field}
-                type={
-                  field === "birthdate"
-                    ? "date"
-                    : field === "age"
-                    ? "number"
-                    : "text"
-                }
-                id={field}
-                placeholder={`Enter ${field}`}
-                value={formData[field] || ""}
-                onChange={handleChange}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+              <div key={field} className="flex flex-col">
+                <label
+                  htmlFor={field}
+                  className="text-sm font-medium text-accent mb-1"
+                >
+                  {field.charAt(0).toUpperCase() + field.slice(1)}
+                </label>
+                <input
+                  type={
+                    field === "birthdate"
+                      ? "date"
+                      : field === "age"
+                      ? "number"
+                      : "text"
+                  }
+                  id={field}
+                  placeholder={`Enter ${field}`}
+                  value={formData[field] || ""}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
             ))}
 
             {/* Gender dropdown */}
-            <select
-              id="gender"
-              value={formData.gender || ""}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="">Select gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
+            <div className="flex flex-col">
+              <label htmlFor='gender' className="text-sm font-medium text-accent mb-1">
+                Gender
+              </label>
+              <select
+                id="gender"
+                value={formData.gender || ""}
+                onChange={handleChange}
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
           </div>
 
           {/* Location Picker */}
+          <label className="text-sm font-medium text-accent">
+            Update Your Location:
+          </label>
           <div className="space-y-2">
             <LocationPicker onLocationSelect={setTempLocation} />
             {/* show selected location */}
@@ -217,8 +231,8 @@ export default function CustomizeProfile() {
           </div>
 
           {/* Profile picture */}
-          <label className="block text-gray-700 font-medium">
-            Upload Profile Picture (optional):
+          <label className="block text-gray-700 font-medium text-sm">
+            Update Your Profile Picture:
             <input
               type="file"
               accept="image/*"

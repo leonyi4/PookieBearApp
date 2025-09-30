@@ -72,8 +72,8 @@ export default function ProfileCompletion() {
           latitude: data.latitude ?? "",
           longitude: data.longitude ?? "",
           phone: data.phone || "",
-          age: data.age || "", 
-          gender: data.gender || ""
+          age: data.age || "",
+          gender: data.gender || "",
         }));
 
         // If they somehow already completed, send them home
@@ -131,7 +131,7 @@ export default function ProfileCompletion() {
       profile_complete: true,
       phone: formData.phone,
       age: formData.age || null,
-      gender: formData.gender || null
+      gender: formData.gender || null,
     };
 
     const { error } = await supabase
@@ -166,7 +166,7 @@ export default function ProfileCompletion() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center px-4 bg-cover bg-center">
       <div className="bg-background rounded-2xl shadow-lg w-full max-w-md md:max-w-2xl p-6 sm:p-8">
-        <h1 className="text-xl font-bold text-center text-primary mb-4">
+        <h1 className="text-2xl font-bold text-center text-primary mb-4">
           Complete Your Profile
         </h1>
 
@@ -174,49 +174,69 @@ export default function ProfileCompletion() {
           <p className="text-red-500 text-sm mb-2">{fetchError}</p>
         )}
 
-      <form onSubmit={handleSubmit} className="space-y-1 lg:space-y-3 text-accent">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-1 lg:space-y-3 text-accent"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              "name",
-              "identification",
-              "birthdate",
-              "country",
-              "city",
-              "phone",
-              "age",
-            ].map((field) => (
-              <input
-                key={field}
-                type={
-                  field === "birthdate"
-                    ? "date"
-                    : field === "age"
-                    ? "number"
-                    : field === "phone"
-                    ? "tel"
-                    : "text"
-                }
-                id={field}
-                placeholder={field}
-                className="w-full p-2 border rounded-lg text-accent focus:ring-2 focus:ring-primary"
-                value={formData[field] || ""}
-                onChange={handleChange}
-              />
+              { id: "name", label: "Full Name" },
+              { id: "identification", label: "Identification Number" },
+              { id: "birthdate", label: "Date of Birth" },
+              { id: "country", label: "Country" },
+              { id: "city", label: "City" },
+              { id: "phone", label: "Phone Number" },
+              { id: "age", label: "Age" },
+            ].map(({ id, label }) => (
+              <div key={id} className="flex flex-col">
+                <label
+                  htmlFor={id}
+                  className="text-sm font-medium text-accent mb-1"
+                >
+                  {label}
+                </label>
+                <input
+                  type={
+                    id === "birthdate"
+                      ? "date"
+                      : id === "age"
+                      ? "number"
+                      : id === "phone"
+                      ? "tel"
+                      : "text"
+                  }
+                  id={id}
+                  placeholder={`Enter your ${label.toLowerCase()}`}
+                  className="w-full p-2 border rounded-lg text-accent focus:ring-2 focus:ring-primary"
+                  value={formData[id] || ""}
+                  onChange={handleChange}
+                />
+              </div>
             ))}
-
-            {/* Gender dropdown, in the same grid */}
-            <select
-              id="gender"
-              value={formData.gender || ""}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-lg text-accent focus:ring-2 focus:ring-primary"
-            >
-              <option value="">Select gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
+            {/* Gender */}
+            <div className="flex flex-col">
+              <label
+                htmlFor="gender"
+                className="text-sm font-medium text-accent mb-1"
+              >
+                Gender
+              </label>
+              <select
+                id="gender"
+                value={formData.gender || ""}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg text-accent focus:ring-2 focus:ring-primary"
+              >
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
           </div>
-
+          {/* Select your current location */}
+          <label className="text-sm font-medium text-accent">
+            Select Your Current Location:
+          </label>
           <LocationPicker onLocationSelect={setTempLocation} />
           {tempLocation && (
             <button
@@ -233,7 +253,7 @@ export default function ProfileCompletion() {
           <button
             type="submit"
             disabled={saving}
-            className="w-full bg-primary text-white py-2 rounded-lg mt-4 disabled:opacity-60"
+            className="w-full bg-primary text-white py-2 rounded-lg mt-2 disabled:opacity-60"
           >
             {saving ? "Saving…" : "Save Profile"}
           </button>

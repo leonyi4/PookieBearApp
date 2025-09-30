@@ -85,14 +85,14 @@ const DisasterDetail = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6 text-gray-900">
       {/* Header */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 justify-between">
         <button
           onClick={() => navigate(-1)}
           className="text-primary hover:text-accent text-lg"
         >
           ←
         </button>
-        <h1 className="text-xl sm:text-2xl font-bold uppercase text-primary">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-semibold uppercase text-primary flex-1 text-center">
           {disaster.name}
         </h1>
       </div>
@@ -110,15 +110,15 @@ const DisasterDetail = () => {
 
         {/* Info */}
         <div className="flex-1 space-y-2">
-          <h2 className="text-2xl font-bold text-primary uppercase">
+          {/* <h2 className="text-2xl font-bold text-primary uppercase">
             {disaster.name}
-          </h2>
-          <p className="text-sm text-gray-500">
-            Date: {new Date(disaster.date).toLocaleDateString()}
-          </p>
-
-          <span
-            className={`inline-block px-3 py-1 text-xs font-semibold rounded-full 
+          </h2> */}
+          <div className="flex justify-between">
+            <p className="text-sm text-gray-500 w-fit">
+              Date: {new Date(disaster.date).toLocaleDateString()}
+            </p>
+            <span
+              className={` px-3 py-1 text-xs font-semibold rounded-full 
         ${
           disaster.severity === "High"
             ? "bg-red-100 text-red-700"
@@ -126,9 +126,10 @@ const DisasterDetail = () => {
             ? "bg-yellow-100 text-yellow-700"
             : "bg-green-100 text-green-700"
         }`}
-          >
-            Severity: {disaster.severity}
-          </span>
+            >
+              Severity: {disaster.severity}
+            </span>
+          </div>
 
           <p className="text-gray-700 text-sm leading-relaxed">
             {disaster.description}
@@ -167,7 +168,7 @@ const DisasterDetail = () => {
         {/* Tab content */}
         {activeTab === "donations" ? (
           donations.length > 0 ? (
-            <div className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[45%] md:auto-cols-[30%] overflow-x-auto gap-4 pb-2">
+            <div className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[45%] md:auto-cols-[35%] overflow-x-auto gap-4 pb-2">
               {donations.map((donation) => (
                 <DonationCard key={donation.id} data={donation} />
               ))}
@@ -179,7 +180,7 @@ const DisasterDetail = () => {
           )
         ) : activeTab === "volunteers" ? (
           volunteers.length > 0 ? (
-            <div className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[45%] md:auto-cols-[30%] overflow-x-auto gap-4 pb-2">
+            <div className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[45%] md:auto-cols-[35%] overflow-x-auto gap-4 pb-2">
               {volunteers.map((vol) => (
                 <VolunteerCard key={vol.id} data={vol} />
               ))}

@@ -92,14 +92,14 @@ export default function VolunteerDetail() {
   return (
     <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden lg:my-6">
       {/* Header */}
-      <div className="flex items-center space-x-4 p-4 sm:p-6 border-b border-gray-200">
+      <div className="flex items-center space-x-4 p-4 sm:p-6 border-b border-gray-200 justify-between">
         <button
           onClick={() => navigate(-1)}
-          className="text-primary text-lg hover:text-accent"
+          className="text-primary text-lg hover:text-accent md:text-xl"
         >
           &larr;
         </button>
-        <h2 className="text-lg sm:text-xl font-semibold text-primary">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-semibold uppercase text-primary flex-1 text-center">
           {campaign.name}
         </h2>
       </div>

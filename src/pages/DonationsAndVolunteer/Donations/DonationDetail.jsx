@@ -120,14 +120,14 @@ export default function DonationDetail() {
   return (
     <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden lg:my-6">
       {/* Header */}
-      <div className="flex items-center space-x-4 p-4 sm:p-6 border-b border-gray-200">
+      <div className="flex items-center space-x-4 p-4 sm:p-6 border-b border-gray-200 justify-center ">
         <button
           onClick={() => navigate(-1)}
           className="text-primary text-lg hover:text-accent"
         >
           &larr;
         </button>
-        <h2 className="text-lg sm:text-xl font-semibold text-primary">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-semibold uppercase  text-primary text-center flex-1">
           {campaign.name}
         </h2>
       </div>

@@ -73,14 +73,14 @@ export default function OrgDetail() {
   return (
     <div className="max-w-5xl mx-auto space-y-6 p-4 text-primary">
       {/* Header */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 justify-between">
         <button
           onClick={() => navigate(-1)}
           className="text-primary text-lg hover:text-accent"
         >
           &larr;
         </button>
-        <h1 className="text-2xl md:text-3xl font-bold text-primary uppercase">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-primary uppercase flex-1 text-center">
           {org.name}
         </h1>
       </div>

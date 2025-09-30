@@ -101,14 +101,14 @@ export default function Profile() {
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="bg-white shadow-lg rounded-xl p-6 md:p-8 w-full max-w-5xl mx-auto">
         {/* Header with back button */}
-        <div className="flex items-center mb-6">
+        <div className="flex items-center mb-6 justify-between">
           <button
             onClick={() => navigate(-1)}
             className="text-primary text-lg hover:text-accent mr-3"
           >
             &larr;
           </button>
-          <h1 className="text-2xl md:text-3xl font-bold text-primary">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary text-center flex-1">
             My Profile
           </h1>
         </div>
